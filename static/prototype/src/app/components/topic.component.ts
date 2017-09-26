@@ -11,6 +11,7 @@ import {ITopic} from "../app.interfaces";
 export class TopicComponent {
 
   private topics: Array<ITopic>;
+  selectedTopic: ITopic;
 
   constructor(private api: ApiService) {
 
@@ -28,18 +29,17 @@ export class TopicComponent {
         });
       },
       error => {
-        this.topics = [
-          { id: 66048, keyword: 'z Geschichte 1956-1966', count: 6},
-          { id: 1280, keyword: '547.8404572', count: 6},
-          { id: 12468, keyword: 'Deutsche Literatur', count: 405236},
-          { id: 35273, keyword: 'Medizin, Gesundheit', count: 329684},
-        ]
-
+        
       },
       () => {
 
       }
     )
+  }
+
+  onSelect(topic: ITopic): void {
+    this.selectedTopic = topic;
+    this.api.setFilter(this.selectedTopic.id, 'topic');
   }
 
 }

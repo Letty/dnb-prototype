@@ -1,20 +1,49 @@
 html, body {
   font-family: "Open Sans"; }
 
-.person-list {
+.person-div .selected-person {
+  margin-left: 30px;
+  padding: 5px;
+  color: #E9435A; }
+.person-div .person-list {
   display: flex;
-  flex-wrap: wrap; }
-  .person-list .person {
+  flex-wrap: wrap;
+  align-items: baseline; }
+  .person-div .person-list .person {
     margin: 5px;
     padding: 5px;
-    background-color: #00d4ff; }
+    color: #E9435A;
+    cursor: pointer; }
 
-.topic-list {
+.topic-div .selected-topic {
+  margin-left: 30px;
+  padding: 5px;
+  color: #1DB5B4; }
+.topic-div .topic-list {
   display: flex;
-  flex-wrap: wrap; }
-  .topic-list .topic {
-    margin: 5px;
+  flex-wrap: wrap;
+  align-items: baseline; }
+  .topic-div .topic-list .topic {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
+    margin: 2px;
     padding: 5px;
-    background-color: pink; }
+    background-color: #D2F0F0;
+    color: #1DB5B4;
+    cursor: pointer; }
+
+.headline-div {
+  display: flex;
+  align-items: baseline; }
+
+.year-area-svg {
+  background: #F4F7FB; }
+  .year-area-svg text {
+    font-family: "Roboto Mono";
+    fill: #3564BA; }
+  .year-area-svg .area-path {
+    fill: #3564BA; }
 
 /*# sourceMappingURL=style.css.map */

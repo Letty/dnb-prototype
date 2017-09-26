@@ -110,7 +110,7 @@ AppModule = __decorate([
 /***/ "../../../../../src/app/components/person.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"person-div\">\n  <h3>Personen</h3>\n  <div class=\"person-list\">\n    <div *ngFor=\"let p of persons | slice:0:10\" class=\"person\">\n      {{p.name}} <br> {{p.count}}\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"person-div\">\n  <div class=\"headline-div\"><h3>Personen</h3>\n    <div *ngIf=\"selectedPerson\" class=\"selected-person\">{{selectedPerson.name}}</div>\n  </div>\n  <div class=\"person-list\">\n    <div *ngFor=\"let p of persons | slice:0:10\" class=\"person\" (click)=\"onSelect(p)\">\n      <span [style]=\"setFontSize(p.count)\">{{p.name}}</span>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -121,6 +121,8 @@ module.exports = "<div class=\"person-div\">\n  <h3>Personen</h3>\n  <div class=
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3__ = __webpack_require__("../../../../d3/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -132,20 +134,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+
 var PersonComponent = (function () {
-    function PersonComponent(api) {
+    function PersonComponent(api, sanitizer) {
         this.api = api;
+        this.sanitizer = sanitizer;
+        this.min = 1e10;
+        this.max = -1e10;
+        this.fontScale = __WEBPACK_IMPORTED_MODULE_3_d3__["f" /* scaleLinear */]()
+            .range([0.8, 2.5]);
     }
     PersonComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.api.getPersons().subscribe(function (result) {
             _this.persons = Object.keys(result).map(function (key) {
+                if (result[key].count < _this.min) {
+                    _this.min = result[key].count;
+                }
+                if (result[key].count > _this.max) {
+                    _this.max = result[key].count;
+                }
                 return {
                     id: result[key].id,
                     name: result[key].name,
                     count: result[key].count
                 };
             });
+            _this.fontScale.domain([_this.min, _this.max]);
         }, function (error) {
             _this.persons = [
                 { id: '66048', name: 'z Geschichte 1956-1966', count: 6 },
@@ -156,6 +172,15 @@ var PersonComponent = (function () {
         }, function () {
         });
     };
+    PersonComponent.prototype.onSelect = function (person) {
+        this.selectedPerson = person;
+        this.api.setFilter(this.selectedPerson.id, 'person');
+    };
+    PersonComponent.prototype.setFontSize = function (count) {
+        var style;
+        style = this.sanitizer.bypassSecurityTrustStyle('font-size: ' + this.fontScale(count) + 'em');
+        return style;
+    };
     return PersonComponent;
 }());
 PersonComponent = __decorate([
@@ -163,10 +188,10 @@ PersonComponent = __decorate([
         selector: 'person',
         template: __webpack_require__("../../../../../src/app/components/person.component.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_api_service__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_api_service__["a" /* ApiService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_api_service__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_api_service__["a" /* ApiService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["b" /* DomSanitizer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["b" /* DomSanitizer */]) === "function" && _b || Object])
 ], PersonComponent);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=person.component.js.map
 
 /***/ }),
@@ -216,27 +241,21 @@ var TimelineComponent = (function () {
             });
             _this.showAreaChart();
         }, function (error) {
-            _this.years = [
-                { id: 66048, year: 1940, count: 6 },
-                { id: 1280, year: 1941, count: 14 },
-                { id: 12468, year: 1942, count: 40 },
-                { id: 35273, year: 1943, count: 32 },
-            ];
-            _this.showAreaChart();
         }, function () {
         });
     };
     TimelineComponent.prototype.showAreaChart = function () {
         var margin = { top: 20, bottom: 20, left: 50, right: 20 };
         var height = 200 - margin.top - margin.bottom, width = 1350 - margin.left - margin.right;
-        var svg = __WEBPACK_IMPORTED_MODULE_2_d3__["h" /* select */]('#viz').append('svg')
+        var svg = __WEBPACK_IMPORTED_MODULE_2_d3__["i" /* select */]('#viz').append('svg')
             .attr('height', height + margin.top + margin.bottom)
             .attr('width', width + margin.left + margin.right)
+            .attr('class', 'year-area-svg')
             .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-        var x = __WEBPACK_IMPORTED_MODULE_2_d3__["g" /* scaleTime */]()
+        var x = __WEBPACK_IMPORTED_MODULE_2_d3__["h" /* scaleTime */]()
             .rangeRound([0, width]);
-        var y = __WEBPACK_IMPORTED_MODULE_2_d3__["f" /* scalePow */]()
+        var y = __WEBPACK_IMPORTED_MODULE_2_d3__["g" /* scalePow */]()
             .exponent(0.3)
             .rangeRound([height, 0]);
         var area = __WEBPACK_IMPORTED_MODULE_2_d3__["a" /* area */]()
@@ -253,7 +272,6 @@ var TimelineComponent = (function () {
         svg.append("path")
             .datum(this.years)
             .attr('class', 'area-path')
-            .attr("fill", "steelblue")
             .attr("d", area)
             .on('mousemove', function (d) {
             // extraxtion des jahres + infos
@@ -290,7 +308,7 @@ var _a, _b, _c;
 /***/ "../../../../../src/app/components/topic.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <h3>Themen</h3>\n  <div class=\"topic-list\">\n    <div *ngFor=\"let t of topics\" class=\"topic\">\n      {{t.keyword}} <br> {{t.count}}\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"topic-div\">\n  <div class=\"headline-div\"><h3>Themen</h3>\n    <div *ngIf=\"selectedTopic\" class=\"selected-topic\">{{selectedTopic.keyword}}</div>\n  </div>\n  <div class=\"topic-list\">\n    <div *ngFor=\"let t of topics\" class=\"topic\" (click)=\"onSelect(t)\">\n      {{t.keyword}}\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -319,7 +337,6 @@ var TopicComponent = (function () {
     TopicComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.api.getTopics().subscribe(function (result) {
-            console.log(result);
             _this.topics = Object.keys(result).map(function (key) {
                 return {
                     id: result[key].id,
@@ -336,6 +353,10 @@ var TopicComponent = (function () {
             ];
         }, function () {
         });
+    };
+    TopicComponent.prototype.onSelect = function (topic) {
+        this.selectedTopic = topic;
+        this.api.setFilter(this.selectedTopic.id, 'topic');
     };
     return TopicComponent;
 }());
@@ -376,6 +397,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ApiService = (function () {
     function ApiService(http) {
         this.http = http;
+        this.headers = new Headers();
+        this.headers.append('Content-Type', 'application/json');
     }
     ApiService.prototype.getTopics = function () {
         return this.http.get('/getTopTopics').map(function (res) { return res.json(); });
@@ -385,6 +408,32 @@ var ApiService = (function () {
     };
     ApiService.prototype.getYears = function () {
         return this.http.get('/getTimeline').map(function (res) { return res.json(); });
+    };
+    ApiService.prototype.setFilter = function (id, filterName) {
+        if (filterName === 'topic') {
+            this.http.put('/setFilterForTopic', { id: id }, this.headers)
+                .subscribe(function (res) {
+                // console.log(res);
+            }, function (error) {
+                console.log(error);
+            });
+        }
+        else if (filterName === 'person') {
+            this.http.put('/setFilterForPerson', { id: id }, this.headers)
+                .subscribe(function (res) {
+                // console.log(res);
+            }, function (error) {
+                console.log(error);
+            });
+        }
+        else if (filterName === 'year') {
+            this.http.put('/setFilterForYear', { id: id }, this.headers)
+                .subscribe(function (res) {
+                // console.log(res);
+            }, function (error) {
+                console.log(error);
+            });
+        }
     };
     return ApiService;
 }());

@@ -1,7 +1,16 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import json
 import pymysql.cursors
 
 app = Flask(__name__, static_url_path='')
+
+topicID = ''
+personID = ''
+yearID = ''
+
+
+def seq_iter(obj):
+    return obj if isinstance(obj, dict) else range(len(obj))
 
 connection = pymysql.connect(host='127.0.0.1',
                              user='root',
@@ -41,3 +50,33 @@ def get_timeline():
         cursor.execute(sql)
         result = cursor.fetchall()
         return jsonify(result)
+
+
+@app.route('/setFilterForTopic', methods=['PUT'])
+def set_filter_for_topic():
+    params = json.loads(request.data)
+    topicID = params.get('id')
+    print('topic: %s' % (topicID))
+    print('person: %s' % (personID))
+    print('year: %s' % (yearID))
+    return 'set topic'
+
+
+@app.route('/setFilterForPerson', methods=['PUT'])
+def set_filter_for_person():
+    params = json.loads(request.data)
+    personID = params.get('id')
+    print('topic: %s' % (topicID))
+    print('person: %s' % (personID))
+    print('year: %s' % (yearID))
+    return 'set person'
+
+
+@app.route('/setFilterForYear', methods=['PUT'])
+def set_filter_for_year():
+    params = json.loads(request.data)
+    yearID = params.get('id')
+    print('topic: %s' % (topicID))
+    print('person: %s' % (personID))
+    print('year: %s' % (yearID))
+    return 'set year'

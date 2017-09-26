@@ -29,13 +29,7 @@ export class TimelineComponent {
         this.showAreaChart();
       },
       error => {
-        this.years = [
-          {id: 66048, year: 1940, count: 6},
-          {id: 1280, year: 1941, count: 14},
-          {id: 12468, year: 1942, count: 40},
-          {id: 35273, year: 1943, count: 32},
-        ]
-        this.showAreaChart();
+
       },
       () => {
 
@@ -53,6 +47,7 @@ export class TimelineComponent {
     let svg = d3.select('#viz').append('svg')
       .attr('height', height + margin.top + margin.bottom)
       .attr('width', width + margin.left + margin.right)
+      .attr('class', 'year-area-svg')
       .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -80,7 +75,6 @@ export class TimelineComponent {
       svg.append("path")
         .datum(this.years)
         .attr('class', 'area-path')
-        .attr("fill", "steelblue")
         .attr("d", area)
         .on('mousemove', function (d) {
           // extraxtion des jahres + infos
