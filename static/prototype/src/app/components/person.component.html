@@ -1,0 +1,8 @@
+<div class="person-div">
+  <h3>Personen</h3>
+  <div class="person-list">
+    <div *ngFor="let p of persons | slice:0:10" class="person">
+      {{p.name}} <br> {{p.count}}
+    </div>
+  </div>
+</div>

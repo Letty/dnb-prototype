@@ -1,0 +1,20 @@
+html, body {
+  font-family: "Open Sans"; }
+
+.person-list {
+  display: flex;
+  flex-wrap: wrap; }
+  .person-list .person {
+    margin: 5px;
+    padding: 5px;
+    background-color: #00d4ff; }
+
+.topic-list {
+  display: flex;
+  flex-wrap: wrap; }
+  .topic-list .topic {
+    margin: 5px;
+    padding: 5px;
+    background-color: pink; }
+
+/*# sourceMappingURL=style.css.map */

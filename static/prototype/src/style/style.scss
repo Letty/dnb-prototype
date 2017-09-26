@@ -1,0 +1,27 @@
+html, body{
+  font-family: "Open Sans";
+}
+
+.person-list{
+  display: flex;
+  flex-wrap: wrap;
+
+  .person{
+    margin: 5px;
+    padding:5px;
+    background-color: #00d4ff;
+  }
+
+}
+
+.topic-list{
+  display: flex;
+  flex-wrap: wrap;
+
+  .topic{
+    margin: 5px;
+    padding:5px;
+    background-color: pink;
+  }
+
+}
