@@ -29,7 +29,7 @@ export class TopicComponent {
         });
       },
       error => {
-        
+
       },
       () => {
 
