@@ -28,7 +28,7 @@ def root():
 @app.route('/getTopTopics')
 def get_top_topics():
     with connection.cursor() as cursor:
-        sql = 'select * from dnb_reduced_topic_count order by count DESC limit 20'
+        sql = 'select * from dnb_topic_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
         return jsonify(result)
@@ -37,7 +37,7 @@ def get_top_topics():
 @app.route('/getTopPeople')
 def get_top_people():
     with connection.cursor() as cursor:
-        sql = 'select * from dnb_reduced_author_count order by count DESC limit 20'
+        sql = 'select * from dnb_author_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
         return jsonify(result)
@@ -46,7 +46,7 @@ def get_top_people():
 @app.route('/getTimeline')
 def get_timeline():
     with connection.cursor() as cursor:
-        sql = 'select year, count from dnb_reduced_years_abstract_count'
+        sql = 'select year, count from old_dnb_reduced_years_abstract_count'
         cursor.execute(sql)
         result = cursor.fetchall()
         return jsonify(result)
