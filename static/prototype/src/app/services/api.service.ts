@@ -4,12 +4,13 @@ import 'rxjs/add/operator/map'
 import {Observable} from 'rxjs/Observable';
 
 import {IPerson, ITopic, IYear} from '../app.interfaces';
+import {SelectionService} from "./selection.service";
 
 @Injectable()
 export class ApiService {
   private headers = new Headers();
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private selection: SelectionService) {
     this.headers.append('Content-Type', 'application/json');
   }
 
@@ -25,29 +26,13 @@ export class ApiService {
     return this.http.get('/getTimeline').map(res => <IYear>res.json());
   }
 
-  setFilter(id: any, filterName: string): void {
-    if (filterName === 'topic') {
-      this.http.put('/setFilterForTopic', {id: id}, this.headers)
-        .subscribe(res => {
-          // console.log(res);
-        }, error => {
-          console.log(error);
-        });
-    } else if (filterName === 'person') {
-      this.http.put('/setFilterForPerson', {id: id}, this.headers)
-        .subscribe(res => {
-          // console.log(res);
-        }, error => {
-          console.log(error);
-        });
-    } else if (filterName === 'year') {
-      this.http.put('/setFilterForYear', {id: id}, this.headers)
-        .subscribe(res => {
-          // console.log(res);
-        }, error => {
-          console.log(error);
-        });
-    }
+  setFilter(): void {
+    this.http.put('/setFilter',  this.selection.getSelection(), this.headers)
+      .subscribe(res => {
+        console.log(res);
+      }, error => {
+        console.log(error);
+      });
   }
 }
 
