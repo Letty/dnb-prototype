@@ -46,7 +46,7 @@ def get_top_people():
 @app.route('/getTimeline')
 def get_timeline():
     with connection.cursor() as cursor:
-        sql = 'select year, count from old_dnb_reduced_years_abstract_count'
+        sql = 'select * from dnb_year_count where year > 1000 and year < 2021'
         cursor.execute(sql)
         result = cursor.fetchall()
         return jsonify(result)
@@ -60,6 +60,14 @@ def set_filter_for_topic():
     print('person: %s' % (personID))
     print('year: %s' % (yearID))
     return 'set topic'
+
+
+@app.route('/setFilter', methods=['PUT'])
+def set_filter():
+    print('set filter')
+    params = json.loads(request.data)
+    print(params)
+    return 'set filter'
 
 
 @app.route('/setFilterForPerson', methods=['PUT'])
