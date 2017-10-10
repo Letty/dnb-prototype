@@ -1,7 +1,6 @@
 <div class="topic-div">
-  <div class="headline-div"><h3>Themen</h3>
-    <div *ngIf="selectedTopic" class="selected-topic">{{selectedTopic.keyword}}</div>
-  </div>
+  <div class="headline-div"><h3>Themen</h3></div>
+  <div id="topic-viz"></div>
   <div class="topic-list">
     <div *ngFor="let t of topics" class="topic" (click)="onSelect(t)">
       {{t.keyword}}

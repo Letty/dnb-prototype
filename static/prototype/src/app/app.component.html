@@ -1,4 +1,15 @@
 <div>
+  <div class="navigation">
+    <div class="dnb-logo">DNB - Prototype</div>
+    <div class="searchbar">Suchleiste</div>
+    <div class="nav-selection">
+      <div>AUSWAHL</div>
+      <div *ngIf="selectedPerson" class="selected-person">{{selectedPerson.name}} {{selectedPerson.lastname}} <b>x</b></div>
+      <div *ngIf="selectedTopic" class="selected-topic">{{selectedTopic.keyword}} <b>x</b></div>
+    </div>
+    <div class="result-count">ANZAHL D ERGEBNISSE</div>
+    <div class="help">?</div>
+  </div>
   <timeline></timeline>
   <person></person>
   <topic></topic>

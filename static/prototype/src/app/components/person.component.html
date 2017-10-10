@@ -1,10 +1,8 @@
 <div class="person-div">
-  <div class="headline-div"><h3>Personen</h3>
-    <div *ngIf="selectedPerson" class="selected-person">{{selectedPerson.name}}</div>
-  </div>
+  <div class="headline-div"><h3>Personen</h3></div>
   <div class="person-list">
-    <div *ngFor="let p of persons | slice:0:10" class="person" (click)="onSelect(p)">
-      <span [style]="setFontSize(p.count)">{{p.name}}</span>
+    <div *ngFor="let p of persons" class="person" (click)="onSelect(p)">
+      <span [style]="setFontSize(p.count)">{{p.name}} <span><b>{{p.lastname}}</b></span></span>
     </div>
   </div>
 </div>
