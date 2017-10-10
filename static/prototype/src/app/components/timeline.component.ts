@@ -86,7 +86,9 @@ export class TimelineComponent {
         .call(d3.axisBottom(x));
 
       svg.append("g")
-        .call(d3.axisLeft(y))
+        .attr('class', 'y-axis')
+        .call(d3.axisLeft(y)
+          .tickSize(-width))
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
