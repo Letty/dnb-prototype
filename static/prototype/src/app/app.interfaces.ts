@@ -7,11 +7,11 @@ export interface ITopic {
 export interface IPerson {
   id: string,
   name: string,
+  lastname: string,
   count: number
 }
 
 export interface IYear {
-  id: number,
   year: number,
   count: number
 }
