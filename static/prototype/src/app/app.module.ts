@@ -7,6 +7,7 @@ import { TimelineComponent} from './components/timeline.component';
 import { PersonComponent} from './components/person.component';
 import { TopicComponent} from './components/topic.component';
 import { ApiService} from './services/api.service';
+import { SelectionService} from './services/selection.service';
 
 
 
@@ -22,7 +23,8 @@ import { ApiService} from './services/api.service';
     HttpModule
   ],
   providers: [
-    ApiService
+    ApiService,
+    SelectionService
   ],
   bootstrap: [
     AppComponent
