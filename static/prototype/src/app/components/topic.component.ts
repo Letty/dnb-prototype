@@ -1,6 +1,7 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import {SelectionService} from '../services/selection.service';
+import {DataService} from '../services/data.service';
 import * as d3 from 'd3';
 
 import {ITopic} from "../app.interfaces";
@@ -18,34 +19,36 @@ export class TopicComponent {
     'children': []
   };
 
-  constructor(private api: ApiService, private selection: SelectionService) {
-
+  constructor(private api: ApiService, private selection: SelectionService, private dataService: DataService) {
+    this.topics = this.dataService.getTopic();
   }
 
+
   ngOnInit(): void {
-    this.api.getTopics().subscribe(
-      result => {
-        this.topics = Object.keys(result).map(key => {
-          this.topicTree['children'].push({
-            id: result[key].id,
-            keyword: result[key].keyword,
-            count: result[key].count
-          });
-          return {
-            id: result[key].id,
-            keyword: result[key].keyword,
-            count: result[key].count
-          };
-        });
-        // this.showTreemap();
-      },
-      error => {
 
-      },
-      () => {
-
-      }
-    )
+    // this.api.getTopics().subscribe(
+    //   result => {
+    //     this.topics = Object.keys(result).map(key => {
+    //       this.topicTree['children'].push({
+    //         id: result[key].id,
+    //         keyword: result[key].keyword,
+    //         count: result[key].count
+    //       });
+    //       return {
+    //         id: result[key].id,
+    //         keyword: result[key].keyword,
+    //         count: result[key].count
+    //       };
+    //     });
+    //     // this.showTreemap();
+    //   },
+    //   error => {
+	//
+    //   },
+    //   () => {
+	//
+    //   }
+    // )
   }
 
   onSelect(topic: ITopic): void {

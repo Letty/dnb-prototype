@@ -12,6 +12,7 @@ export class AppComponent {
   private selectedPerson: IPerson;
   private selectedTopic: ITopic;
 
+
   constructor(private selection: SelectionService) {
     selection.selPerson$.subscribe(
       person => {
@@ -29,6 +30,7 @@ export class AppComponent {
       year => {
         this.selectedYear = year;
       }
-    )
+    );
+
   }
 }
