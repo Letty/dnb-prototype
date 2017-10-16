@@ -15,7 +15,7 @@ def seq_iter(obj):
 connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='',
-                             db='dnb',
+                             db='dnb2',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
@@ -52,39 +52,44 @@ def get_timeline():
         return jsonify(result)
 
 
-@app.route('/setFilterForTopic', methods=['PUT'])
-def set_filter_for_topic():
-    params = json.loads(request.data)
-    topicID = params.get('id')
-    print('topic: %s' % (topicID))
-    print('person: %s' % (personID))
-    print('year: %s' % (yearID))
-    return 'set topic'
+@app.route('/setFilterForPersonResultYear', methods=['PUT'])
+def filter_by_person_result_year():
+    person_id = request.data.decode('utf-8')
+    year_result = {'data': None, 'error': None}
+
+    # select time
+    with connection.cursor() as cursor:
+        sql = 'select year, count(i_id) count from dnb_author_item where a_id=%s group by year'
+        try:
+            cursor.execute(sql, (person_id))
+        except:
+            year_result['error'] = str(sys.exc_info()[0])
+        else:
+            year_result['data'] = cursor.fetchall()
+    return jsonify(year_result)
 
 
-@app.route('/setFilter', methods=['PUT'])
-def set_filter():
-    print('set filter')
-    params = json.loads(request.data)
-    print(params)
-    return 'set filter'
+@app.route('/setFilterForPersonResultTopic', methods=['PUT'])
+def filter_by_person_result_topic():
+    person_id = request.data.decode('utf-8')
+    topic_result = {'data': None, 'error': None}
+
+    # select topic
+    with connection.cursor() as cursor:
+        sql = 'select * from dnb_author_topic where a_id=%s order by count desc limit 20'
+        try:
+            cursor.execute(sql, (person_id))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            topic_result['data'] = cursor.fetchall()
+    return jsonify(topic_result)
 
 
-@app.route('/setFilterForPerson', methods=['PUT'])
-def set_filter_for_person():
-    params = json.loads(request.data)
-    personID = params.get('id')
-    print('topic: %s' % (topicID))
-    print('person: %s' % (personID))
-    print('year: %s' % (yearID))
-    return 'set person'
+@app.route('/setFilterForPersonResultPerson', methods=['PUT'])
+def filter_by_person_result_person():
+    # todo
+    person_id = request.data.decode('utf-8')
+    person_result = {'data': None, 'error': None}
 
-
-@app.route('/setFilterForYear', methods=['PUT'])
-def set_filter_for_year():
-    params = json.loads(request.data)
-    yearID = params.get('id')
-    print('topic: %s' % (topicID))
-    print('person: %s' % (personID))
-    print('year: %s' % (yearID))
-    return 'set year'
+    return jsonify(person_result)
