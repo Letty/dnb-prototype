@@ -27,12 +27,47 @@ export class ApiService {
   }
 
   setFilter(): void {
-    this.http.put('/setFilter',  this.selection.getSelection(), this.headers)
-      .subscribe(res => {
-        console.log(res);
-      }, error => {
-        console.log(error);
-      });
+    let filter = this.selection.getSelection();
+
+    if (filter['person_id'] !== null && filter['topic_id'] === null) { //&& filter['year'] === null
+      // z: false  -  a: true  -  t: false
+      this.http.put('/setFilterForPersonResultYear', String(filter['person_id']) , this.headers)
+        .subscribe(res => {
+          console.log('---jahr---');
+          console.log(res.json());
+        }, error => {
+          console.log(error);
+        });
+      this.http.put('/setFilterForPersonResultTopic', String(filter['person_id']) , this.headers)
+        .subscribe(res => {
+          console.log('---thema---');
+          console.log(res.json());
+        }, error => {
+          console.log(error);
+        });
+
+
+      // z: true  -  a: true  -  t: false
+
+    }else if(filter['person_id'] === null && filter['topic_id'] !== null){//&& filter['year'] === null
+      // z: false  -  a: false  -  t: true
+
+
+
+      // z: true  -  a: false  -  t: true
+
+    }else if(filter['person_id'] !== null && filter['topic_id'] !== null){//&& filter['year'] === null
+      // z: false  -  a: true  -  t: true
+
+
+
+      // z: true  -  a: true  -  t: true
+
+    }else{
+      // z: false  -  a: false  -  t: false
+      //defaultwerte
+
+    }
   }
 }
 
