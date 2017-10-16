@@ -93,3 +93,54 @@ def filter_by_person_result_person():
     person_result = {'data': None, 'error': None}
 
     return jsonify(person_result)
+
+
+@app.route('/setFilterForTopicResultYear', methods=['PUT'])
+def filter_by_topic_result_year():
+    topic_id = request.data.decode('utf-8')
+    year_result = {'data': None, 'error': None}
+
+    # select time
+    with connection.cursor() as cursor:
+        sql = 'select year, count(i_id) from dnb_item_topic where t_id =%s group by year'
+        try:
+            cursor.execute(sql, (topic_id))
+        except:
+            year_result['error'] = str(sys.exc_info()[0])
+        else:
+            year_result['data'] = cursor.fetchall()
+    return jsonify(year_result)
+
+
+@app.route('/setFilterForTopicResultPerson', methods=['PUT'])
+def filter_by_topic_result_person():
+    topic_id = request.data.decode('utf-8')
+    person_result = {'data': None, 'error': None}
+
+    # select time
+    with connection.cursor() as cursor:
+        sql = 'select * from dnb_author_topic where t_id = %s order by count desc limit 20'
+        try:
+            cursor.execute(sql, (topic_id))
+        except:
+            person_result['error'] = str(sys.exc_info()[0])
+        else:
+            person_result['data'] = cursor.fetchall()
+    return jsonify(person_result)
+
+
+@app.route('/setFilterForTopicResultTopic', methods=['PUT'])
+def filter_by_topic_result_topic():
+    topic_id = request.data.decode('utf-8')
+    topic_result = {'data': None, 'error': None}
+
+    # select time
+    # with connection.cursor() as cursor:
+    #     sql = 'select * from dnb_author_topic where t_id = %s order by count desc limit 20'
+    #     try:
+    #         cursor.execute(sql, (topic_id))
+    #     except:
+    #         person_result['error'] = str(sys.exc_info()[0])
+    #     else:
+    #         person_result['data'] = cursor.fetchall()
+    return jsonify(person_result)

@@ -51,7 +51,20 @@ export class ApiService {
 
     }else if(filter['person_id'] === null && filter['topic_id'] !== null){//&& filter['year'] === null
       // z: false  -  a: false  -  t: true
-
+      this.http.put('/setFilterForTopicResultYear', String(filter['topic_id']) , this.headers)
+        .subscribe(res => {
+          console.log('---jahr---');
+          console.log(res.json());
+        }, error => {
+          console.log(error);
+        });
+      this.http.put('/setFilterForTopicResultPerson', String(filter['topic_id']) , this.headers)
+        .subscribe(res => {
+          console.log('---personen---');
+          console.log(res.json());
+        }, error => {
+          console.log(error);
+        });
 
 
       // z: true  -  a: false  -  t: true
