@@ -5,6 +5,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import * as d3 from 'd3';
 
 import {IPerson} from "../app.interfaces";
+import {DataService} from "../services/data.service";
 
 @Component({
   selector: 'person',
@@ -20,7 +21,8 @@ export class PersonComponent {
   private fontScale = d3.scaleLinear()
     .range([0.8, 2.5]);
 
-  constructor(private api: ApiService, private selection: SelectionService, private sanitizer: DomSanitizer) {
+  constructor(private api: ApiService, private selection: SelectionService, private sanitizer: DomSanitizer,
+              private dataService: DataService) {
 
   }
 
@@ -56,7 +58,7 @@ export class PersonComponent {
 
   onSelect(person: IPerson): void {
     this.selection.setPerson(person);
-    this.api.setFilter();
+    this.dataService.setFilter();
   }
 
 

@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Observable} from "rxjs/Observable";
+
 import {ApiService} from '../services/api.service';
 import {SelectionService} from '../services/selection.service';
 import {DataService} from '../services/data.service';
@@ -13,47 +15,23 @@ import {ITopic} from "../app.interfaces";
 
 export class TopicComponent {
 
-  private topics: Array<ITopic>;
+  private topics: Observable<ITopic[]>;
   private topicTree = {
     'keyword': 'tree',
     'children': []
   };
 
   constructor(private api: ApiService, private selection: SelectionService, private dataService: DataService) {
-    this.topics = this.dataService.getTopic();
   }
 
 
   ngOnInit(): void {
-
-    // this.api.getTopics().subscribe(
-    //   result => {
-    //     this.topics = Object.keys(result).map(key => {
-    //       this.topicTree['children'].push({
-    //         id: result[key].id,
-    //         keyword: result[key].keyword,
-    //         count: result[key].count
-    //       });
-    //       return {
-    //         id: result[key].id,
-    //         keyword: result[key].keyword,
-    //         count: result[key].count
-    //       };
-    //     });
-    //     // this.showTreemap();
-    //   },
-    //   error => {
-	//
-    //   },
-    //   () => {
-	//
-    //   }
-    // )
+    this.topics = this.dataService.topics;
   }
 
   onSelect(topic: ITopic): void {
     this.selection.setTopic(topic);
-    this.api.setFilter();
+    this.dataService.setFilter();
   }
 
   // showTreemap(): void {

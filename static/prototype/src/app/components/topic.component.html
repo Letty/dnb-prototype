@@ -2,7 +2,7 @@
   <div class="headline-div"><h3>Themen</h3></div>
   <div id="topic-viz"></div>
   <div class="topic-list">
-    <div *ngFor="let t of topics" class="topic" (click)="onSelect(t)">
+    <div *ngFor="let t of topics | async" class="topic" (click)="onSelect(t)">
       {{t.keyword}}
     </div>
   </div>
