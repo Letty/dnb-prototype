@@ -13,21 +13,31 @@ export class DataService {
   private defaultTopic: Array<ITopic>;
 
   topics: Observable<ITopic[]>;
+  persons: Observable<IPerson[]>;
   private _topics: BehaviorSubject<ITopic[]>;
+  private _persons: BehaviorSubject<IPerson[]>;
+
   private year: Array<IYear>;
-  private person: Array<IPerson>;
-  private topic: Observable<ITopic[]>;
 
   private dataStore: {
+    persons: IPerson[],
+    defaultPersons: IPerson[],
+
     topics: ITopic[],
     defaultTopics: ITopic[]
   };
 
   constructor(private api: ApiService, private selection: SelectionService) {
 
-    this.dataStore = {topics: [], defaultTopics: []};
+    this.dataStore = {
+      persons: [], defaultPersons: [],
+      topics: [], defaultTopics: []
+    };
     this._topics = <BehaviorSubject<ITopic[]>>new BehaviorSubject([]);
+    this._persons = <BehaviorSubject<IPerson[]>>new BehaviorSubject([]);
+
     this.topics = this._topics.asObservable();
+    this.persons = this._persons.asObservable();
 
     this.api.getYears().subscribe(
       result => {
@@ -46,23 +56,12 @@ export class DataService {
       }
     );
 
-    this.api.getPersons().subscribe(
-      result => {
-        this.defaultPerson = Object.keys(result).map(key => {
-          return {
-            id: result[key].id,
-            name: result[key].name,
-            lastname: result[key].lastname,
-            count: result[key].count
-          };
-        });
-      },
-      error => {
-      },
-      () => {
-        this.person = this.defaultPerson;
-      }
-    );
+    this.api.getPersons()
+      .subscribe(data => {
+        this.dataStore.persons = data;
+        this.dataStore.defaultPersons = data;
+        this._persons.next(Object.assign({}, this.dataStore).persons);
+      }, err => console.log('error while loading default persons'));
 
     this.api.getTopics()
       .subscribe(data => {
@@ -76,6 +75,11 @@ export class DataService {
   setTopic(topics_: ITopic[]): void {
     this.dataStore.topics = topics_;
     this._topics.next(Object.assign({}, this.dataStore).topics);
+  }
+
+  setPerson(persons_: IPerson[]): void {
+    this.dataStore.persons = persons_;
+    this._persons.next(Object.assign({}, this.dataStore).persons);
   }
 
   setFilter(): void {
@@ -122,6 +126,10 @@ export class DataService {
   }
 
   filterDataByTopic(topicID: string): void {
+    this.api.filterDataByTopicResultPerson(topicID)
+      .subscribe(data => {
+        this.setPerson(data);
+      })
     // this.http.put('/setFilterForTopicResultYear', topicID, this.headers)
     //   .subscribe(res => {
     //     console.log('---jahr---');
@@ -130,18 +138,9 @@ export class DataService {
     //   }, error => {
     //     console.log(error);
     //   });
-    // this.http.put('/setFilterForTopicResultPerson', topicID, this.headers)
-    //   .subscribe(res => {
-    //     console.log('---personen---');
-    //     console.log(res.json());
-    //   }, error => {
-    //     console.log(error);
-    //   });
+
   }
 
-  getPerson(): Array<IPerson> {
-    return this.person;
-  }
 
   getYear(): Array<IYear> {
     return this.year;

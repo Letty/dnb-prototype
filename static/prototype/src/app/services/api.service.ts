@@ -17,8 +17,8 @@ export class ApiService {
     return this.http.get('/getTopTopics').map(res => <ITopic[]>res.json());
   }
 
-  getPersons(): Observable<IPerson> {
-    return this.http.get('/getTopPeople').map(res => <IPerson>res.json());
+  getPersons(): Observable<IPerson[]> {
+    return this.http.get('/getTopPeople').map(res => <IPerson[]>res.json());
   }
 
   getYears(): Observable<IYear> {
