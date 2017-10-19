@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import {SelectionService} from "../services/selection.service";
 import {DomSanitizer} from "@angular/platform-browser";
+import {Observable} from "rxjs/Observable";
 import * as d3 from 'd3';
 
 import {IPerson} from "../app.interfaces";
@@ -14,7 +15,7 @@ import {DataService} from "../services/data.service";
 
 export class PersonComponent {
 
-  private persons: Array<IPerson>;
+  private persons: Observable<IPerson[]>;
   private min: number = 1e10;
   private max: number = -1e10;
 
@@ -27,33 +28,23 @@ export class PersonComponent {
   }
 
   ngOnInit(): void {
-    this.api.getPersons().subscribe(
-      result => {
-        this.persons = Object.keys(result).map(key => {
-          if (result[key].count < this.min) {
-            this.min = result[key].count;
-          }
-          if (result[key].count > this.max) {
-            this.max = result[key].count;
-          }
 
-          return {
-            id: result[key].id,
-            name: result[key].name,
-            lastname: result[key].lastname,
-            count: result[key].count
-          };
-        });
+    this.persons = this.dataService.persons;
+    this.dataService.persons.subscribe(
+      value => {
+        value.forEach(p => {
+            if (p.count < this.min) {
+              this.min = p.count;
+            }
+            if (p.count > this.max) {
+              this.max = p.count;
+            }
+          }
+        );
         this.fontScale.domain([this.min, this.max]);
-      },
-      error => {
+      });
 
 
-      },
-      () => {
-
-      }
-    )
   }
 
   onSelect(person: IPerson): void {
