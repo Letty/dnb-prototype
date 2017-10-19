@@ -27,7 +27,8 @@ export class ApiService {
 
 
   filterDataByPersonResultYear(personID: string): Observable<IYear[]> {
-    return this.http.put('/setFilterForPersonResultYear', personID, this.headers).map(res => <IYear[]>res.json());
+    return this.http.put('/setFilterForPersonResultYear', personID, this.headers)
+      .map(res => <IYear[]>res.json());
 
   }
 
@@ -36,22 +37,14 @@ export class ApiService {
       res => <ITopic[]>res.json().data);
   }
 
-  // filterDataByTopic(topicID: string): void {
-  //   this.http.put('/setFilterForTopicResultYear', topicID, this.headers)
-  //     .subscribe(res => {
-  //       console.log('---jahr---');
-  //       console.log(res.json());
-  //       this.dataService.setTopic(res.json())
-  //     }, error => {
-  //       console.log(error);
-  //     });
-  //   this.http.put('/setFilterForTopicResultPerson', topicID, this.headers)
-  //     .subscribe(res => {
-  //       console.log('---personen---');
-  //       console.log(res.json());
-  //     }, error => {
-  //       console.log(error);
-  //     });
-  // }
+  filterDataByTopicResultYear(topicID: string): Observable<IYear[]> {
+    return this.http.put('/setFilterForTopicResultYear', topicID, this.headers).map(
+      res => <IYear[]>res.json().data);
+  }
+
+  filterDataByTopicResultPerson(topicID: string): Observable<IPerson[]> {
+    return this.http.put('/setFilterForTopicResultPerson', topicID, this.headers).map(
+      res => <IPerson[]>res.json().data);
+  }
 }
 
