@@ -68,7 +68,7 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    font-size: 1.5em;
+    font-size: 1.25em;
 
     .topic {
       @include border-radius(2px);
