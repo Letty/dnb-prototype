@@ -107,6 +107,11 @@ html, body {
       stroke: #3564BA;
     }
   }
+
+  g.brush rect.selection{
+    stroke: none;
+    fill: #E1EAFA;
+  }
 }
 
 .topic-viz {
