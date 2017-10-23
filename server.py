@@ -5,14 +5,6 @@ import pymysql.cursors
 
 app = Flask(__name__, static_url_path='')
 
-topicID = ''
-personID = ''
-yearID = ''
-
-
-def seq_iter(obj):
-    return obj if isinstance(obj, dict) else range(len(obj))
-
 connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='',
