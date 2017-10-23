@@ -149,3 +149,49 @@ def filter_by_topic_result_topic():
     #     else:
     #         person_result['data'] = cursor.fetchall()
     return jsonify(person_result)
+
+
+@app.route('/setFilterForYearResultPerson', methods=['PUT'])
+def filter_by_year_result_person():
+    startTime = datetime.now()
+    years = json.loads(request.data.decode('utf-8'))
+    print(years)
+    person_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        # sql = 'select ai.a_id, ac.lastname, ac.name, count(ai.a_id) count '\
+        #     'from dnb_author_item ai inner join dnb_author_count ac '\
+        #     'on ai.a_id = ac.id where '\
+        #     'ai.year > %s and ai.year < %s group by ai.a_id order by count desc limit 20'
+        sql = 'select ai.a_id, ac.lastname, ac.name, count(ai.a_id) count '\
+            'from dnb_author_item ai, dnb_author_count ac '\
+            'where ai.a_id = ac.id and ai.year > %s and ai.year < %s '\
+            'group by ai.a_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (years[0], years[1]))
+        except:
+            person_result['error'] = str(sys.exc_info()[0])
+        else:
+            person_result['data'] = cursor.fetchall()
+    uptime = str(datetime.now() - startTime)
+    print('uptime: %s', (uptime))
+    return jsonify(person_result)
+
+
+@app.route('/setFilterForYearResultTopic', methods=['PUT'])
+def filter_by_year_result_topic():
+    years = json.loads(request.data.decode('utf-8'))
+    topic_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select it.t_id, tc.keyword, count(it.t_id) count '\
+            'from dnb_item_topic it inner join dnb_topic_count tc '\
+            'on it.t_id = tc.id where it.year > %s and it.year < %s '\
+            'group by it.t_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (years[0], years[1]))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            topic_result['data'] = cursor.fetchall()
+    return jsonify(topic_result)
