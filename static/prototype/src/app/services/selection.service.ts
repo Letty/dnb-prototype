@@ -36,8 +36,10 @@ export class SelectionService {
     return this.selectedTopic;
   }
 
-  setYear(year: IYear): void {
-    this.selectedYear.next(year);
+  setYear(yearMin: number, yearMax: number): void {
+    // this.selectedYear.next(year);
+    this.yearMin = yearMin;
+    this.yearMax = yearMax
   }
 
   getYear(): Subject<IYear> {
@@ -47,8 +49,9 @@ export class SelectionService {
   getSelection(): Object {
     return {
       'person_id': this.personID,
-      'topic_id': this.topicID
-      // 'year': this.selectedYear
+      'topic_id': this.topicID,
+      'min_year': this.yearMin,
+      'max_year': this.yearMax
     }
   }
 }
