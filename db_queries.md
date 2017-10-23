@@ -16,6 +16,7 @@
 * A: ``
 * T: `select * from dnb2.dnb_author_topic where a_id = '118540238' order by count desc limit 20` - namen noch auflisten
 
+
 # Set Topic (false-false-true)
 
 * Z: `select year, count(t_id) from dnb2.dnb_item_topic where t_id = '10160' group by year`
@@ -51,5 +52,3 @@
 
 * alle themen eines autors in einem zeitraum auf zeit und thema gezählt: `select a.a_id, a.year, i.t_id,count(i.t_id) count from dnb2.dnb_author_item a inner join dnb2.dnb_item_topic i on i.i_id = a.i_id  where a.a_id = '118540238' and a.year > 1999 and a.year < 2002 group by i.t_id, a.year`
 
-
-12:34:37    select a.a_id, a.year, i.t_id,count(i.t_id) count from dnb2.dnb_author_item a inner join dnb2.dnb_item_topic i on i.i_id = a.i_id  where a.a_id = '118540238' and a.year > 1999 and a.year < 2002 group by i.t_id, i.year   Error Code: 1055. Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dnb2.a.year' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by   0.00036 sec
