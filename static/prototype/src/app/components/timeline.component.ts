@@ -59,6 +59,10 @@ export class TimelineComponent {
       .exponent(0.3)
       .rangeRound([height, 0]);
 
+    let brush = d3.brushX()
+      .extent([[0, 0], [width, height]])
+      .on("brush end", this.brushed);
+
     let area = d3.area<IYear>()
       .x(d => { return x(new Date(d.year,1,1));})
       .y0(height)
@@ -81,6 +85,16 @@ export class TimelineComponent {
           //console.log(x.invert(d3.mouse(this)[0]).getFullYear(), year[new Date(x.invert(d3.mouse(this)[0]).getFullYear(),1,1)]);
         });
 
+    svg.append("g")
+      .attr("class", "brush")
+      .call(brush)
+      .call(brush.move, x.range());
+
+    d3.select('.brush .selection')
+      .style('display', 'none');
+    d3.select('.brush .handle')
+      .style('display', 'none');
+
       svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
@@ -96,6 +110,10 @@ export class TimelineComponent {
         .attr("dy", "0.71em")
         .attr("text-anchor", "end")
         .text("Veröffentlichungen");
+  }
+
+  brushed():void{
+    console.log('brush event');
   }
 
 
