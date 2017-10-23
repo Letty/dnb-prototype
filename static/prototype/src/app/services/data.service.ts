@@ -85,23 +85,35 @@ export class DataService {
   setFilter(): void {
     let filter = this.selection.getSelection();
 
-    if (filter['person_id'] !== null && filter['topic_id'] === null) { //&& filter['year'] === null
+    if (filter['person_id'] !== null && filter['topic_id'] === null &&
+      (filter['min_year'] === null && filter['max_year'] === null)) {
       // z: false  -  a: true  -  t: false
       this.filterDataByPerson(String(filter['person_id']));
-    } else if (filter['person_id'] !== null && filter['topic_id'] === null) {//&& filter['year'] !== null
+
+    } else if (filter['person_id'] !== null && filter['topic_id'] === null &&
+      (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: true  -  t: false
 
-    } else if (filter['person_id'] === null && filter['topic_id'] !== null) {//&& filter['year'] === null
+
+    } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
+      (filter['min_year'] === null && filter['max_year'] === null)) {
       // z: false  -  a: false  -  t: true
       this.filterDataByTopic(String(filter['topic_id']));
-    } else if (filter['person_id'] === null && filter['topic_id'] !== null) {//&& filter['year'] !== null
+
+    } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
+      (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: false  -  t: true
 
-    } else if (filter['person_id'] !== null && filter['topic_id'] !== null) {//&& filter['year'] === null
+
+    } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
+      (filter['min_year'] === null && filter['max_year'] === null)) {
       // z: false  -  a: true  -  t: true
 
-    } else if (filter['person_id'] !== null && filter['topic_id'] !== null) {//&& filter['year'] !== null
+
+    } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
+      (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: true  -  t: true
+
 
     } else {
       // z: false  -  a: false  -  t: false
@@ -119,7 +131,7 @@ export class DataService {
     //   .subscribe(res => {
     //     console.log('---thema---');
     //     console.log(res.json());
-	//
+    //
     //   }, error => {
     //     console.log(error);
     //   });
@@ -139,6 +151,9 @@ export class DataService {
     //     console.log(error);
     //   });
 
+  }
+
+  filterDataByYear(minYear: number, maxYear:number): void {
   }
 
 
