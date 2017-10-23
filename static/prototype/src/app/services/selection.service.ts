@@ -7,7 +7,8 @@ import {Subject} from "rxjs/Subject";
 export class SelectionService {
   private selectedPerson = new Subject<IPerson>();
   private selectedTopic = new Subject<ITopic>();
-  private selectedYear = new Subject<IYear>();
+  private selectedMinYear = new Subject<number>();
+  private selectedMaxYear = new Subject<number>();
 
   private personID: string = null;
   private topicID: number = null;
@@ -16,7 +17,8 @@ export class SelectionService {
 
   selPerson$ = this.selectedPerson.asObservable();
   selTopic$ = this.selectedTopic.asObservable();
-  selYear$ = this.selectedYear.asObservable();
+  selMinYear$ = this.selectedMinYear.asObservable();
+  selMaxYear$ = this.selectedMaxYear.asObservable();
 
   setPerson(person: IPerson): void {
     this.personID = person.id;
@@ -37,14 +39,15 @@ export class SelectionService {
   }
 
   setYear(yearMin: number, yearMax: number): void {
-    // this.selectedYear.next(year);
     this.yearMin = yearMin;
-    this.yearMax = yearMax
+    this.yearMax = yearMax;
+    this.selectedMinYear.next(yearMin);
+    this.selectedMaxYear.next(yearMax);
   }
 
-  getYear(): Subject<IYear> {
-    return this.selectedYear;
-  }
+  // getYears(): Subject<Number[]> {
+  //   return [this.selectedMinYear, this.selectedMaxYear];
+  // }
 
   getSelection(): Object {
     return {

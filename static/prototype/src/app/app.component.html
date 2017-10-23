@@ -4,8 +4,16 @@
     <div class="searchbar">Suchleiste</div>
     <div class="nav-selection">
       <div>AUSWAHL</div>
-      <div *ngIf="selectedPerson" class="selected-person">{{selectedPerson.name}} {{selectedPerson.lastname}} <b>x</b></div>
-      <div *ngIf="selectedTopic" class="selected-topic">{{selectedTopic.keyword}} <b>x</b></div>
+      <div class="selected-year">
+        <div *ngIf="selectedMinYear">{{selectedMinYear}}</div>
+        <div *ngIf="selectedMaxYear"> - {{selectedMaxYear}}</div>
+        <div *ngIf="selectedMinYear"> <b>x</b></div>
+      </div>
+      <div *ngIf="selectedPerson" class="selected-person">
+        {{selectedPerson.name}} {{selectedPerson.lastname}} <b>x</b>
+      </div>
+      <div *ngIf="selectedTopic" class="selected-topic">
+        {{selectedTopic.keyword}} <b>x</b></div>
     </div>
     <div class="result-count">ANZAHL D ERGEBNISSE</div>
     <div class="help">?</div>

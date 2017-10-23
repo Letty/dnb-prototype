@@ -8,7 +8,8 @@ import {SelectionService} from "./services/selection.service";
 })
 export class AppComponent {
   title = 'app';
-  private selectedYear: IYear;
+  private selectedMinYear: number;
+  private selectedMaxYear: number;
   private selectedPerson: IPerson;
   private selectedTopic: ITopic;
 
@@ -26,9 +27,14 @@ export class AppComponent {
       }
     );
 
-    selection.selYear$.subscribe(
+    selection.selMinYear$.subscribe(
       year => {
-        this.selectedYear = year;
+        this.selectedMinYear = year;
+      }
+    );
+    selection.selMaxYear$.subscribe(
+      year => {
+        this.selectedMaxYear = year;
       }
     );
 

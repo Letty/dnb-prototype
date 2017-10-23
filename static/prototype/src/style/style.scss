@@ -5,6 +5,8 @@
   border-radius: $radius;
 }
 
+// green #BFC91C
+
 html, body {
   font-family: "Open Sans";
   //background-color: black;
@@ -20,6 +22,15 @@ html, body {
     display: flex;
     flex-grow: 2;
     align-items: baseline;
+
+    .selected-year{
+      display: flex;
+      @include border-radius(2px);
+      margin-left: 30px;
+      padding: 0px 5px;
+      background: #E1EAFA;
+      color: #3564BA;
+    }
 
     .selected-person {
       @include border-radius(2px);
