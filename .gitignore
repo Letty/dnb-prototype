@@ -1,4 +1,4 @@
-static/dist/*
+static/dist/
 static/prototype/src/style/*.css.map
 static/prototype/src/style/*.css
 static/prototype/node_modules/

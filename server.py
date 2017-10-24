@@ -77,7 +77,6 @@ def filter_by_person_result_topic():
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             topic_result['data'] = cursor.fetchall()
-            print(topic_result['data'])
     uptime = str(datetime.now() - startTime)
     print('uptime: %s', (uptime))
     return jsonify(topic_result)
@@ -98,7 +97,7 @@ def filter_by_topic_result_year():
     year_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
-        sql = 'select year, count(i_id) from dnb_item_topic where t_id =%s group by year'
+        sql = 'select year, count(i_id) count from dnb_item_topic where t_id =%s group by year'
         try:
             cursor.execute(sql, (topic_id))
         except:
@@ -147,7 +146,6 @@ def filter_by_topic_result_topic():
 def filter_by_year_result_person():
     startTime = datetime.now()
     years = json.loads(request.data.decode('utf-8'))
-    print(years)
     person_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
