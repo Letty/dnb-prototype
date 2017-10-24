@@ -21,14 +21,14 @@ export class ApiService {
     return this.http.get('/getTopPeople').map(res => <IPerson[]>res.json());
   }
 
-  getYears(): Observable<IYear> {
-    return this.http.get('/getTimeline').map(res => <IYear>res.json());
+  getYears(): Observable<IYear[]> {
+    return this.http.get('/getTimeline').map(res => <IYear[]>res.json());
   }
 
 
   filterDataByPersonResultYear(personID: string): Observable<IYear[]> {
     return this.http.put('/setFilterForPersonResultYear', personID, this.headers)
-      .map(res => <IYear[]>res.json());
+      .map(res => <IYear[]>res.json().data);
 
   }
 
