@@ -1,23 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from '../services/api.service';
-import {SelectionService} from "../services/selection.service";
-import {DomSanitizer} from "@angular/platform-browser";
-import {Observable} from "rxjs/Observable";
+import {SelectionService} from '../services/selection.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Observable} from 'rxjs/Observable';
 import * as d3 from 'd3';
 
-import {IPerson} from "../app.interfaces";
-import {DataService} from "../services/data.service";
+import {IPerson} from '../app.interfaces';
+import {DataService} from '../services/data.service';
 
 @Component({
-  selector: 'person',
+  selector: 'chart-person',
   templateUrl: './person.component.html'
 })
 
-export class PersonComponent {
+export class PersonComponent implements OnInit {
 
-  private persons: Observable<IPerson[]>;
-  private min: number = 1e10;
-  private max: number = -1e10;
+  public persons: Observable<IPerson[]>;
+  private min = 1e10;
+  private max = -1e10;
 
   private fontScale = d3.scaleLinear()
     .range([0.8, 2.5]);

@@ -2,21 +2,21 @@ import {Component, ElementRef, Renderer2, OnInit} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import * as d3 from 'd3';
 
-import {IYear} from "../app.interfaces";
-import {SelectionService} from "../services/selection.service";
-import {getClassMembers} from "@angular/compiler-cli/src/diagnostics/typescript_symbols";
-import {DataService} from "../services/data.service";
-import {Observable} from "rxjs/Observable";
+import {IYear} from '../app.interfaces';
+import {SelectionService} from '../services/selection.service';
+import {getClassMembers} from '@angular/compiler-cli/src/diagnostics/typescript_symbols';
+import {DataService} from '../services/data.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'timeline',
   templateUrl: './timeline.component.html'
 })
 
-export class TimelineComponent {
+export class TimelineComponent implements OnInit {
   private _years: Observable<IYear[]>;
   private years: IYear[] = [];
-  init: number = 0;
+  init = 0;
 
   constructor(private api: ApiService, private selection: SelectionService, private dataService: DataService) {
 
@@ -32,7 +32,7 @@ export class TimelineComponent {
           this.init = this.init + 1;
         }
 
-        let y: IYear[] = [];
+        const y: IYear[] = [];
 
         if (this.init === 1) {
           value.forEach(function (d) {
@@ -43,7 +43,7 @@ export class TimelineComponent {
 
           this.showAreaChart();
 
-        }else{
+        } else {
           console.log('update data');
           console.log(value);
         }
@@ -54,31 +54,31 @@ export class TimelineComponent {
 
   showAreaChart(): void {
 
-    let margin = {top: 20, bottom: 20, left: 50, right: 20};
+    const margin = {top: 20, bottom: 20, left: 50, right: 20};
 
-    let height = 200 - margin.top - margin.bottom;
-    let width = 1350 - margin.left - margin.right;
+    const height = 200 - margin.top - margin.bottom;
+    const width = 1350 - margin.left - margin.right;
 
 
-    let x = d3.scaleTime()
+    const x = d3.scaleTime()
       .rangeRound([0, width]);
 
 
-    let y = d3.scalePow()
+    const y = d3.scalePow()
       .exponent(0.3)
       .rangeRound([height, 0]);
 
-    let brush = d3.brushX()
+    const brush = d3.brushX()
       .extent([[0, 0], [width, height]])
-      .on("brush end", () => {
-        if (d3.event.type === 'end' && (d3.event.selection[0] != 0 && d3.event.selection[1] != width)) {
+      .on('brush end', () => {
+        if (d3.event.type === 'end' && (d3.event.selection[0] !== 0 && d3.event.selection[1] !== width)) {
           this.selection.setYear(x.invert(d3.event.selection[0]).getFullYear(),
             x.invert(d3.event.selection[1]).getFullYear());
           this.dataService.setFilter();
         }
       });
 
-    let area = d3.area<IYear>()
+    const area = d3.area<IYear>()
       .x(d => {
         return x(new Date(d.year, 1, 1));
       })
@@ -88,7 +88,7 @@ export class TimelineComponent {
       });
 
 
-    let svg = d3.select('#viz').append('svg')
+    const svg = d3.select('#viz').append('svg')
       .attr('height', height + margin.top + margin.bottom)
       .attr('width', width + margin.left + margin.right)
       .attr('class', 'year-area-svg')
@@ -103,17 +103,17 @@ export class TimelineComponent {
       return d.count;
     })]);
 
-    svg.append("path")
+    svg.append('path')
       .datum(this.years)
       .attr('class', 'area-path')
-      .attr("d", area)
+      .attr('d', area)
       .on('mousemove', function (d) {
         // extraxtion des jahres + infos
-        //console.log(x.invert(d3.mouse(this)[0]).getFullYear(), year[new Date(x.invert(d3.mouse(this)[0]).getFullYear(),1,1)]);
+        // console.log(x.invert(d3.mouse(this)[0]).getFullYear(), year[new Date(x.invert(d3.mouse(this)[0]).getFullYear(),1,1)]);
       });
 
-    svg.append("g")
-      .attr("class", "brush")
+    svg.append('g')
+      .attr('class', 'brush')
       .call(brush)
       .call(brush.move, x.range());
 
@@ -122,20 +122,20 @@ export class TimelineComponent {
     d3.select('.brush .handle')
       .style('display', 'none');
 
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
+    svg.append('g')
+      .attr('transform', 'translate(0,' + height + ')')
       .call(d3.axisBottom(x));
-    svg.append("g")
+    svg.append('g')
       .attr('class', 'y-axis')
       .call(d3.axisLeft(y)
         .tickSize(-width))
-      .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("text-anchor", "end")
-      .text("Veröffentlichungen");
+      .append('text')
+      .attr('fill', '#000')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 6)
+      .attr('dy', '0.71em')
+      .attr('text-anchor', 'end')
+      .text('Veröffentlichungen');
 
   }
 }
