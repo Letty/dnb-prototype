@@ -6,6 +6,7 @@ import {IYear} from "../app.interfaces";
 import {SelectionService} from "../services/selection.service";
 import {getClassMembers} from "@angular/compiler-cli/src/diagnostics/typescript_symbols";
 import {DataService} from "../services/data.service";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'timeline',
@@ -13,32 +14,42 @@ import {DataService} from "../services/data.service";
 })
 
 export class TimelineComponent {
-  private years: Array<IYear>;
+  private _years: Observable<IYear[]>;
+  private years: IYear[] = [];
+  init: number = 0;
 
   constructor(private api: ApiService, private selection: SelectionService, private dataService: DataService) {
 
   }
 
   ngOnInit(): void {
-    this.api.getYears().subscribe(
-      result => {
-        this.years = Object.keys(result).map(key => {
-          return {
-            id: result[key].id,
-            year: result[key].year,
-            count: result[key].count
-          };
-        });
-        this.showAreaChart();
-      },
-      error => {
 
-      },
-      () => {
+    this._years = this.dataService.years;
 
+    this.dataService.years.subscribe(
+      value => {
+        if (value.length > 0) {
+          this.init = this.init + 1;
+        }
 
+        let y: IYear[] = [];
+
+        if (this.init === 1) {
+          value.forEach(function (d) {
+            y.push(d);
+          });
+
+          this.years = y;
+
+          this.showAreaChart();
+
+        }else{
+          console.log('update data');
+          console.log(value);
+        }
       }
-    )
+    );
+
   }
 
   showAreaChart(): void {
