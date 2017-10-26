@@ -45,6 +45,12 @@ a {
     padding: 0;
   }
 
+  .searchbar {
+    background-color: #eee;
+    @include border-radius(2px);
+    border: 0;
+  }
+
   .nav-selection {
     display: flex;
     flex-grow: 2;
