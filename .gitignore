@@ -4,3 +4,4 @@ static/prototype/src/style/*.css
 static/prototype/node_modules/
 *.pyc
 .idea
+.DS_Store
