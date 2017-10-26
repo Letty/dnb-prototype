@@ -10,6 +10,7 @@
 html {
   font: normal normal 105%/1.7 "Open Sans", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", Helvetica, sans-serif;
   color: #222;
+  background-color: #f7f7f7;
 }
 
 html, body {
@@ -30,18 +31,26 @@ a {
   text-decoration: none;
 }
 
-.navigation {
+.header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
+  background-color: #fff;
+  padding: 1em;
+
+  .dnb-logo {
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+  }
 
   .nav-selection {
     display: flex;
     flex-grow: 2;
     align-items: baseline;
 
-    .selected-year{
+    .selected-year {
       display: flex;
       @include border-radius(2px);
       margin-left: 30px;
@@ -68,8 +77,8 @@ a {
   }
 }
 
-.navigation div{
-  margin: 0px 5px;
+.header > * {
+  margin-right: 1em !important;
 }
 
 .person-div {
