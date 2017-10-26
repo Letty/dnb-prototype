@@ -17,7 +17,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() xAxis = false;
   @Input() yAxis = false;
   @Input() brush = true;
-  @Input() logScale = true;
+  @Input() logXScale = true;
   @Input() startYear = 1500;
   @Input() endYear = 2017;
   @Input() height = 96;
@@ -48,26 +48,21 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   }
 
   updatePath(): void {
-    const xScale = d3.scaleTime()
-      .rangeRound([0, this.width])
-      .domain(d3.extent(this.years, function (d) {
-        return new Date(d.year, 1, 1);
-      }));
+    const xScale = this.logXScale ?
+      d3.scalePow().exponent(2) : d3.scaleLinear();
+
+    xScale.rangeRound([0, this.width])
+      .domain(d3.extent(this.years, d => d.year));
+
     const yScale = d3.scalePow()
       .exponent(0.3)
       .rangeRound([this.height, 0])
-      .domain([0, d3.max(this.years, function (d) {
-        return d.count;
-      })]);
+      .domain([0, d3.max(this.years, d => d.count)]);
 
     const area = d3.area<IYear>()
-      .x(d => {
-        return xScale(new Date(d.year, 1, 1));
-      })
+      .x(d => xScale(d.year))
       .y0(this.height)
-      .y1(d => {
-        return yScale(d.count);
-      });
+      .y1(d => yScale(d.count));
 
     this.path = area(this.years);
   }
