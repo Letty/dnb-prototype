@@ -111,15 +111,14 @@ a {
 .person-div {
 
   .person-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
 
     .person {
-      margin: 5px;
-      padding: 5px;
+      display: inline-block;
+      margin: 0 5px;
+      padding: 2px 5px;
       color: #E9435A; //hintergrund FFEBEE
       cursor: pointer;
+      @include border-radius(2px);
     }
     .person:hover {
       background-color: #FFEBEE;
