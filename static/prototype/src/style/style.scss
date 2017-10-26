@@ -38,6 +38,9 @@ a {
   align-items: baseline;
   background-color: #fff;
   padding: 1em;
+  -webkit-box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.02);
+  -moz-box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.02);
+  box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.02);
 
   .dnb-logo {
     font-size: 1em;
@@ -49,6 +52,10 @@ a {
     background-color: #eee;
     @include border-radius(2px);
     border: 0;
+    color: #aaa;
+    font-size: 0.8em;
+    padding: 0.5em 0.5em;
+    width: 10vw;
   }
 
   .nav-selection {
@@ -56,30 +63,44 @@ a {
     flex-grow: 2;
     align-items: baseline;
 
-    .selected-year {
-      display: flex;
+    & > span {
+      color: #aaa;
+    }
+
+    .facet {
       @include border-radius(2px);
-      margin-left: 30px;
-      padding: 0px 5px;
+      margin-left: 0.5vw;
+      padding: 0.2em 0.5em;
+      font-weight: bold;
+      font-size: 0.8em;
+
+      .close-button {
+        margin-left: 0.5em;
+      }
+    }
+
+    .selected-year {
       background: #E1EAFA;
       color: #3564BA;
     }
 
     .selected-person {
-      @include border-radius(2px);
-      margin-left: 30px;
-      padding: 0px 5px;
       color: #E9435A;
       background-color: #FFEBEE;
     }
 
     .selected-topic {
-      @include border-radius(2px);
-      margin-left: 30px;
-      padding: 0px 5px;
       color: #1DB5B4;
       background-color: #D2F0F0;
     }
+  }
+
+  .help {
+    @include border-radius(2px)
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    background-color: #eee;
+    color: #aaa;
   }
 }
 
