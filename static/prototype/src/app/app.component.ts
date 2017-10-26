@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {IYear, IPerson, ITopic} from "./app.interfaces";
-import {SelectionService} from "./services/selection.service";
+import {IYear, IPerson, ITopic} from './app.interfaces';
+import {SelectionService} from './services/selection.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +8,10 @@ import {SelectionService} from "./services/selection.service";
 })
 export class AppComponent {
   title = 'app';
-  private selectedMinYear: number;
-  private selectedMaxYear: number;
-  private selectedPerson: IPerson;
-  private selectedTopic: ITopic;
+  public selectedMinYear: number;
+  public selectedMaxYear: number;
+  public selectedPerson: IPerson;
+  public selectedTopic: ITopic;
 
 
   constructor(private selection: SelectionService) {

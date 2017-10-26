@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import {ApiService} from '../services/api.service';
-import {SelectionService} from "./selection.service";
+import {SelectionService} from './selection.service';
 import {IPerson, ITopic, IYear} from '../app.interfaces';
-import {Observable} from "rxjs/Observable";
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class DataService {
@@ -86,7 +86,7 @@ export class DataService {
   }
 
   setFilter(): void {
-    let filter = this.selection.getSelection();
+    const filter = this.selection.getSelection();
 
     if (filter['person_id'] !== null && filter['topic_id'] === null &&
       (filter['min_year'] === null && filter['max_year'] === null)) {
@@ -126,7 +126,7 @@ export class DataService {
 
     } else {
       // z: false  -  a: false  -  t: false
-      //defaultwerte
+      // defaultwerte
 
     }
   }
@@ -140,18 +140,18 @@ export class DataService {
     this.api.filterDataByPersonResultYear(personID)
       .subscribe(data => {
         this.setYear(data);
-      })
+      });
   }
 
   filterDataByTopic(topicID: string): void {
     this.api.filterDataByTopicResultPerson(topicID)
       .subscribe(data => {
         this.setPerson(data);
-      })
+      });
     this.api.filterDataByTopicResultYear(topicID)
       .subscribe(data => {
         this.setYear(data);
-      })
+      });
   }
 
   filterDataByYear(minYear: number, maxYear: number): void {

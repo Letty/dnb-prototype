@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 
 import {IPerson, ITopic, IYear} from '../app.interfaces';
@@ -48,12 +48,11 @@ export class ApiService {
   }
 
   filterDataByYearResultPerson(yearMin: number, yearMax: number): Observable<IPerson[]> {
-    return this.http.put('/setFilterForYearResultPerson', JSON.stringify([yearMin,yearMax]), this.headers)
+    return this.http.put('/setFilterForYearResultPerson', JSON.stringify([yearMin, yearMax]), this.headers)
       .map(res => <IPerson[]>res.json().data);
   }
   filterDataByYearResultTopic(yearMin: number, yearMax: number): Observable<ITopic[]> {
-    return this.http.put('/setFilterForYearResultTopic', JSON.stringify([yearMin,yearMax]), this.headers)
+    return this.http.put('/setFilterForYearResultTopic', JSON.stringify([yearMin, yearMax]), this.headers)
       .map(res => <ITopic[]>res.json().data);
   }
 }
-

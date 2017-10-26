@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import {IPerson, ITopic, IYear} from '../app.interfaces';
-import {Subject} from "rxjs/Subject";
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class SelectionService {
@@ -55,7 +55,6 @@ export class SelectionService {
       'topic_id': this.topicID,
       'min_year': this.yearMin,
       'max_year': this.yearMax
-    }
+    };
   }
 }
-
