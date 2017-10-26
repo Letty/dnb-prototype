@@ -7,9 +7,27 @@
 
 // green #BFC91C
 
+html {
+  font: normal normal 105%/1.7 "Open Sans", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", Helvetica, sans-serif;
+  color: #222;
+}
+
 html, body {
-  font-family: "Open Sans";
-  //background-color: black;
+  height: 100%;
+  width: 100%;
+}
+
+html, body, figure, ul, li, p {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 .navigation {
