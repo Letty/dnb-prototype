@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS # remove for production
 import json
 from datetime import datetime
 import pymysql.cursors
 
 app = Flask(__name__, static_url_path='')
+CORS(app) # remove for production
 
 connection = pymysql.connect(host='127.0.0.1',
                              user='root',
