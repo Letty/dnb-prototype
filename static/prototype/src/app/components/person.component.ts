@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ApiService} from '../services/api.service';
-import {SelectionService} from '../services/selection.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Observable} from 'rxjs/Observable';
-import * as d3 from 'd3';
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../services/api.service';
+import { SelectionService } from '../services/selection.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import { scaleLinear } from "d3-scale";
 
-import {IPerson} from '../app.interfaces';
-import {DataService} from '../services/data.service';
+import { IPerson } from '../app.interfaces';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'chart-person',
@@ -16,35 +16,27 @@ import {DataService} from '../services/data.service';
 export class PersonComponent implements OnInit {
 
   public persons: Observable<IPerson[]>;
-  private min = 1e10;
-  private max = -1e10;
+  private min = Number.POSITIVE_INFINITY;
+  private max = Number.NEGATIVE_INFINITY;
 
-  private fontScale = d3.scaleLinear()
+  private fontScale = scaleLinear()
     .range([0.8, 2.5]);
 
-  constructor(private api: ApiService, private selection: SelectionService, private sanitizer: DomSanitizer,
-              private dataService: DataService) {
-
-  }
+  constructor(
+    private api: ApiService,
+    private selection: SelectionService,
+    private sanitizer: DomSanitizer,
+    private dataService: DataService
+    ) {}
 
   ngOnInit(): void {
 
     this.persons = this.dataService.persons;
     this.dataService.persons.subscribe(
       value => {
-        value.forEach(p => {
-            if (p.count < this.min) {
-              this.min = p.count;
-            }
-            if (p.count > this.max) {
-              this.max = p.count;
-            }
-          }
-        );
-        this.fontScale.domain([this.min, this.max]);
+        let counts: Array<number> = value.map(p => p.count);
+        this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
       });
-
-
   }
 
   onSelect(person: IPerson): void {
@@ -52,11 +44,9 @@ export class PersonComponent implements OnInit {
     this.dataService.setFilter();
   }
 
-
   setFontSize(count: number): string {
     let style: any;
     style = this.sanitizer.bypassSecurityTrustStyle('font-size: ' + this.fontScale(count) + 'em');
     return style;
   }
-
 }
