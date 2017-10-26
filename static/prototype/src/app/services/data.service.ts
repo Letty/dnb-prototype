@@ -8,9 +8,6 @@ import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class DataService {
-  private defaultYear: Array<IYear>;
-  private defaultPerson: Array<IPerson>;
-  private defaultTopic: Array<ITopic>;
 
   topics: Observable<ITopic[]>;
   persons: Observable<IPerson[]>;
@@ -49,7 +46,7 @@ export class DataService {
     this.years = this._years.asObservable();
 
     this.api.getYears()
-      .subscribe( data => {
+      .subscribe(data => {
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);
@@ -88,30 +85,30 @@ export class DataService {
   setFilter(): void {
     let filter = this.selection.getSelection();
 
-    if (filter['person_id'] !== null && filter['topic_id'] === null &&
+    if (filter['person_id'] === null && filter['topic_id'] === null &&
+      (filter['min_year'] !== null && filter['max_year'] !== null)) {
+      // z: true  -  a: false  -  t: false
+      this.filterDataByYear(filter['min_year'], filter['max_year']);
+
+
+    } else if (filter['person_id'] !== null && filter['topic_id'] === null &&
       (filter['min_year'] === null && filter['max_year'] === null)) {
       // z: false  -  a: true  -  t: false
       this.filterDataByPerson(String(filter['person_id']));
-
-    } else if (filter['person_id'] !== null && filter['topic_id'] === null &&
-      (filter['min_year'] !== null && filter['max_year'] !== null)) {
-      // z: true  -  a: true  -  t: false
-
 
     } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
       (filter['min_year'] === null && filter['max_year'] === null)) {
       // z: false  -  a: false  -  t: true
       this.filterDataByTopic(String(filter['topic_id']));
 
+    } else if (filter['person_id'] !== null && filter['topic_id'] === null &&
+      (filter['min_year'] !== null && filter['max_year'] !== null)) {
+      // z: true  -  a: true  -  t: false
+      this.filterDataByYearAndPerson(filter['min_year'], filter['max_year'], String(filter['person_id']));
+
     } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
       (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: false  -  t: true
-
-
-    } else if (filter['person_id'] === null && filter['topic_id'] === null &&
-      (filter['min_year'] !== null && filter['max_year'] !== null)) {
-      // z: true  -  a: false  -  t: false
-      this.filterDataByYear(filter['min_year'], filter['max_year']);
 
 
     } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
@@ -162,6 +159,14 @@ export class DataService {
     this.api.filterDataByYearResultTopic(minYear, maxYear)
       .subscribe(data => {
         this.setTopic(data);
+      });
+  }
+
+  filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
+    this.api.filterForYearPersonResultYear(minYear, maxYear, personID)
+      .subscribe(data => {
+        console.log(data);
+        this.setYear(data);
       });
   }
 
