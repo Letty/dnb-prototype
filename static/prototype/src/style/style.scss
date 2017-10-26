@@ -130,21 +130,37 @@ a {
 
   .topic-list {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    font-size: 1.25em;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 20vh;
+    font-size: 0.8em;
 
-    .topic {
-      @include border-radius(2px);
-      margin: 2px;
-      padding: 5px;
-      background-color: #D2F0F0;
-      color: #1DB5B4;
-      cursor: pointer;
-    }
+    .topic-bins {
+      flex: 1;
 
-    .topic:hover {
-      background-color: #e8f7f7;
+      .topic {
+        span {
+          @include border-radius(2px);
+          display: block;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          text-align: center;
+          height: calc(100% - 2px);
+          width: calc(100% - 2px);
+          margin: 0 2px;
+          top: 2px;
+          background-color: #D2F0F0;
+          color: #1DB5B4;
+          cursor: pointer;
+          line-height: 1.2em;
+
+          &:hover {
+            background-color: #e8f7f7;
+          }
+        }
+      }
     }
   }
 }

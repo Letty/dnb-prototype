@@ -15,6 +15,37 @@ connection = pymysql.connect(host='127.0.0.1',
                              cursorclass=pymysql.cursors.DictCursor)
 
 
+def getTopicsPercentage(result):
+    total = sum(item['count'] for item in result)
+    for item in result:
+        item['percentage'] = item['count'] * 100 / total
+    number_of_bins = 5
+    percentage_per_bin = 100 / number_of_bins
+    bins = [[] for _ in range(number_of_bins)]
+
+    for bin in bins:
+        for item in result:
+            if (sum(item['percentage'] for item in bin) < percentage_per_bin):
+                bin.append(item)
+                result.remove(item)
+
+    bins.sort(key = lambda bin: sum(item['percentage'] for item in bin), reverse = True)
+
+    current_bin = 0
+    for item in result:
+        bins[current_bin].append(item)
+        current_bin += 1
+        if current_bin == number_of_bins:
+            current_bin = 0
+
+    for bin in bins:
+        total = sum(item['percentage'] for item in bin)
+        print(total)
+        for item in bin:
+            item['percentage'] = item['percentage'] * 100 / total
+
+    return bins
+
 @app.route('/')
 def root():
     return app.send_static_file('dist/index.html')
@@ -26,7 +57,7 @@ def get_top_topics():
         sql = 'select * from dnb_topic_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
-        return jsonify(result)
+        return jsonify(getTopicsPercentage(result))
 
 
 @app.route('/getTopPeople')
@@ -78,7 +109,7 @@ def filter_by_person_result_topic():
         except:
             topic_result['error'] = str(sys.exc_info()[0])
         else:
-            topic_result['data'] = cursor.fetchall()
+            topic_result['data'] = getTopicsPercentage(cursor.fetchall())
     uptime = str(datetime.now() - startTime)
     print('uptime: %s', (uptime))
     return jsonify(topic_result)
@@ -185,5 +216,5 @@ def filter_by_year_result_topic():
         except:
             topic_result['error'] = str(sys.exc_info()[0])
         else:
-            topic_result['data'] = cursor.fetchall()
+            topic_result['data'] = getTopicsPercentage(cursor.fetchall())
     return jsonify(topic_result)
