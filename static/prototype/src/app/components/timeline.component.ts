@@ -15,12 +15,13 @@ import {Observable} from 'rxjs/Observable';
 
 export class TimelineComponent implements OnInit {
   private _years: Observable<IYear[]>;
-  private years: IYear[] = [];
+  public years: IYear[] = [];
   init = 0;
 
-  constructor(private api: ApiService, private selection: SelectionService, private dataService: DataService) {
-
-  }
+  constructor(
+    private api: ApiService,
+    private selection: SelectionService,
+    private dataService: DataService) {}
 
   ngOnInit(): void {
 
@@ -28,6 +29,9 @@ export class TimelineComponent implements OnInit {
 
     this.dataService.years.subscribe(
       value => {
+
+        console.log(value);
+
         if (value.length > 0) {
           this.init = this.init + 1;
         }
@@ -44,8 +48,9 @@ export class TimelineComponent implements OnInit {
           this.showAreaChart();
 
         } else {
+          this.years = value;
           console.log('update data');
-          console.log(value);
+          console.log(this.years, this._years);
         }
       }
     );

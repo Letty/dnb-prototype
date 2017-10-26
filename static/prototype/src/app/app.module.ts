@@ -6,6 +6,8 @@ import {AppComponent} from './app.component';
 import {TimelineComponent} from './components/timeline.component';
 import {PersonComponent} from './components/person.component';
 import {TopicComponent} from './components/topic.component';
+import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline.component';
+
 import {ApiService} from './services/api.service';
 import {SelectionService} from './services/selection.service';
 import {DataService} from './services/data.service';
@@ -16,7 +18,8 @@ import {DataService} from './services/data.service';
     AppComponent,
     TimelineComponent,
     PersonComponent,
-    TopicComponent
+    TopicComponent,
+    ChartTimelineComponent
   ],
   imports: [
     BrowserModule,
