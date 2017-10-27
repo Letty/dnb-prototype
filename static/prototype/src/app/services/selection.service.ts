@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {IPerson, ITopic, IYear} from '../app.interfaces';
 import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class SelectionService {

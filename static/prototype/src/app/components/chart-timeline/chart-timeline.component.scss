@@ -1,0 +1,35 @@
+svg {
+  overflow: visible;
+  text {
+    font-size: 10px;
+    font-family: 'Roboto Mono';
+
+    &.x-axis {
+      text-anchor: middle;
+    }
+
+    .brush {
+      .handle {
+        display: none;
+      }
+    }
+  }
+
+  line {
+    stroke: #3564BA;
+    stroke-width: 1;
+    shape-rendering: crisp-edges;
+  }
+
+  .ruler {
+    circle {
+      stroke: #3564BA;
+      fill: white;
+      stroke-width: 1;
+
+      &.inner {
+        stroke-width: 2;
+      }
+    }
+  }
+}

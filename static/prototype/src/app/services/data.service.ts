@@ -50,6 +50,7 @@ export class DataService {
 
     this.api.getYears()
       .subscribe( data => {
+        console.log('data ', data);
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);

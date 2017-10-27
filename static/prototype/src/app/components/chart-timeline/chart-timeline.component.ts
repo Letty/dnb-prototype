@@ -1,5 +1,9 @@
 import {Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges, HostListener} from '@angular/core';
 import * as d3 from 'd3';
+import _ from 'lodash';
+
+import {SelectionService} from '../../services/selection.service';
+import {DataService} from '../../services/data.service';
 
 import {IYear} from '../../app.interfaces';
 
@@ -9,29 +13,73 @@ import { debounce } from '../../decorators';
 
 @Component({
   selector: 'chart-timeline',
-  templateUrl: './chart-timeline.component.html'
+  templateUrl: './chart-timeline.component.html',
+  styleUrls: ['./chart-timeline.component.scss']
 })
 
 export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() years: IYear[] = [];
-  @Input() xAxis = false;
-  @Input() yAxis = false;
-  @Input() brush = true;
+  @Input() showXTicks = false;
+  @Input() showYTicks = false;
+  @Input() enableBrush = true;
   @Input() logXScale = true;
-  @Input() startYear = 1500;
-  @Input() endYear = 2017;
-  @Input() height = 96;
+  @Input() height = 160;
 
   @ViewChild('svg') svg;
-
-
+  @ViewChild('brush') brushContainer;
 
   public path: string;
+  public xTicks = [];
+  public yTicks = [];
+  public width = 0;
+  public ruler;
 
-  private width = 0;
+  private minYear = 1000;
+  private maxYear = new Date().getFullYear();
+  private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
+  private yTickValues = [100000, 200000, 300000, 400000];
+  private brush = d3.brushX();
+  private xScale;
+  private yScale;
 
+  constructor(
+    private selection: SelectionService,
+    private dataService: DataService) {}
+
+  // Listeners
+  @HostListener('window:resize', ['$event'])
+  @debounce(250)
+  onResize(event) {
+    this.width = this.svg.nativeElement.clientWidth;
+    this.brush.extent([[0, 0], [this.width, this.height]]);
+    this.updatePath();
+  }
+
+  // Life-cycle hooks
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
+
+    if (this.enableBrush) {
+      this.brush
+        .extent([[0, 0], [this.width, this.height]])
+        .on('brush end', () => {
+          const sel = d3.event.selection;
+          if (d3.event.type === 'end' && sel && (sel[0] !== 0 && sel[1] !== this.width)) {
+            this.selection.setYear(
+              Math.round(this.xScale.invert(sel[0])),
+              Math.round(this.xScale.invert(sel[1]))
+            );
+            this.dataService.setFilter();
+          }
+      });
+
+      d3.select(this.brushContainer.nativeElement)
+        .call(this.brush)
+        .call(this.brush.move, this.xScale.range());
+
+      d3.select('.brush .handle')
+        .style('display', 'none');
+    }
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -40,30 +88,81 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  @debounce(250)
-  onResize(event) {
-    this.width = this.svg.nativeElement.clientWidth;
-    this.updatePath();
-  }
-
+  // Methods
   updatePath(): void {
-    const xScale = this.logXScale ?
-      d3.scalePow().exponent(2) : d3.scaleLinear();
+    const selection = this.selection.getSelection();
 
-    xScale.rangeRound([0, this.width])
-      .domain(d3.extent(this.years, d => d.year));
+    const maxY = _.maxBy(this.years, 'count');
 
-    const yScale = d3.scalePow()
+    console.log('maxY', maxY);
+
+    this.xScale = this.logXScale ?
+      d3.scalePow().exponent(3) : d3.scaleLinear();
+
+    this.xScale.rangeRound([0, this.width])
+      .domain([this.minYear, this.maxYear]);
+
+    const areaHeight = this.showXTicks ? this.height - 16 : this.height;
+
+    this.yScale = d3.scalePow()
       .exponent(0.3)
-      .rangeRound([this.height, 0])
-      .domain([0, d3.max(this.years, d => d.count)]);
+      .rangeRound([areaHeight, 0])
+      .domain([0, maxY ? maxY.count : 0]);
 
     const area = d3.area<IYear>()
-      .x(d => xScale(d.year))
-      .y0(this.height)
-      .y1(d => yScale(d.count));
+      .x(d => this.xScale(d.year))
+      .y0(areaHeight)
+      .y1(d => this.yScale(d.count));
 
-    this.path = area(this.years);
+    this.path = area(this.addMissingYears(this.years));
+
+    this.xTicks = this.showXTicks ? this.xTickValues.map(d => {
+      return {
+        year: d,
+        x: this.xScale(d)
+      };
+    }) : [];
+    this.yTicks = this.showYTicks ? this.yTickValues.map(d => {
+      return {
+        value: d3.format(',')(d),
+        transform: `translate(0 ${isNaN(this.yScale(d)) ? 0 : this.yScale(d)})`
+      };
+    }) : [];
+
+    if (maxY != null) {
+      this.ruler = {
+        count: maxY.count,
+        transform: `translate(${this.xScale(maxY.year)}, ${this.yScale(maxY.count)})`
+      };
+    }
+  }
+
+  addMissingYears(years: IYear[]): IYear[] {
+    const minYear = Math.min(...years.map(y => y.year)) - 1;
+    const maxYear = Math.max(...years.map(y => y.year)) + 1;
+
+    const allYears: IYear[] = [];
+    for (let i = minYear; i <= maxYear; i++) {
+      const year = years.find(y => y.year === i);
+      if (i >= this.minYear && i <= this.maxYear) {
+        allYears.push(year ? year : {count: 0, year: i});
+      }
+    }
+
+    return allYears;
+  }
+
+  mousemove(e): void {
+    const fullyear = Math.round(this.xScale.invert(e.offsetX));
+    const year = this.years.find(y => y.year === fullyear);
+
+    this.ruler = year ? {
+      count: year.count,
+      transform: `translate(${this.xScale(year.year)}, ${this.yScale(year.count)})`
+    } : {
+      count: 0,
+      transform: `translate(${this.xScale(fullyear)}, ${this.yScale(0)})`
+    };
+
   }
 }

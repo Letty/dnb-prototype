@@ -29,9 +29,6 @@ export class TimelineComponent implements OnInit {
 
     this.dataService.years.subscribe(
       value => {
-
-        console.log(value);
-
         if (value.length > 0) {
           this.init = this.init + 1;
         }
@@ -49,8 +46,6 @@ export class TimelineComponent implements OnInit {
 
         } else {
           this.years = value;
-          console.log('update data');
-          console.log(this.years, this._years);
         }
       }
     );

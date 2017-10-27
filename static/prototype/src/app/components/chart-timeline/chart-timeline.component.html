@@ -1,9 +1,23 @@
 <div>
-  <div class="chart-timeline">
-    <svg #svg width="100%" [attr.height]="height">
+  <div class="chart-timeline year-area-svg">
+    <svg #svg width="100%" [attr.height]="height" (mousemove)="mousemove($event)">
       <g>
-        <path [attr.d]="path"></path>
+        <path [attr.d]="path" class="area-path"></path>
       </g>
+      <text *ngFor="let t of xTicks" class="x-axis"
+        [attr.y]="height" [attr.x]="t.x">{{t.year}}</text>
+
+      <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
+        <text class="y-axis" y="4" x="0">{{t.value}}</text>
+        <line x1="48" [attr.x2]="width"></line>
+      </g>
+      <g class="ruler" *ngIf="ruler">
+        <g [attr.transform]="ruler.transform">
+          <circle class="outer" r="5"></circle>
+          <circle class="inner" r="2.5"></circle>
+        </g>
+      </g>
+      <g #brush class="brush"></g>
     </svg>
   </div>
 </div>
