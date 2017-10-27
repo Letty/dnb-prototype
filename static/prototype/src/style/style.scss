@@ -5,12 +5,14 @@
   border-radius: $radius;
 }
 
+@import 'variables';
+
 // green #BFC91C
 
 html {
   font: normal normal 105%/1.7 "Open Sans", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", Helvetica, sans-serif;
-  color: #222;
-  background-color: #f7f7f7;
+  color: $color-body-font;
+  background-color: $color-body-background;
 }
 
 html, body {
@@ -36,11 +38,11 @@ a {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
-  background-color: #fff;
+  background-color: $color-header-background;
   padding: 1em;
-  -webkit-box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.02);
-  -moz-box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.02);
-  box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.02);
+  -webkit-box-shadow: $effect-header-shadow;
+  -moz-box-shadow: $effect-header-shadow;
+  box-shadow: $effect-header-shadow;
 
   .dnb-logo {
     font-size: 1em;
@@ -50,7 +52,7 @@ a {
 
   .searchbar {
     background-color: #eee;
-    @include border-radius(2px);
+    @include border-radius($border-radius-default);
     border: 0;
     color: #aaa;
     font-size: 0.8em;
@@ -68,7 +70,7 @@ a {
     }
 
     .facet {
-      @include border-radius(2px);
+      @include border-radius($border-radius-default);
       margin-left: 0.5vw;
       padding: 0.2em 0.5em;
       font-weight: bold;
@@ -80,23 +82,23 @@ a {
     }
 
     .selected-year {
-      background: #E1EAFA;
-      color: #3564BA;
+      background: $color-year-background;
+      color: $color-year-text;
     }
 
     .selected-person {
-      color: #E9435A;
-      background-color: #FFEBEE;
+      color: $color-person-text;
+      background-color: $color-person-background;
     }
 
     .selected-topic {
-      color: #1DB5B4;
-      background-color: #D2F0F0;
+      color: $color-topic-text;
+      background-color: $color-topic-background;
     }
   }
 
   .help {
-    @include border-radius(2px)
+    @include border-radius($border-radius-default)
     display: inline-block;
     padding: 0.2em 0.5em;
     background-color: #eee;
@@ -116,12 +118,12 @@ a {
       display: inline-block;
       margin: 0 5px;
       padding: 2px 5px;
-      color: #E9435A; //hintergrund FFEBEE
+      color: $color-person-text; //hintergrund FFEBEE
       cursor: pointer;
-      @include border-radius(2px);
+      @include border-radius($border-radius-default);
     }
     .person:hover {
-      background-color: #FFEBEE;
+      background-color: $color-person-background;
     }
   }
 }
@@ -140,7 +142,7 @@ a {
 
       .topic {
         span {
-          @include border-radius(2px);
+          @include border-radius($border-radius-default);
           display: block;
           display: flex;
           align-items: center;
@@ -151,13 +153,13 @@ a {
           width: calc(100% - 2px);
           margin: 0 2px;
           top: 2px;
-          background-color: #D2F0F0;
-          color: #1DB5B4;
+          background-color: $color-topic-background;
+          color: $color-topic-text;
           cursor: pointer;
           line-height: 1.2em;
 
           &:hover {
-            background-color: #e8f7f7;
+            background-color: $color-topic-background--hover;
           }
         }
       }
