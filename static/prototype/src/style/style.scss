@@ -6,6 +6,11 @@
 }
 
 @import 'variables';
+@import 'reset';
+@import 'component-header';
+@import 'vis-topics';
+@import 'vis-people';
+@import 'vis-time';
 
 // green #BFC91C
 
@@ -20,180 +25,9 @@ html, body {
   width: 100%;
 }
 
-html, body, figure, ul, li, p {
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  background-color: $color-header-background;
-  padding: 1em;
-  -webkit-box-shadow: $effect-header-shadow;
-  -moz-box-shadow: $effect-header-shadow;
-  box-shadow: $effect-header-shadow;
-
-  .dnb-logo {
-    font-size: 1em;
-    margin: 0;
-    padding: 0;
-  }
-
-  .searchbar {
-    background-color: #eee;
-    @include border-radius($border-radius-default);
-    border: 0;
-    color: #aaa;
-    font-size: 0.8em;
-    padding: 0.5em 0.5em;
-    width: 10vw;
-  }
-
-  .nav-selection {
-    display: flex;
-    flex-grow: 2;
-    align-items: baseline;
-
-    & > span {
-      color: #aaa;
-    }
-
-    .facet {
-      @include border-radius($border-radius-default);
-      margin-left: 0.5vw;
-      padding: 0.2em 0.5em;
-      font-weight: bold;
-      font-size: 0.8em;
-
-      .close-button {
-        margin-left: 0.5em;
-      }
-    }
-
-    .selected-year {
-      background: $color-year-background;
-      color: $color-year-text;
-    }
-
-    .selected-person {
-      color: $color-person-text;
-      background-color: $color-person-background;
-    }
-
-    .selected-topic {
-      color: $color-topic-text;
-      background-color: $color-topic-background;
-    }
-  }
-
-  .help {
-    @include border-radius($border-radius-default)
-    display: inline-block;
-    padding: 0.2em 0.5em;
-    background-color: #eee;
-    color: #aaa;
-  }
-}
-
-.header > * {
-  margin-right: 1em !important;
-}
-
-.person-div {
-
-  .person-list {
-
-    .person {
-      display: inline-block;
-      margin: 0 5px;
-      padding: 2px 5px;
-      color: $color-person-text; //hintergrund FFEBEE
-      cursor: pointer;
-      @include border-radius($border-radius-default);
-    }
-    .person:hover {
-      background-color: $color-person-background;
-    }
-  }
-}
-
-.topic-div {
-
-  .topic-list {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    height: 20vh;
-    font-size: 0.8em;
-
-    .topic-bins {
-      flex: 1;
-
-      .topic {
-        span {
-          @include border-radius($border-radius-default);
-          display: block;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          text-align: center;
-          height: calc(100% - 2px);
-          width: calc(100% - 2px);
-          margin: 0 2px;
-          top: 2px;
-          background-color: $color-topic-background;
-          color: $color-topic-text;
-          cursor: pointer;
-          line-height: 1.2em;
-
-          &:hover {
-            background-color: $color-topic-background--hover;
-          }
-        }
-      }
-    }
-  }
-}
-
 .headline-div {
   display: flex;
   align-items: baseline;
-}
-
-.year-area-svg {
-  background: #F4F7FB;
-  text {
-    font-family: "Roboto Mono";
-    fill: #3564BA;
-  }
-  .area-path {
-    fill: #3564BA;
-  }
-  .y-axis {
-    line {
-      stroke: #3564BA;
-    }
-    path {
-      stroke: #3564BA;
-    }
-  }
-
-  g.brush rect.selection{
-    stroke: none;
-    fill: #E1EAFA;
-  }
 }
 
 .topic-viz {

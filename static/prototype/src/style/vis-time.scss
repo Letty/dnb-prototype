@@ -1,0 +1,23 @@
+.year-area-svg {
+  background: #F4F7FB;
+  text {
+    font-family: "Roboto Mono";
+    fill: #3564BA;
+  }
+  .area-path {
+    fill: #3564BA;
+  }
+  .y-axis {
+    line {
+      stroke: #3564BA;
+    }
+    path {
+      stroke: #3564BA;
+    }
+  }
+
+  g.brush rect.selection{
+    stroke: none;
+    fill: #E1EAFA;
+  }
+}

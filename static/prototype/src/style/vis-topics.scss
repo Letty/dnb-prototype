@@ -1,0 +1,37 @@
+.topic-div {
+
+  .topic-list {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 20vh;
+    font-size: 0.8em;
+
+    .topic-bins {
+      flex: 1;
+
+      .topic {
+        span {
+          @include border-radius($border-radius-default);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          text-align: center;
+          height: calc(100% - 2px);
+          width: calc(100% - 2px);
+          margin: 0 2px;
+          top: 2px;
+          background-color: $color-topic-background;
+          color: $color-topic-text;
+          cursor: pointer;
+          line-height: 1.2em;
+
+          &:hover {
+            background-color: $color-topic-background--hover;
+          }
+        }
+      }
+    }
+  }
+}

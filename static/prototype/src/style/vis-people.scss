@@ -1,0 +1,15 @@
+.person-div {
+  .person-list {
+    .person {
+      display: inline-block;
+      margin: 0 5px;
+      padding: 2px 5px;
+      color: $color-person-text; //hintergrund FFEBEE
+      cursor: pointer;
+      @include border-radius($border-radius-default);
+    }
+    .person:hover {
+      background-color: $color-person-background;
+    }
+  }
+}

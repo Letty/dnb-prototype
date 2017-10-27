@@ -1,0 +1,76 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  background-color: $color-header-background;
+  padding: $distance-outer-default;
+  -webkit-box-shadow: $effect-header-shadow;
+  -moz-box-shadow: $effect-header-shadow;
+  box-shadow: $effect-header-shadow;
+
+  .dnb-logo {
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+  }
+
+  .searchbar {
+    background-color: #eee;
+    @include border-radius($border-radius-default);
+    border: 0;
+    color: #aaa;
+    font-size: 0.8em;
+    padding: 0.5em 0.5em;
+    width: 10vw;
+  }
+
+  .nav-selection {
+    display: flex;
+    flex-grow: 2;
+    align-items: baseline;
+
+    & > span {
+      color: #aaa;
+    }
+
+    .facet {
+      @include border-radius($border-radius-default);
+      margin-left: 0.5vw;
+      padding: 0.2em 0.5em;
+      font-weight: bold;
+      font-size: 0.8em;
+
+      .close-button {
+        margin-left: $distance-inner-default;
+      }
+    }
+
+    .selected-year {
+      background: $color-year-background;
+      color: $color-year-text;
+    }
+
+    .selected-person {
+      color: $color-person-text;
+      background-color: $color-person-background;
+    }
+
+    .selected-topic {
+      color: $color-topic-text;
+      background-color: $color-topic-background;
+    }
+  }
+
+  .help {
+    @include border-radius($border-radius-default)
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    background-color: #eee;
+    color: #aaa;
+  }
+}
+
+.header > * {
+  margin-right: $distance-outer-default !important;
+}
