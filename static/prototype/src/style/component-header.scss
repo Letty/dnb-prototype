@@ -48,18 +48,22 @@
 
     .selected-year {
       background: $color-year-background;
-      color: $color-year-text;
+      color: $color-year-default;
     }
 
     .selected-person {
-      color: $color-person-text;
+      color: $color-person-default;
       background-color: $color-person-background;
     }
 
     .selected-topic {
-      color: $color-topic-text;
+      color: $color-topic-default;
       background-color: $color-topic-background;
     }
+  }
+
+  .result-count {
+    color: $color-results-default;
   }
 
   .help {
