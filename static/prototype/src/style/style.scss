@@ -30,8 +30,8 @@ html, body {
   align-items: baseline;
 }
 
-.topic-viz {
-  position: relative;
+.main-viz {
+  margin: 0 $distance-outer-default;
 }
 
 .node {
