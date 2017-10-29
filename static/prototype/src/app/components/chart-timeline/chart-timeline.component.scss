@@ -1,3 +1,23 @@
+@import "../../../style/variables";
+
+svg {
+  text, .area-path {
+    fill: #000;
+  }
+  line, circle {
+    stroke: #000;
+  }
+}
+
+:host(.color-year) {
+  text, .area-path {
+    fill: $color-year-default;
+  }
+  line, circle {
+    stroke: $color-year-default;
+  }
+}
+
 svg {
   overflow-x: visible;
   text {
@@ -22,14 +42,12 @@ svg {
   }
 
   line {
-    stroke: #3564BA;
     stroke-width: 1;
     shape-rendering: crisp-edges;
   }
 
   .ruler {
     circle {
-      stroke: #3564BA;
       fill: white;
       stroke-width: 1;
 

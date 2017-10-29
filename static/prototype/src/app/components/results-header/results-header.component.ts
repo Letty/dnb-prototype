@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'results-header',
-  templateUrl: './results-header.component.html'
+  templateUrl: './results-header.component.html',
 })
 
 export class ResultsHeaderComponent implements OnInit {
