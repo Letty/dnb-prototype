@@ -15,34 +15,50 @@ connection = pymysql.connect(host='127.0.0.1',
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-def getTopicsPercentage(result):
-    total = sum(item['count'] for item in result)
-    for item in result:
-        item['percentage'] = item['count'] * 100 / total
-    number_of_bins = 5
-    percentage_per_bin = 100 / number_of_bins
-    bins = [[] for _ in range(number_of_bins)]
+def getTopicsPercentage(topics):
+    number_of_bins = 5 # The number of columns the visualization has
 
+    # Calculate the percentage each topic has
+    total = sum(topic['count'] for topic in topics)
+    for topic in topics:
+        topic['percentage'] = topic['count'] * 100 / total
+
+    percentage_per_bin = 100 / number_of_bins # The percentage each column should hold
+    bins = [[] for _ in range(number_of_bins)] # Create arrays for each column
+
+    # Distribute the topics to the bins
     for bin in bins:
-        for item in result:
-            if (sum(item['percentage'] for item in bin) < percentage_per_bin):
-                bin.append(item)
-                result.remove(item)
+        for topic in topics:
+            if (sum(topic['percentage'] for topic in bin) < percentage_per_bin):
+                bin.append(topic)
+                topics.remove(topic)
 
-    bins.sort(key = lambda bin: sum(item['percentage'] for item in bin), reverse = True)
+    # Sort bins to have the one least filled at front
+    bins.sort(key = lambda bin: sum(topic['percentage'] for topic in bin), reverse = True)
 
+    # Distribute the remaining topics to the columns
     current_bin = 0
-    for item in result:
-        bins[current_bin].append(item)
+    for topic in topics:
+        bins[current_bin].append(topic)
         current_bin += 1
         if current_bin == number_of_bins:
             current_bin = 0
 
+    # Filter empty columns
+    bins = list(filter(lambda bin: len(bin) != 0, bins))
+
+    # Calculate the percentage each topic has of its column
     for bin in bins:
-        total = sum(item['percentage'] for item in bin)
-        print(total)
-        for item in bin:
-            item['percentage'] = item['percentage'] * 100 / total
+        total = sum(topic['percentage'] for topic in bin)
+        for topic in bin:
+            topic['percentage'] = topic['percentage'] * 100 / total
+        bin.sort(key = lambda topic: topic['percentage'], reverse = True)
+
+    # Sort bins to have the one with the highest first value first
+    bins.sort(key = lambda bin: bin[0]['percentage'], reverse = True)
+
+    # Sort bins to have the one with the least topics first
+    # bins.sort(key = lambda bin: len(bin))
 
     return bins
 
