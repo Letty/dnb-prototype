@@ -1,10 +1,10 @@
 import {Component, ElementRef, Renderer2, OnInit} from '@angular/core';
-import {ApiService} from '../services/api.service';
+import {ApiService} from '../../services/api.service';
 
-import {IYear} from '../app.interfaces';
-import {SelectionService} from '../services/selection.service';
+import {IYear} from '../../app.interfaces';
+import {SelectionService} from '../../services/selection.service';
 import {getClassMembers} from '@angular/compiler-cli/src/diagnostics/typescript_symbols';
-import {DataService} from '../services/data.service';
+import {DataService} from '../../services/data.service';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
