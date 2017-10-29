@@ -3,6 +3,7 @@ import {HttpModule} from '@angular/http';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
+import {DnbHeaderComponent} from './components/dnb-header/dnb-header.component';
 import {ResultsHeaderComponent} from './components/results-header.component';
 import {PersonComponent} from './components/person.component';
 import {TopicComponent} from './components/topic.component';
@@ -19,7 +20,8 @@ import {DataService} from './services/data.service';
     ResultsHeaderComponent,
     PersonComponent,
     TopicComponent,
-    ChartTimelineComponent
+    ChartTimelineComponent,
+    DnbHeaderComponent
   ],
   imports: [
     BrowserModule,

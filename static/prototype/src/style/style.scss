@@ -1,13 +1,7 @@
-@mixin border-radius($radius) {
-  -webkit-border-radius: $radius;
-  -moz-border-radius: $radius;
-  -ms-border-radius: $radius;
-  border-radius: $radius;
-}
-
 @import 'variables';
+@import 'mixins';
 @import 'reset';
-@import 'component-header';
+// @import 'component-header';
 @import 'vis-topics';
 @import 'vis-people';
 @import 'vis-time';

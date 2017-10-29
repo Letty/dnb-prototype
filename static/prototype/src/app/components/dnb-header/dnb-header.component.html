@@ -1,0 +1,17 @@
+<header class="header">
+  <h1 class="dnb-logo">DNB &mdash; Prototype</h1>
+  <input class="searchbar" type="text" name="search" value="Suche">
+  <nav class="nav-selection">
+    <span>Auswahl</span>
+    <div class="selected-year facet" *ngIf="selectedMinYear">
+      <span>{{selectedMinYear}}</span><span *ngIf="selectedMaxYear">&thinsp;&ndash;&thinsp;{{selectedMaxYear}}</span><strong class="close-button">&times;</strong>
+    </div>
+    <div class="selected-person facet" *ngIf="selectedPerson">
+      {{selectedPerson.name}} {{selectedPerson.lastname}}<strong class="close-button">&times;</strong>
+    </div>
+    <div class="selected-topic facet" *ngIf="selectedTopic">
+      {{selectedTopic.keyword}}<strong class="close-button">&times;</strong></div>
+  </nav>
+  <span class="result-count">Anzahl der Ergebnisse</span>
+  <span class="help">Help</span>
+</header>
