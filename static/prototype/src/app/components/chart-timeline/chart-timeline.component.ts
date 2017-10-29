@@ -114,7 +114,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
     this.yScale = d3.scalePow()
       .exponent(0.3)
-      .rangeRound([areaHeight, 0])
+      .rangeRound([areaHeight, 16])
       .domain([0, maxY ? maxY.count : 0]);
 
     const area = d3.area<IYear>()
@@ -153,7 +153,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
         allYears.push(year ? year : {count: 0, year: i});
       }
     }
-
     return allYears;
   }
 
