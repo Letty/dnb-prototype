@@ -1,0 +1,23 @@
+@import "../../../style/variables";
+
+.results-header {
+  .section-title {
+    background: $color-year-default;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 8px 24px;
+    font-size: 14px;
+    color: white;
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  background: $color-header-background;
+  box-shadow: $effect-header-shadow;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  transform: translateY(-100%);
+}

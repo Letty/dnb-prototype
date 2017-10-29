@@ -1,30 +1,28 @@
-<div>
-  <div class="chart-timeline year-area-svg">
-    <svg #svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetYear()">
-      <g *ngIf="init">
-        <g>
-          <path [attr.d]="path" class="area-path"></path>
-        </g>
-        <text *ngFor="let t of xTicks" class="x-axis"
-          [attr.y]="height" [attr.x]="t.x">{{t.year}}</text>
+<div class="chart-timeline year-area-svg">
+  <svg #svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetYear()">
+    <g *ngIf="init">
+      <g>
+        <path [attr.d]="path" class="area-path"></path>
+      </g>
+      <text *ngFor="let t of xTicks" class="x-axis"
+        [attr.y]="height" [attr.x]="t.x">{{t.year}}</text>
 
-        <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
-          <text class="y-axis" y="4" x="0">{{t.value}}</text>
-          <line x1="48" [attr.x2]="width"></line>
-        </g>
-        <g class="ruler" *ngIf="ruler">
-          <g [attr.transform]="ruler.transform">
-            <circle class="outer" r="5"></circle>
-            <circle class="inner" r="2.5"></circle>
+      <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
+        <text class="y-axis" y="4" x="0">{{t.value}}</text>
+        <line x1="48" [attr.x2]="width"></line>
+      </g>
+      <g class="ruler" *ngIf="ruler">
+        <g [attr.transform]="ruler.transform">
+          <circle class="outer" r="5"></circle>
+          <circle class="inner" r="2.5"></circle>
 
-            <g [attr.transform]="rulerOffset">
-              <text class="shadow" #rulerLabel>{{ruler.count}}</text>
-              <text>{{ruler.count}}</text>
-            </g>
+          <g [attr.transform]="rulerOffset">
+            <text class="shadow" #rulerLabel>{{ruler.count}}</text>
+            <text>{{ruler.count}}</text>
           </g>
         </g>
       </g>
-      <g #brush class="brush"></g>
-    </svg>
-  </div>
+    </g>
+    <g #brush class="brush"></g>
+  </svg>
 </div>

@@ -1,6 +1,8 @@
 @import "../../../style/variables";
 
 svg {
+  display: block;
+
   text, .area-path {
     fill: #000;
   }
@@ -18,46 +20,50 @@ svg {
   }
 }
 
-svg {
-  overflow-x: visible;
-  text {
-    font-size: 10px;
-    font-family: 'Roboto Mono';
+.chart-timeline {
+  padding: 8px 0;
 
-    &.x-axis {
-      text-anchor: middle;
-    }
-
-    &.shadow {
-      fill: #fff;
-      stroke: #fff;
-      stroke-width: 2.5;
-    }
-
-    .brush {
-      .handle {
-        display: none;
-      }
-    }
-  }
-
-  line {
-    stroke-width: 1;
-    shape-rendering: crisp-edges;
-  }
-
-  .ruler {
-    circle {
-      fill: white;
-      stroke-width: 1;
-
-      &.inner {
-        stroke-width: 2;
-      }
-    }
-
+  svg {
+    overflow-x: visible;
     text {
-      text-anchor: middle;
+      font-size: 10px;
+      font-family: 'Roboto Mono';
+
+      &.x-axis {
+        text-anchor: middle;
+      }
+
+      &.shadow {
+        fill: #fff;
+        stroke: #fff;
+        stroke-width: 2.5;
+      }
+
+      .brush {
+        .handle {
+          display: none;
+        }
+      }
+    }
+
+    line {
+      stroke-width: 1;
+      shape-rendering: crisp-edges;
+    }
+
+    .ruler {
+      circle {
+        fill: white;
+        stroke-width: 1;
+
+        &.inner {
+          stroke-width: 2;
+        }
+      }
+
+      text {
+        text-anchor: middle;
+      }
     }
   }
 }

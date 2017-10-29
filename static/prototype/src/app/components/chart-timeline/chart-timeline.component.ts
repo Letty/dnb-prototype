@@ -99,10 +99,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   // Methods
   updatePath(): void {
     const selection = this.selection.getSelection();
-
     const maxY = _.maxBy(this.years, 'count');
-
-    console.log('maxY', maxY);
 
     this.xScale = this.logXScale ?
       d3.scalePow().exponent(3) : d3.scaleLinear();

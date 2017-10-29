@@ -10,10 +10,12 @@ import {Observable} from 'rxjs/Observable';
 @Component({
   selector: 'results-header',
   templateUrl: './results-header.component.html',
+  styleUrls: ['./results-header.component.scss']
 })
 
 export class ResultsHeaderComponent implements OnInit {
   private _years: Observable<IYear[]>;
+  public results = 0;
   public years: IYear[] = [];
 
   constructor(

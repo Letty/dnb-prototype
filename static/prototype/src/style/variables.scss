@@ -1,12 +1,13 @@
 /* GOBLAL */
 /* Color */
 $color-results-default: #cad023;
+$color-results-background: #EDF0C2;
 
-$color-year-default: #3564BA;
-$color-year-background: #E1EAFA;
+$color-year-default: $color-results-default;
+$color-year-background: $color-results-background;
 
-$color-person-default: #E9435A;
-$color-person-background: #FFEBEE;
+$color-person-default: #3564BA;
+$color-person-background: #E1EAFA;
 
 $color-topic-default: #1DB5B4;
 $color-topic-background: #D2F0F0;
