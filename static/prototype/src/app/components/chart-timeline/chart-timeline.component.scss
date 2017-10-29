@@ -8,6 +8,12 @@ svg {
       text-anchor: middle;
     }
 
+    &.shadow {
+      fill: #fff;
+      stroke: #fff;
+      stroke-width: 2.5;
+    }
+
     .brush {
       .handle {
         display: none;
@@ -30,6 +36,10 @@ svg {
       &.inner {
         stroke-width: 2;
       }
+    }
+
+    text {
+      text-anchor: middle;
     }
   }
 }

@@ -21,18 +21,23 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() years: IYear[] = [];
   @Input() showXTicks = false;
   @Input() showYTicks = false;
-  @Input() enableBrush = true;
-  @Input() logXScale = true;
+  @Input() showRuler = false;
+  @Input() interactiveRuler = false;
+  @Input() enableBrush = false;
+  @Input() logXScale = false;
   @Input() height = 160;
 
   @ViewChild('svg') svg;
   @ViewChild('brush') brushContainer;
+  @ViewChild('rulerLabel') rulerLabel;
 
   public path: string;
   public xTicks = [];
   public yTicks = [];
   public width = 0;
   public ruler;
+  public rulerOffset = 'translate(0 -8)';
+  public init = false;
 
   private minYear = 1000;
   private maxYear = new Date().getFullYear();
@@ -84,6 +89,9 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   ngOnChanges (changes: SimpleChanges) {
     if (changes.years) {
+      if (!changes.years.firstChange) {
+        this.init = true;
+      }
       this.updatePath();
     }
   }
@@ -130,10 +138,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     }) : [];
 
     if (maxY != null) {
-      this.ruler = {
-        count: maxY.count,
-        transform: `translate(${this.xScale(maxY.year)}, ${this.yScale(maxY.count)})`
-      };
+      this.resetYear();
     }
   }
 
@@ -152,17 +157,41 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     return allYears;
   }
 
-  mousemove(e): void {
-    const fullyear = Math.round(this.xScale.invert(e.offsetX));
+  setYear(e): void {
+    if (!this.interactiveRuler) { return; }
+    this.updateRuler(Math.round(this.xScale.invert(e.offsetX)));
+  }
+
+  resetYear() {
+    const years = this.years.filter(y => {
+      return y.year <= this.maxYear && y.year >= this.minYear;
+    });
+    this.updateRuler(_.maxBy(years, 'count').year);
+  }
+
+  updateRuler (fullyear) {
+    if (!this.showRuler) { return; }
+
     const year = this.years.find(y => y.year === fullyear);
+    const x = this.xScale(year ? year.year : fullyear);
 
     this.ruler = year ? {
-      count: year.count,
-      transform: `translate(${this.xScale(year.year)}, ${this.yScale(year.count)})`
+      count: d3.format(',')(year.count),
+      transform: `translate(${x}, ${this.yScale(year.count)})`
     } : {
       count: 0,
       transform: `translate(${this.xScale(fullyear)}, ${this.yScale(0)})`
     };
 
+    setTimeout(() => {
+      const elWidth = this.rulerLabel.nativeElement.getBBox().width;
+      let offset = 0;
+      if (x + elWidth / 2 > this.width - 2) {
+        offset = this.width - 2 - (x + elWidth / 2);
+      } else if (x - elWidth / 2 < 2) {
+        offset = 2 - (x - elWidth / 2);
+      }
+      this.rulerOffset = `translate(${offset}, -8)`;
+    }, 0);
   }
 }
