@@ -9,6 +9,7 @@ import {PersonComponent} from './components/person.component';
 import {TopicComponent} from './components/topic.component';
 import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline.component';
 import {BtnLinkComponent} from './components/btn-link/btn-link.component';
+import {LoadingDataComponent} from './components/loading-data/loading-data.component';
 
 import {ApiService} from './services/api.service';
 import {SelectionService} from './services/selection.service';
@@ -23,7 +24,8 @@ import {DataService} from './services/data.service';
     TopicComponent,
     ChartTimelineComponent,
     DnbHeaderComponent,
-    BtnLinkComponent
+    BtnLinkComponent,
+    LoadingDataComponent
   ],
   imports: [
     BrowserModule,

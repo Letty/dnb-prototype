@@ -16,6 +16,7 @@ import { DataService } from '../services/data.service';
 export class PersonComponent implements OnInit {
 
   public persons: Observable<IPerson[]>;
+  public loadingData = true;
   private min = Number.POSITIVE_INFINITY;
   private max = Number.NEGATIVE_INFINITY;
 
@@ -27,13 +28,16 @@ export class PersonComponent implements OnInit {
     private selection: SelectionService,
     private sanitizer: DomSanitizer,
     private dataService: DataService
-    ) {}
+    ) {
+      dataService.loadingData$.subscribe(() => this.loadingData = true);
+    }
 
   ngOnInit(): void {
 
     this.persons = this.dataService.persons;
     this.dataService.persons.subscribe(
       value => {
+        this.loadingData = false;
         let counts: Array<number> = value.map(p => p.count);
         this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
       });

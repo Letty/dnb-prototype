@@ -16,6 +16,7 @@ import { ITopic } from '../app.interfaces';
 
 export class TopicComponent implements OnInit {
 
+  public loadingData = true;
   public topics: Observable<ITopic[]>;
   private topicTree = {
     'keyword': 'tree',
@@ -27,13 +28,16 @@ export class TopicComponent implements OnInit {
     private selection: SelectionService,
     private sanitizer: DomSanitizer,
     private dataService: DataService
-  ) {}
+  ) {
+    dataService.loadingData$.subscribe(() => this.loadingData = true);
+  }
 
   ngOnInit(): void {
     this.topics = this.dataService.topics;
     this.dataService.topics.subscribe(
       value => {
-        console.log(value);
+        console.log('value::::', value);
+        this.loadingData = false;
         // let counts: Array<number> = value.map(p => p.count);
         // this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
       });

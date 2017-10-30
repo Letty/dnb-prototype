@@ -1,5 +1,5 @@
 <div class="results-header">
-
+  <loading-data *ngIf="loadingData" class="color-year"></loading-data>
   <btn-link class="color-year" [icon]="'arrow-down'"
     [fullWidth]="true" [invert]="true"
     [value]="results" [sectionTitle]="'Ergebnisse'"></btn-link>
