@@ -65,10 +65,6 @@
     }
   }
 
-  .result-count {
-    color: $color-results-default;
-  }
-
   .help {
     @include border-radius($border-radius-default)
     display: inline-block;
