@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {IYear, IPerson, ITopic} from '../../app.interfaces';
 import {SelectionService} from '../../services/selection.service';
+import {DataService} from '../../services/data.service';
 
 @Component({
   selector: 'dnb-header',
@@ -15,7 +16,10 @@ export class DnbHeaderComponent {
   public selectedTopic: ITopic;
 
 
-  constructor(private selection: SelectionService) {
+  constructor(
+    private selection: SelectionService,
+    private dataService: DataService
+  ) {
     selection.selPerson$.subscribe(
       person => {
         this.selectedPerson = person;
@@ -38,5 +42,18 @@ export class DnbHeaderComponent {
         this.selectedMaxYear = year;
       }
     );
+  }
+
+  resetYear(): void {
+    this.selection.setYear(null, null);
+    this.dataService.setFilter();
+  }
+  resetTopic(): void {
+    this.selection.setTopic(null);
+    this.dataService.setFilter();
+  }
+  resetPerson(): void {
+    this.selection.setPerson(null);
+    this.dataService.setFilter();
   }
 }
