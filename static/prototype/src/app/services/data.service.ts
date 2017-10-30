@@ -36,7 +36,6 @@ export class DataService {
   };
 
   constructor(private api: ApiService, private selection: SelectionService) {
-    this.loadingData$ = new EventEmitter();
     this.dataStore = {
       persons: [], defaultPersons: [],
       topics: [], defaultTopics: [],
@@ -89,7 +88,6 @@ export class DataService {
   }
 
   setFilter(): void {
-    this.loadingData$.emit('loading-data');
     const filter = this.selection.getSelection();
 
     if (filter['person_id'] !== null && filter['topic_id'] === null &&

@@ -25,7 +25,9 @@ export class ResultsHeaderComponent implements OnInit {
     private api: ApiService,
     private selection: SelectionService,
     private dataService: DataService) {
-      dataService.loadingData$.subscribe(() => this.loadingData = true);
+      api.loadingData$.subscribe((e) => {
+        if (e === 'year') { this.loadingData = true; }
+      });
     }
 
   ngOnInit(): void {

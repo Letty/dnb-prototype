@@ -29,7 +29,9 @@ export class PersonComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private dataService: DataService
     ) {
-      dataService.loadingData$.subscribe(() => this.loadingData = true);
+      api.loadingData$.subscribe((e) => {
+        if (e === 'person') { this.loadingData = true; }
+      });
     }
 
   ngOnInit(): void {
