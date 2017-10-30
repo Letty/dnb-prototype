@@ -8,7 +8,7 @@ import {Component, Input} from '@angular/core';
 
 export class BtnLinkComponent {
   @Input() fullWidth = false;
-  @Input() value: number;
+  @Input() value: '0';
   @Input() sectionTitle = '';
   @Input() icon = 'arrow-right';
   @Input() invert = false;

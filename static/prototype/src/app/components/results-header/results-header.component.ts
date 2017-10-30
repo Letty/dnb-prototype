@@ -7,6 +7,8 @@ import {getClassMembers} from '@angular/compiler-cli/src/diagnostics/typescript_
 import {DataService} from '../../services/data.service';
 import {Observable} from 'rxjs/Observable';
 
+import {format} from 'd3';
+
 @Component({
   selector: 'results-header',
   templateUrl: './results-header.component.html',
@@ -15,7 +17,7 @@ import {Observable} from 'rxjs/Observable';
 
 export class ResultsHeaderComponent implements OnInit {
   private _years: Observable<IYear[]>;
-  public results = 0;
+  public results = '0';
   public years: IYear[] = [];
 
   constructor(
@@ -25,6 +27,9 @@ export class ResultsHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this._years = this.dataService.years;
-    this.dataService.years.subscribe(value => this.years = value);
+    this.dataService.years.subscribe(value => {
+      this.years = value;
+      this.results = format(',')(this.years.length ? this.years.map(y => y.count).reduce((a, b) => a + b) : 0);
+    });
     }
   }
