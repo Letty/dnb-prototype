@@ -1,5 +1,5 @@
 <div class="person-div main-viz">
-  <div class="headline-div"><h3>Personen</h3></div>
+  <btn-link [sectionTitle]="'Personen'" class="color-person"></btn-link>
   <div class="person-list">
     <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
       <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
