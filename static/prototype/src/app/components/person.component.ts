@@ -3,7 +3,7 @@ import { ApiService } from '../services/api.service';
 import { SelectionService } from '../services/selection.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
-import { scaleLinear } from "d3-scale";
+import { scaleLinear } from 'd3-scale';
 
 import { IPerson } from '../app.interfaces';
 import { DataService } from '../services/data.service';
@@ -38,7 +38,7 @@ export class PersonComponent implements OnInit {
     this.dataService.persons.subscribe(
       value => {
         this.loadingData = false;
-        let counts: Array<number> = value.map(p => p.count);
+        const counts: Array<number> = value.map(p => p.count);
         this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
       });
   }
