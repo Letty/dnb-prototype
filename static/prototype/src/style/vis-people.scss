@@ -4,12 +4,13 @@
       display: inline-block;
       margin: 0 5px;
       padding: 2px 5px;
-      color: $color-person-default; //hintergrund FFEBEE
+      color: $color-person-default;
       cursor: pointer;
       @include border-radius($border-radius-default);
-    }
-    .person:hover {
-      background-color: $color-person-background;
+
+      &:hover {
+        background-color: $color-person-background;
+      }
     }
   }
 }

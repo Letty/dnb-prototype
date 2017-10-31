@@ -26,6 +26,10 @@ html, body {
 .main-viz {
   margin: 0 $distance-outer-default;
   position: relative;
+
+  header {
+    @include flex-default();
+  }
 }
 
 .node {

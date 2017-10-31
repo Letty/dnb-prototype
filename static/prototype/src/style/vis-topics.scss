@@ -3,9 +3,7 @@ $gutter-topics-default: 4px;
 .topic-div {
 
   .topic-list {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+    @include flex-default();
     height: 20vh;
     font-size: 0.8em;
 

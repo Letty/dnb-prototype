@@ -4,3 +4,9 @@
   -ms-border-radius: $radius;
   border-radius: $radius;
 }
+
+@mixin flex-default() {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
