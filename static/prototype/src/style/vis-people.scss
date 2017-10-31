@@ -1,0 +1,16 @@
+.person-div {
+  .person-list {
+    .person {
+      display: inline-block;
+      margin: 0 5px;
+      padding: 2px 5px;
+      color: $color-person-default;
+      cursor: pointer;
+      @include border-radius($border-radius-default);
+
+      &:hover {
+        background-color: $color-person-background;
+      }
+    }
+  }
+}

@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS # remove for production
 import json
 from datetime import datetime
 import pymysql.cursors
 
 app = Flask(__name__, static_url_path='')
+CORS(app) # remove for production
 
 connection = pymysql.connect(host='127.0.0.1',
                              user='root',
@@ -12,6 +14,53 @@ connection = pymysql.connect(host='127.0.0.1',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+
+def getTopicsPercentage(topics):
+    number_of_bins = 5 # The number of columns the visualization has
+
+    # Calculate the percentage each topic has
+    total = sum(topic['count'] for topic in topics)
+    for topic in topics:
+        topic['percentage'] = topic['count'] * 100 / total
+
+    percentage_per_bin = 100 / number_of_bins # The percentage each column should hold
+    bins = [[] for _ in range(number_of_bins)] # Create arrays for each column
+
+    # Distribute the topics to the bins
+    for bin in bins:
+        for topic in topics:
+            if (sum(topic['percentage'] for topic in bin) < percentage_per_bin):
+                bin.append(topic)
+                topics.remove(topic)
+
+    # Sort bins to have the one least filled at front
+    bins.sort(key = lambda bin: sum(topic['percentage'] for topic in bin), reverse = True)
+
+    # Distribute the remaining topics to the columns
+    current_bin = 0
+    for topic in topics:
+        bins[current_bin].append(topic)
+        current_bin += 1
+        if current_bin == number_of_bins:
+            current_bin = 0
+
+    # Filter empty columns
+    bins = list(filter(lambda bin: len(bin) != 0, bins))
+
+    # Calculate the percentage each topic has of its column
+    for bin in bins:
+        total = sum(topic['percentage'] for topic in bin)
+        for topic in bin:
+            topic['percentage'] = topic['percentage'] * 100 / total
+        bin.sort(key = lambda topic: topic['percentage'], reverse = True)
+
+    # Sort bins to have the one with the highest first value first
+    bins.sort(key = lambda bin: bin[0]['percentage'], reverse = True)
+
+    # Sort bins to have the one with the least topics first
+    # bins.sort(key = lambda bin: len(bin))
+
+    return bins
 
 @app.route('/')
 def root():
@@ -24,7 +73,7 @@ def get_top_topics():
         sql = 'select * from dnb_topic_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
-        return jsonify(result)
+        return jsonify(getTopicsPercentage(result))
 
 
 @app.route('/getTopPeople')
@@ -76,7 +125,7 @@ def filter_by_person_result_topic():
         except:
             topic_result['error'] = str(sys.exc_info()[0])
         else:
-            topic_result['data'] = cursor.fetchall()
+            topic_result['data'] = getTopicsPercentage(cursor.fetchall())
     uptime = str(datetime.now() - startTime)
     print('uptime: %s', (uptime))
     return jsonify(topic_result)
@@ -191,7 +240,7 @@ def filter_by_year_result_topic():
         except:
             topic_result['error'] = str(sys.exc_info()[0])
         else:
-            topic_result['data'] = cursor.fetchall()
+            topic_result['data'] = getTopicsPercentage(cursor.fetchall())
     return jsonify(topic_result)
 
 

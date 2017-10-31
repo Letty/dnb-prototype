@@ -1,0 +1,9 @@
+//
+
+div.chart-timeline.year-area-svg svg g.brush rect.selection{
+  stroke: none;
+}
+
+.color-year div.chart-timeline.year-area-svg svg g.brush rect.selection{
+  fill: $color-year-background;
+}

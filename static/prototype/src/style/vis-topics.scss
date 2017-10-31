@@ -1,0 +1,37 @@
+$gutter-topics-default: 4px;
+
+.topic-div {
+
+  .topic-list {
+    @include flex-default();
+    height: 20vh;
+    font-size: 0.8em;
+
+    .topic-bins {
+      flex: 1;
+
+      .topic {
+        span {
+          @include border-radius($border-radius-default);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          text-align: center;
+          height: calc(100% - #{$gutter-topics-default});
+          width: calc(100% - #{$gutter-topics-default});
+          margin: 0 $gutter-topics-default;
+          top: $gutter-topics-default;
+          background-color: $color-topic-background;
+          color: $color-topic-default;
+          cursor: pointer;
+          line-height: 1.2em;
+
+          &:hover {
+            background-color: $color-topic-background--hover;
+          }
+        }
+      }
+    }
+  }
+}

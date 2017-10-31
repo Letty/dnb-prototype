@@ -1,99 +1,21 @@
-@mixin border-radius($radius) {
-  -webkit-border-radius: $radius;
-  -moz-border-radius: $radius;
-  -ms-border-radius: $radius;
-  border-radius: $radius;
-}
+@import 'variables';
+@import 'mixins';
+@import 'reset';
+@import 'vis-topics';
+@import 'vis-people';
+@import 'fixes';
 
 // green #BFC91C
 
+html {
+  font: normal normal 105%/1.7 "Open Sans", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", Helvetica, sans-serif;
+  color: $color-body-font;
+  background-color: $color-body-background;
+}
+
 html, body {
-  font-family: "Open Sans";
-  //background-color: black;
-}
-
-.navigation {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-
-  .nav-selection {
-    display: flex;
-    flex-grow: 2;
-    align-items: baseline;
-
-    .selected-year{
-      display: flex;
-      @include border-radius(2px);
-      margin-left: 30px;
-      padding: 0px 5px;
-      background: #E1EAFA;
-      color: #3564BA;
-    }
-
-    .selected-person {
-      @include border-radius(2px);
-      margin-left: 30px;
-      padding: 0px 5px;
-      color: #E9435A;
-      background-color: #FFEBEE;
-    }
-
-    .selected-topic {
-      @include border-radius(2px);
-      margin-left: 30px;
-      padding: 0px 5px;
-      color: #1DB5B4;
-      background-color: #D2F0F0;
-    }
-  }
-}
-
-.navigation div{
-  margin: 0px 5px;
-}
-
-.person-div {
-
-  .person-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-
-    .person {
-      margin: 5px;
-      padding: 5px;
-      color: #E9435A; //hintergrund FFEBEE
-      cursor: pointer;
-    }
-    .person:hover {
-      background-color: #FFEBEE;
-    }
-  }
-}
-
-.topic-div {
-
-  .topic-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    font-size: 1.25em;
-
-    .topic {
-      @include border-radius(2px);
-      margin: 2px;
-      padding: 5px;
-      background-color: #D2F0F0;
-      color: #1DB5B4;
-      cursor: pointer;
-    }
-
-    .topic:hover {
-      background-color: #e8f7f7;
-    }
-  }
+  height: 100%;
+  width: 100%;
 }
 
 .headline-div {
@@ -101,32 +23,14 @@ html, body {
   align-items: baseline;
 }
 
-.year-area-svg {
-  background: #F4F7FB;
-  text {
-    font-family: "Roboto Mono";
-    fill: #3564BA;
-  }
-  .area-path {
-    fill: #3564BA;
-  }
-  .y-axis {
-    line {
-      stroke: #3564BA;
-    }
-    path {
-      stroke: #3564BA;
-    }
-  }
-
-  g.brush rect.selection{
-    stroke: none;
-    fill: #E1EAFA;
-  }
-}
-
-.topic-viz {
+.main-viz {
+  margin: 0 $distance-outer-default;
   position: relative;
+
+  header {
+    @include flex-default();
+    align-items: center;
+  }
 }
 
 .node {

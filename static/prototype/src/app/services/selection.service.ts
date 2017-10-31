@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 
 import {IPerson, ITopic, IYear} from '../app.interfaces';
-import {Subject} from "rxjs/Subject";
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class SelectionService {
@@ -21,7 +22,7 @@ export class SelectionService {
   selMaxYear$ = this.selectedMaxYear.asObservable();
 
   setPerson(person: IPerson): void {
-    this.personID = person.id;
+    this.personID = person ? person.id : null;
     this.selectedPerson.next(person);
   }
 
@@ -30,7 +31,7 @@ export class SelectionService {
   }
 
   setTopic(topic: ITopic): void {
-    this.topicID = topic.id;
+    this.topicID = topic ? topic.id : null;
     this.selectedTopic.next(topic);
   }
 
@@ -55,7 +56,6 @@ export class SelectionService {
       'topic_id': this.topicID,
       'min_year': this.yearMin,
       'max_year': this.yearMax
-    }
+    };
   }
 }
-

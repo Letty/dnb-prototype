@@ -1,50 +1,55 @@
-import {Component, OnInit} from '@angular/core';
-import {ApiService} from '../services/api.service';
-import {SelectionService} from "../services/selection.service";
-import {DomSanitizer} from "@angular/platform-browser";
-import {Observable} from "rxjs/Observable";
-import * as d3 from 'd3';
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../services/api.service';
+import { SelectionService } from '../services/selection.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import { scaleLinear } from 'd3-scale';
 
-import {IPerson} from "../app.interfaces";
-import {DataService} from "../services/data.service";
+import { IPerson } from '../app.interfaces';
+import { DataService } from '../services/data.service';
+import { RouterService } from '../services/router.service';
 
 @Component({
-  selector: 'person',
+  selector: 'chart-person',
   templateUrl: './person.component.html'
 })
 
-export class PersonComponent {
+export class PersonComponent implements OnInit {
 
-  private persons: Observable<IPerson[]>;
-  private min: number = 1e10;
-  private max: number = -1e10;
+  public detail = false;
+  public show = true;
+  public persons: Observable<IPerson[]>;
+  public loadingData = true;
+  private min = Number.POSITIVE_INFINITY;
+  private max = Number.NEGATIVE_INFINITY;
 
-  private fontScale = d3.scaleLinear()
+  private fontScale = scaleLinear()
     .range([0.8, 2.5]);
 
-  constructor(private api: ApiService, private selection: SelectionService, private sanitizer: DomSanitizer,
-              private dataService: DataService) {
-
-  }
+  constructor(
+    private api: ApiService,
+    private selection: SelectionService,
+    private sanitizer: DomSanitizer,
+    private dataService: DataService,
+    private routerService: RouterService
+    ) {
+      api.loadingData$.subscribe((e) => {
+        if (e === 'person') { this.loadingData = true; }
+      });
+    }
 
   ngOnInit(): void {
-
     this.persons = this.dataService.persons;
-    this.dataService.persons.subscribe(
-      value => {
-        value.forEach(p => {
-            if (p.count < this.min) {
-              this.min = p.count;
-            }
-            if (p.count > this.max) {
-              this.max = p.count;
-            }
-          }
-        );
-        this.fontScale.domain([this.min, this.max]);
-      });
+    this.dataService.persons.subscribe(value => {
+      this.loadingData = false;
+      const counts: Array<number> = value.map(p => p.count);
+      this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
+    });
 
-
+    this.routerService.view.subscribe(view => {
+      this.show = view !== 'topic';
+      this.detail = view === 'person';
+    });
   }
 
   onSelect(person: IPerson): void {
@@ -52,11 +57,9 @@ export class PersonComponent {
     this.dataService.setFilter();
   }
 
-
   setFontSize(count: number): string {
     let style: any;
     style = this.sanitizer.bypassSecurityTrustStyle('font-size: ' + this.fontScale(count) + 'em');
     return style;
   }
-
 }
