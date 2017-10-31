@@ -4,3 +4,16 @@
   -ms-border-radius: $radius;
   border-radius: $radius;
 }
+
+@mixin flex-default() {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+@mixin box-shadow($shadow) {
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}

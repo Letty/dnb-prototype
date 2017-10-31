@@ -2,15 +2,12 @@
 @import '../../../style/mixins';
 
 .header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
+  @include flex-default();
+  justify-content: flex-start;
+  align-items: center;
   background-color: $color-header-background;
   padding: $distance-outer-default;
-  -webkit-box-shadow: $effect-header-shadow;
-  -moz-box-shadow: $effect-header-shadow;
-  box-shadow: $effect-header-shadow;
+  @include box-shadow($effect-header-shadow);
 
   .dnb-logo {
     font-size: 1em;
@@ -43,6 +40,7 @@
       padding: 0.2em 0.5em;
       font-weight: bold;
       font-size: 0.8em;
+      cursor: pointer;
 
       .close-button {
         margin-left: $distance-inner-default;
@@ -66,7 +64,8 @@
   }
 
   .help {
-    @include border-radius($border-radius-default)
+    @include border-radius($border-radius-default);
+    margin-left: auto;
     display: inline-block;
     padding: 0.2em 0.5em;
     background-color: #eee;

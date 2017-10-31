@@ -117,7 +117,7 @@ def filter_by_person_result_topic():
     topic_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
-        sql = 'select a.t_id, tc.keyword, a.count from dnb_author_topic a '\
+        sql = 'select a.t_id id, tc.keyword, a.count from dnb_author_topic a '\
             'inner join dnb2.dnb_topic_count tc on a.t_id= tc.id '\
             'where a.a_id=%s order by count desc limit 20'
         try:
@@ -136,6 +136,14 @@ def filter_by_person_result_person():
     # todo
     person_id = request.data.decode('utf-8')
     person_result = {'data': None, 'error': None}
+
+    #
+    #
+    #
+    #
+    #
+    #
+    #
 
     return jsonify(person_result)
 
@@ -162,7 +170,7 @@ def filter_by_topic_result_person():
     person_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
-        sql = 'select a.a_id, ac.name, ac.lastname,a.count '\
+        sql = 'select a.a_id id, ac.name, ac.lastname,a.count '\
             'from dnb_author_topic a inner join dnb_author_count ac '\
             'on a.a_id=ac.id where a.t_id =%s order by count desc limit 20'
         try:
@@ -202,7 +210,7 @@ def filter_by_year_result_person():
         #     'from dnb_author_item ai inner join dnb_author_count ac '\
         #     'on ai.a_id = ac.id where '\
         #     'ai.year > %s and ai.year < %s group by ai.a_id order by count desc limit 20'
-        sql = 'select ai.a_id, ac.lastname, ac.name, count(ai.a_id) count '\
+        sql = 'select ai.a_id id, ac.lastname, ac.name, count(ai.a_id) count '\
             'from dnb_author_item ai, dnb_author_count ac '\
             'where ai.a_id = ac.id and ai.year > %s and ai.year < %s '\
             'group by ai.a_id order by count desc limit 20'
@@ -223,7 +231,7 @@ def filter_by_year_result_topic():
     topic_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
-        sql = 'select it.t_id, tc.keyword, count(it.t_id) count '\
+        sql = 'select it.t_id id, tc.keyword, count(it.t_id) count '\
             'from dnb_item_topic it inner join dnb_topic_count tc '\
             'on it.t_id = tc.id where it.year > %s and it.year < %s '\
             'group by it.t_id order by count desc limit 20'
@@ -234,3 +242,26 @@ def filter_by_year_result_topic():
         else:
             topic_result['data'] = getTopicsPercentage(cursor.fetchall())
     return jsonify(topic_result)
+
+
+@app.route('/setFilterForYearPersonResultYear', methods=['PUT'])
+def filter_by_year_person_result_year():
+    params = json.loads(request.data.decode('utf-8'))
+    year_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select a_id id, count(a_id) as count, year from dnb_author_item '\
+            'where a_id = %s and year > %s and year < %s GROUP by a_id, year'
+        try:
+            cursor.execute(sql, (params['person_id'],
+                                 params['min_year'], params['max_year']))
+        except:
+            year_result['error'] = str(sys.exc_info()[0])
+        else:
+            year_result['data'] = cursor.fetchall()
+    return jsonify(year_result)
+
+
+@app.route('/setFilterForYearPersonResultTopic', methods=['PUT'])
+def filter_by_year_person_result_topic():
+    params = json.loads(request.data.decode('utf-8'))

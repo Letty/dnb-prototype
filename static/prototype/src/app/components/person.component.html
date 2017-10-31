@@ -1,13 +1,21 @@
 <div class="person-div main-viz" *ngIf="show">
   <loading-data *ngIf="loadingData" class="color-person"></loading-data>
-  <btn-link class="color-person" [sectionTitle]="'Personen'"
-    [invert]="detail" [route]="detail ? 'index' : 'person'"></btn-link>
-  <div class="person-list" *ngIf="!detail">
-    <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
-      <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
+  <header>
+    <btn-link
+      class="color-person"
+      [sectionTitle]="'Personen'"
+      [invert]="detail"
+      [route]="detail ? 'index' : 'person'"></btn-link>
+    <span class="off-counter">Ohne Person: {{ this.offResults }}</span>
+  </header>
+  <section class="viz-container">
+    <div class="person-list" *ngIf="!detail">
+      <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
+        <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
+      </div>
     </div>
-  </div>
-  <div *ngIf="detail">
-    Detail
-  </div>
+    <div *ngIf="detail">
+      Person-Detail
+    </div>
+  </section>
 </div>

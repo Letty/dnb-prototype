@@ -9,6 +9,8 @@ import { IPerson } from '../app.interfaces';
 import { DataService } from '../services/data.service';
 import { RouterService } from '../services/router.service';
 
+import { format } from 'd3';
+
 @Component({
   selector: 'chart-person',
   templateUrl: './person.component.html'
@@ -20,6 +22,7 @@ export class PersonComponent implements OnInit {
   public show = true;
   public persons: Observable<IPerson[]>;
   public loadingData = true;
+  public offResults = '0';
   private min = Number.POSITIVE_INFINITY;
   private max = Number.NEGATIVE_INFINITY;
 
@@ -44,6 +47,7 @@ export class PersonComponent implements OnInit {
       this.loadingData = false;
       const counts: Array<number> = value.map(p => p.count);
       this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
+      this.offResults = format(',')(123456);
     });
 
     this.routerService.view.subscribe(view => {
