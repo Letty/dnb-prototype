@@ -6,7 +6,7 @@
       [sectionTitle]="'Personen'"
       [invert]="detail"
       [route]="detail ? 'index' : 'person'"></btn-link>
-    <span>Ohne Person: xxx</span>
+    <span class="off-counter">Ohne Person: {{ this.offResults }}</span>
   </header>
   <section class="viz-container">
     <div class="person-list" *ngIf="!detail">

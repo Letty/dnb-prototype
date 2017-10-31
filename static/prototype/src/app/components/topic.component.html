@@ -6,7 +6,7 @@
       [sectionTitle]="'Themen'"
       [invert]="detail"
       [route]="detail ? 'index' : 'topic'"></btn-link>
-    <span>Ohne Thema: xxx</span>
+    <span class="off-counter">Ohne Thema: {{ this.offResults }}</span>
   </header>
   <section class="viz-container">
     <div class="topic-list">

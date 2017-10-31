@@ -1,4 +1,9 @@
 .person-div {
+  header .off-counter {
+    color: $color-person-default;
+    font-size: 0.8em;
+  }
+
   .person-list {
     .person {
       display: inline-block;
