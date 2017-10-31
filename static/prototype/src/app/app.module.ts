@@ -5,6 +5,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {DnbHeaderComponent} from './components/dnb-header/dnb-header.component';
 import {ResultsHeaderComponent} from './components/results-header/results-header.component';
+import {ResultsListComponent} from './components/results-list/results-list.component';
 import {PersonComponent} from './components/person.component';
 import {TopicComponent} from './components/topic.component';
 import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline.component';
@@ -22,6 +23,7 @@ import {RouterService} from './services/router.service';
   declarations: [
     AppComponent,
     ResultsHeaderComponent,
+    ResultsListComponent,
     PersonComponent,
     TopicComponent,
     ChartTimelineComponent,

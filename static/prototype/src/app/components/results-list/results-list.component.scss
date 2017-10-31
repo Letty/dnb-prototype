@@ -1,0 +1,44 @@
+@import "../../../style/variables";
+@import "../../../style/mixins";
+
+$gutter-results-default: 10px;
+
+.results-list {
+  background: $color-header-background;
+
+  & > ul {
+  	@include flex-default();
+	  margin: 0 $distance-outer-default;
+	  box-sizing: border-box;
+
+	  .result-bin {
+	  	flex: 1;
+	  }
+
+	  .result {
+	  	background-color: $color-year-default;
+	  	display: inline-block;
+	  	height: calc(100% - #{$gutter-results-default});
+      width: calc(100% - #{$gutter-results-default});
+      margin: $gutter-results-default $gutter-results-default 0;
+
+	  	span {
+	  		display: block;
+	  		color: #fff;
+	  		margin: 0 0 0.5em;
+	  	}
+
+	  	header {
+	  		padding: $distance-outer-default;
+	  		font-weight: bold;
+	  		line-height: 1.2em;
+	  	}
+
+	  	footer {
+	  		padding: $distance-outer-default;
+	  		font-size: 0.8em;
+	  	}
+
+	  }
+  }
+}

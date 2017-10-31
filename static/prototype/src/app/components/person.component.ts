@@ -92,7 +92,6 @@ export class PersonComponent implements OnInit {
   setLifeWidth(birth: number, death: number): string {
     let style: any;
     style = this.sanitizer.bypassSecurityTrustStyle('width: ' + (this.yearScale(birth) - this.yearScale(death)) + '%');
-    console.log(style);
     return style;
   }
 }
