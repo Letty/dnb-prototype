@@ -167,7 +167,6 @@ export class DataService {
       });
   }
 
-
   getYear(): Array<IYear> {
     return this.year;
   }
