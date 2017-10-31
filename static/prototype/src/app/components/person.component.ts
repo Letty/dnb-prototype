@@ -15,6 +15,7 @@ import { DataService } from '../services/data.service';
 
 export class PersonComponent implements OnInit {
 
+  public detail = false;
   public persons: Observable<IPerson[]>;
   public loadingData = true;
   private min = Number.POSITIVE_INFINITY;
