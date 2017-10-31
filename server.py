@@ -14,14 +14,41 @@ connection = pymysql.connect(host='127.0.0.1',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+def avoidSmallPercentage(values, threshold):
+    missing_percentage = 0
+    percentage_above_threshold = 0
+
+    # Find out how much percentage is missing and how much is above the threshold
+    for value in values:
+        if (value['percentage'] < (threshold)):
+            missing_percentage += threshold - value['percentage']
+        else:
+            percentage_above_threshold += value['percentage']
+
+    # This method is not completly clean. The sum of the resulting percentages are above 100 if items are higher than the threshold but would fall below if subtracted.
+    if (missing_percentage > 0):
+        for value in values:
+            # Calculate the needed subtraction
+            value_subtraction = value['percentage'] / percentage_above_threshold * missing_percentage
+            # Check if item would be below threshold after subtraction
+            if (value['percentage'] - value_subtraction < (threshold)):
+                value['percentage'] = (threshold)
+            else:
+                value['percentage'] = value['percentage'] - value_subtraction
+
+    return values
 
 def getTopicsPercentage(topics):
     number_of_bins = 5 # The number of columns the visualization has
+    threshold_percentage = 10
 
     # Calculate the percentage each topic has
     total = sum(topic['count'] for topic in topics)
     for topic in topics:
         topic['percentage'] = topic['count'] * 100 / total
+
+    # Recalculate to have no values below threshold
+    topics = avoidSmallPercentage(topics, threshold_percentage / number_of_bins)
 
     percentage_per_bin = 100 / number_of_bins # The percentage each column should hold
     bins = [[] for _ in range(number_of_bins)] # Create arrays for each column
@@ -52,6 +79,11 @@ def getTopicsPercentage(topics):
         total = sum(topic['percentage'] for topic in bin)
         for topic in bin:
             topic['percentage'] = topic['percentage'] * 100 / total
+
+        # Recalculate again to have no values below threshold
+        bin = avoidSmallPercentage(bin, threshold_percentage)
+
+        # Sort items to have biggest at top
         bin.sort(key = lambda topic: topic['percentage'], reverse = True)
 
     # Sort bins to have the one with the highest first value first
