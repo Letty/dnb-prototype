@@ -29,6 +29,7 @@ html, body {
 
   header {
     @include flex-default();
+    align-items: center;
   }
 }
 

@@ -2,15 +2,11 @@
 @import '../../../style/mixins';
 
 .header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
+  @include flex-default();
+  align-items: center;
   background-color: $color-header-background;
   padding: $distance-outer-default;
-  -webkit-box-shadow: $effect-header-shadow;
-  -moz-box-shadow: $effect-header-shadow;
-  box-shadow: $effect-header-shadow;
+  @include box-shadow($effect-header-shadow);
 
   .dnb-logo {
     font-size: 1em;
