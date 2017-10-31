@@ -1,26 +1,33 @@
 # DNB Prototype
 
+# Install
+
+```
+sudo pip install Flask
+pip install PyMySQL
+```
+
+```
+cd static/prototype
+npm install
+```
+
+# Development
+
 ## Server
 
-Requirements: 
-
-* python3
-* [flask](http://flask.pocoo.org/)  (for python 3)
-* [PyMySQL](https://github.com/PyMySQL/PyMySQL)
-
-Run server:
-
 ```
-> run mysql 
-
-> export FLASK_APP=server.py
-> flask run
+export FLASK_APP=server.py
+flask run
 ```
 
-
-## Build Angular App
+## Angular
 
 ```
-> cd static/prototype
-> ng build
+npm start
+```
+
+## Browser
+```
+http://127.0.0.1:4200/
 ```
