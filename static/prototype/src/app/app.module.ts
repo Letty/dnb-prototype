@@ -14,6 +14,7 @@ import {LoadingDataComponent} from './components/loading-data/loading-data.compo
 import {ApiService} from './services/api.service';
 import {SelectionService} from './services/selection.service';
 import {DataService} from './services/data.service';
+import {RouterService} from './services/router.service';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import {DataService} from './services/data.service';
   providers: [
     ApiService,
     DataService,
-    SelectionService
+    SelectionService,
+    RouterService
   ],
   bootstrap: [
     AppComponent

@@ -7,6 +7,7 @@ import { scaleLinear } from 'd3-scale';
 
 import { IPerson } from '../app.interfaces';
 import { DataService } from '../services/data.service';
+import { RouterService } from '../services/router.service';
 
 @Component({
   selector: 'chart-person',
@@ -16,6 +17,7 @@ import { DataService } from '../services/data.service';
 export class PersonComponent implements OnInit {
 
   public detail = false;
+  public show = true;
   public persons: Observable<IPerson[]>;
   public loadingData = true;
   private min = Number.POSITIVE_INFINITY;
@@ -28,7 +30,8 @@ export class PersonComponent implements OnInit {
     private api: ApiService,
     private selection: SelectionService,
     private sanitizer: DomSanitizer,
-    private dataService: DataService
+    private dataService: DataService,
+    private routerService: RouterService
     ) {
       api.loadingData$.subscribe((e) => {
         if (e === 'person') { this.loadingData = true; }
@@ -36,14 +39,17 @@ export class PersonComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
     this.persons = this.dataService.persons;
-    this.dataService.persons.subscribe(
-      value => {
-        this.loadingData = false;
-        const counts: Array<number> = value.map(p => p.count);
-        this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
-      });
+    this.dataService.persons.subscribe(value => {
+      this.loadingData = false;
+      const counts: Array<number> = value.map(p => p.count);
+      this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
+    });
+
+    this.routerService.view.subscribe(view => {
+      this.show = view !== 'topic';
+      this.detail = view === 'person';
+    });
   }
 
   onSelect(person: IPerson): void {

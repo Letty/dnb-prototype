@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {RouterService} from '../../services/router.service';
 
 @Component({
   selector: 'btn-link',
@@ -12,4 +13,11 @@ export class BtnLinkComponent {
   @Input() sectionTitle = '';
   @Input() icon = 'arrow-right';
   @Input() invert = false;
+  @Input() route: string = null;
+
+  constructor(private router: RouterService) { }
+
+  clicked(): void {
+    this.router.setView(this.route || 'index');
+  }
 }
