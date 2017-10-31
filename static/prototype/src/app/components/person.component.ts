@@ -5,6 +5,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { scaleLinear } from 'd3-scale';
 
+import _ from 'lodash';
+
 import { IPerson } from '../app.interfaces';
 import { DataService } from '../services/data.service';
 import { RouterService } from '../services/router.service';
@@ -28,6 +30,8 @@ export class PersonComponent implements OnInit {
 
   private fontScale = scaleLinear()
     .range([0.8, 2.5]);
+  private yearScale = scaleLinear()
+    .range([0, 100]);
 
   constructor(
     private api: ApiService,
@@ -44,6 +48,18 @@ export class PersonComponent implements OnInit {
   ngOnInit(): void {
     this.persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
+      _.each(value, person => {
+        person['date_of_birth'] = _.random(1100, 1900);
+        person['date_of_death'] = person['date_of_birth'] + _.random(10, 100);
+      });
+
+      const years_birth: Array<number> = value.map(p => p['date_of_birth']);
+      const years_death: Array<number> = value.map(p => p['date_of_death']);
+
+      const years = years_birth.concat(years_death);
+
+      this.yearScale.domain([_.min(years), _.max(years)]);
+
       this.loadingData = false;
       const counts: Array<number> = value.map(p => p.count);
       this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
@@ -64,6 +80,19 @@ export class PersonComponent implements OnInit {
   setFontSize(count: number): string {
     let style: any;
     style = this.sanitizer.bypassSecurityTrustStyle('font-size: ' + this.fontScale(count) + 'em');
+    return style;
+  }
+
+  setBirthWidth(count: number): string {
+    let style: any;
+    style = this.sanitizer.bypassSecurityTrustStyle('width: ' + this.yearScale(count) + '%');
+    return style;
+  }
+
+  setLifeWidth(birth: number, death: number): string {
+    let style: any;
+    style = this.sanitizer.bypassSecurityTrustStyle('width: ' + (this.yearScale(birth) - this.yearScale(death)) + '%');
+    console.log(style);
     return style;
   }
 }
