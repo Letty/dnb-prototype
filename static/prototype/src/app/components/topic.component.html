@@ -1,5 +1,4 @@
 <div class="topic-div main-viz" *ngIf="show">
-  <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
   <header>
     <btn-link
       class="color-topic"
@@ -9,6 +8,7 @@
     <span class="off-counter">Ohne Thema: {{ this.offResults }}</span>
   </header>
   <section class="viz-container">
+    <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
     <div class="topic-list" *ngIf="!detail">
       <div *ngFor="let bin of topics | async" class="topic-bins">
         <div *ngFor="let t of bin" class="topic" (click)="onSelect(t)" [style]="setTopicHeight(t.percentage)">

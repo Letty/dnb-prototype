@@ -1,5 +1,4 @@
 <div class="person-div main-viz" *ngIf="show">
-  <loading-data *ngIf="loadingData" class="color-person"></loading-data>
   <header>
     <btn-link
       class="color-person"
@@ -9,6 +8,7 @@
     <span class="off-counter">Ohne Person: {{ this.offResults }}</span>
   </header>
   <section class="viz-container">
+    <loading-data *ngIf="loadingData" class="color-person"></loading-data>
     <div class="person-list-overview" *ngIf="!detail">
       <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
         <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>

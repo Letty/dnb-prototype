@@ -8,6 +8,7 @@
   background-color: $color-header-background;
   padding: $distance-outer-default;
   @include box-shadow($effect-header-shadow);
+  height: calc(8vh - 2 * #{$distance-outer-default});
 
   .dnb-logo {
     font-size: 1em;

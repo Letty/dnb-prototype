@@ -18,18 +18,32 @@ html, body {
   width: 100%;
 }
 
-.headline-div {
-  display: flex;
-  align-items: baseline;
-}
+.filter {
+  @include flex-default();
+  align-items: center;
+  justify-content: center;
+  height: 92vh;
+  flex-direction: column;
+  align-content: space-between;
 
-.main-viz {
-  margin: 0 $distance-outer-default;
-  position: relative;
+  & > * {
+    width: 100%;
+    flex: 1;
+  }
 
-  header {
-    @include flex-default();
-    align-items: center;
+  .timeline {
+    height: auto;
+    flex: 0;
+  }
+
+  .main-viz {
+    margin: 0 $distance-outer-default;
+    position: relative;
+
+    header {
+      @include flex-default();
+      align-items: center;
+    }
   }
 }
 
