@@ -10,6 +10,7 @@ import {TopicComponent} from './components/topic.component';
 import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline.component';
 import {BtnLinkComponent} from './components/btn-link/btn-link.component';
 import {LoadingDataComponent} from './components/loading-data/loading-data.component';
+import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
 
 import {ApiService} from './services/api.service';
 import {SelectionService} from './services/selection.service';
@@ -26,7 +27,8 @@ import {RouterService} from './services/router.service';
     ChartTimelineComponent,
     DnbHeaderComponent,
     BtnLinkComponent,
-    LoadingDataComponent
+    LoadingDataComponent,
+    TopicDetailComponent
   ],
   imports: [
     BrowserModule,
