@@ -2,10 +2,11 @@
   <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
   <header>
     <btn-link
-    class="color-topic"
-    [sectionTitle]="'Themen'"
-    [invert]="detail"
-    [route]="detail ? 'index' : 'topic'"></btn-link>
+      class="color-topic"
+      [sectionTitle]="'Themen'"
+      [invert]="detail"
+      [route]="detail ? 'index' : 'topic'"></btn-link>
+    <span>Ohne Thema: xxx</span>
   </header>
   <section class="viz-container">
     <div class="topic-list">
