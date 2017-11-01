@@ -14,22 +14,27 @@ connection = pymysql.connect(host='127.0.0.1',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+
 def avoidSmallPercentage(values, threshold):
     missing_percentage = 0
     percentage_above_threshold = 0
 
-    # Find out how much percentage is missing and how much is above the threshold
+    # Find out how much percentage is missing and how much is above the
+    # threshold
     for value in values:
         if (value['percentage'] < (threshold)):
             missing_percentage += threshold - value['percentage']
         else:
             percentage_above_threshold += value['percentage']
 
-    # This method is not completly clean. The sum of the resulting percentages are above 100 if items are higher than the threshold but would fall below if subtracted.
+    # This method is not completly clean. The sum of the resulting percentages
+    # are above 100 if items are higher than the threshold but would fall
+    # below if subtracted.
     if (missing_percentage > 0):
         for value in values:
             # Calculate the needed subtraction
-            value_subtraction = value['percentage'] / percentage_above_threshold * missing_percentage
+            value_subtraction = value['percentage'] / \
+                percentage_above_threshold * missing_percentage
             # Check if item would be below threshold after subtraction
             if (value['percentage'] - value_subtraction < (threshold)):
                 value['percentage'] = (threshold)
@@ -38,8 +43,9 @@ def avoidSmallPercentage(values, threshold):
 
     return values
 
+
 def getTopicsPercentage(topics):
-    number_of_bins = 5 # The number of columns the visualization has
+    number_of_bins = 5  # The number of columns the visualization has
     threshold_percentage = 10
 
     # Calculate the percentage each topic has
@@ -48,10 +54,12 @@ def getTopicsPercentage(topics):
         topic['percentage'] = topic['count'] * 100 / total
 
     # Recalculate to have no values below threshold
-    topics = avoidSmallPercentage(topics, threshold_percentage / number_of_bins)
+    topics = avoidSmallPercentage(
+        topics, threshold_percentage / number_of_bins)
 
-    percentage_per_bin = 100 / number_of_bins # The percentage each column should hold
-    bins = [[] for _ in range(number_of_bins)] # Create arrays for each column
+    # The percentage each column should hold
+    percentage_per_bin = 100 / number_of_bins
+    bins = [[] for _ in range(number_of_bins)]  # Create arrays for each column
 
     # Distribute the topics to the bins
     for bin in bins:
@@ -85,7 +93,7 @@ def getTopicsPercentage(topics):
         bin = avoidSmallPercentage(bin, threshold_percentage)
 
         # Sort items to have biggest at top
-        bin.sort(key = lambda topic: topic['percentage'], reverse = True)
+        bin.sort(key=lambda topic: topic['percentage'], reverse=True)
 
     # Sort bins to have the one with the highest first value first
     bins.sort(key=lambda bin: bin[0]['percentage'], reverse=True)
@@ -298,10 +306,19 @@ def filter_by_year_person_result_year():
 @app.route('/setFilterForYearPersonResultTopic', methods=['PUT'])
 def filter_by_year_person_result_topic():
     params = json.loads(request.data.decode('utf-8'))
-    #
-    #
-    #
-    #
-    #
-    #
-    #
+    topic_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select ai.i_id, ai.year, it.t_id, tc.keyword from dnb2.dnb_author_item ai, '\
+            'dnb2.dnb_item_topic it, dnb2.dnb_topic_count tc where  ai.a_id = %s '\
+            'and ai.year > %s and ai.year < %s and ai.i_id = it.i_id and it.t_id = tc.id'
+
+        try:
+            cursor.execute(sql, (params['person_id'],
+                                 params['min_year'], params['max_year']))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            topic_result['data'] = cursor.fetchAll()
+    print(topic_result['data'])
+    return jsonify(topic_result)
