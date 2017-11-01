@@ -181,3 +181,38 @@ Zeitstrahl: immer einen kleinen als Filter
 ## Time, Person and Topic filter (true-true-true)
 * Time: ?
 * Topics: Netzwerk der Top 50 verwandte Themen einer person+thema innerhalb der Zeitspanne und wie häufig sie miteinander auftretem
+
+--readme content
+# DNB Prototype
+
+# Install
+
+```
+sudo pip3 install Flask
+pip3 install PyMySQL
+```
+
+```
+cd static/prototype
+npm install
+```
+
+# Development
+
+## Server
+
+```
+export FLASK_APP=server.py
+flask run
+```
+
+## Angular
+
+```
+npm start
+```
+
+## Browser
+```
+http://127.0.0.1:4200/
+```
