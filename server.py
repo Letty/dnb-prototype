@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS # remove for production
+from flask_cors import CORS  # remove for production
 import json
 from datetime import datetime
 import pymysql.cursors
 
 app = Flask(__name__, static_url_path='')
-CORS(app) # remove for production
+CORS(app)  # remove for production
 
 connection = pymysql.connect(host='127.0.0.1',
                              user='root',
@@ -61,7 +61,8 @@ def getTopicsPercentage(topics):
                 topics.remove(topic)
 
     # Sort bins to have the one least filled at front
-    bins.sort(key = lambda bin: sum(topic['percentage'] for topic in bin), reverse = True)
+    bins.sort(key=lambda bin: sum(topic['percentage']
+                                  for topic in bin), reverse=True)
 
     # Distribute the remaining topics to the columns
     current_bin = 0
@@ -87,12 +88,13 @@ def getTopicsPercentage(topics):
         bin.sort(key = lambda topic: topic['percentage'], reverse = True)
 
     # Sort bins to have the one with the highest first value first
-    bins.sort(key = lambda bin: bin[0]['percentage'], reverse = True)
+    bins.sort(key=lambda bin: bin[0]['percentage'], reverse=True)
 
     # Sort bins to have the one with the least topics first
     # bins.sort(key = lambda bin: len(bin))
 
     return bins
+
 
 @app.route('/')
 def root():
@@ -219,15 +221,14 @@ def filter_by_topic_result_topic():
     topic_id = request.data.decode('utf-8')
     topic_result = {'data': None, 'error': None}
 
-    # select time
-    # with connection.cursor() as cursor:
-    #     sql = 'select * from dnb_author_topic where t_id = %s order by count desc limit 20'
-    #     try:
-    #         cursor.execute(sql, (topic_id))
-    #     except:
-    #         person_result['error'] = str(sys.exc_info()[0])
-    #     else:
-    #         person_result['data'] = cursor.fetchall()
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
     return jsonify(person_result)
 
 
@@ -297,3 +298,10 @@ def filter_by_year_person_result_year():
 @app.route('/setFilterForYearPersonResultTopic', methods=['PUT'])
 def filter_by_year_person_result_topic():
     params = json.loads(request.data.decode('utf-8'))
+    #
+    #
+    #
+    #
+    #
+    #
+    #
