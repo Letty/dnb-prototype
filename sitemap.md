@@ -154,53 +154,30 @@ Zeitstrahl: immer einen kleinen als Filter
 ## Time filter (true-false-false)
 
 * Time: ?
-* Person: 
-    - setFilterForYearResultPerson
-    - `[{id, name, lastname, count}, {}, {}, {}, ..]`
-* Topics: default (top 20)
-    - setFilterForYearResultTopic
-    - `[{id, keyword, count}, {}, {}, ..]`
+* Topics: Netzwerk der Top 50 für Zeitspanne und wie häufig sie miteinander auftretem
 
 ## Person filter (false-true-false)
 * Time: ?
-* Person: ?
-* Topics: 
-    - setFilterForPersonResultTopic
-    - `[{id, keyword, count}, {}, {}, ..]`
+* Topics: Netzwerk der Top 50 Themen der Person und wie häufig sie miteinander auftretem
 
 ## Topic filter (false-false-true)
 * Time: ?
-* Person: 
-    - setFilterForTopicResultPerson
-    - `[{id, name, lastname, count}, {}, {}, {}, ..]`
-* Topics: ?
+* Topics: verwandte themen zu diesem thema und wie häufig sie miteinander auftretem
 
 ## Person and Topic filter (false-true-true)
 * Time: ?
-* Person: ?
-* Topics: ?
+* Topics: netzwerk der 50 verwandte themen einer person und des ausgewählten themas sowie die verknüpfung
 
 
 ## Time and Person filter (true-true-false)
 
 * Time: ?
-* Person: ?
-* Topics: 
-    - setFilterForYearPersonResultTopic
-    - `[{id, keyword, count}, {}, {}, ..]`
+* Topics: Netzwerk der Top 50 Themen der Person innerhalb der Zeitspanne und wie häufig sie miteinander auftretem
 
 ## Time and Topic filter (true-false-true)
 * Time: ?
-* Person: 
-    - setFilterForTimeTopicResultPerson
-    - `[{id, name, lastname, count}, {}, {}, {}, ..]`
-* Topics: ?
+* Topics: Netzwerk der Top 50 verwandte Themen innerhalb der Zeitspanne und wie häufig sie miteinander auftretem
 
 ## Time, Person and Topic filter (true-true-true)
 * Time: ?
-* Person: 
-    - setFilterForTimeTopicResultPerson
-    - `[{id, name, lastname, count}, {}, {}, {}, ..]`
-* Topics: ?
-
-//, dateofbirth, dateofdeath,
+* Topics: Netzwerk der Top 50 verwandte Themen einer person+thema innerhalb der Zeitspanne und wie häufig sie miteinander auftretem
