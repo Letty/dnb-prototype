@@ -168,11 +168,18 @@ export class DataService {
   }
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
-    this.api.filterForYearPersonResultYear(minYear, maxYear, personID)
+
+    this.api.filterDataForYearPersonResultYear(minYear, maxYear, personID)
       .subscribe(data => {
         console.log(data);
         this.setYear(data);
       });
+
+    this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personID)
+      .subscribe(data => {
+        console.log(data);
+      })
+
   }
 
   getYear(): Array<IYear> {
