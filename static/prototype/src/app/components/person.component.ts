@@ -21,7 +21,6 @@ import { format } from 'd3';
 export class PersonComponent implements OnInit {
 
   public detail = false;
-  public show = true;
   public persons: Observable<IPerson[]>;
   public loadingData = true;
   public offResults = '0';
@@ -67,7 +66,6 @@ export class PersonComponent implements OnInit {
     });
 
     this.routerService.view.subscribe(view => {
-      this.show = view !== 'topic';
       this.detail = view === 'person';
     });
   }

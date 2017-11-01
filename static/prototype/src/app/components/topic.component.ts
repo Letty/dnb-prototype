@@ -24,13 +24,6 @@ export class TopicComponent implements OnInit {
   public loadingData = true;
   public offResults = '0';
 
-  /* What is that? */
-  private topicTree = {
-    'keyword': 'tree',
-    'children': []
-  };
-  /* End of what is that? */
-
   constructor(
     private api: ApiService,
     private selection: SelectionService,
@@ -51,7 +44,6 @@ export class TopicComponent implements OnInit {
     });
 
     this.routerService.view.subscribe(view => {
-      this.show = view !== 'person';
       this.detail = view === 'topic';
     });
   }

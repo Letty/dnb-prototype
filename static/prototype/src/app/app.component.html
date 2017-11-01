@@ -1,8 +1,8 @@
 <div>
   <dnb-header></dnb-header>
   <div class="filter">
-    <chart-person></chart-person>
-    <topic></topic>
+    <chart-person *ngIf="showPerson"></chart-person>
+    <topic *ngIf="showTopic"></topic>
     <results-header class="timeline"></results-header>
   </div>
   <results-list></results-list>
