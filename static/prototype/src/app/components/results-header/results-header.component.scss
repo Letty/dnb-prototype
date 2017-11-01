@@ -1,6 +1,9 @@
 @import "../../../style/variables";
 
 .results-header {
+  align-self: flex-end;
+  margin-top: auto;
+
   .section-title {
     background: $color-year-default;
     height: 40px;
@@ -15,9 +18,4 @@
   }
 
   background: $color-header-background;
-  box-shadow: $effect-header-shadow;
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  transform: translateY(-100%);
 }

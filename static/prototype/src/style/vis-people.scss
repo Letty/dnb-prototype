@@ -1,5 +1,10 @@
 .person-div {
-  .person-list {
+  header .off-counter {
+    color: $color-person-default;
+    font-size: 0.8em;
+  }
+
+  .person-list-overview {
     .person {
       display: inline-block;
       margin: 0 5px;
@@ -10,6 +15,41 @@
 
       &:hover {
         background-color: $color-person-background;
+      }
+    }
+  }
+
+  .person-list-detail {
+    .person {
+      @include flex-default();
+      align-items: center;
+      color: $color-person-default;
+
+      .label {
+        position: absolute;
+      }
+
+      .life {
+        @include flex-default();
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        font-size: 0.8em;
+
+        .birth {
+          text-align: right;
+          margin-right: 0.5em;
+        }
+
+        .lifespan {
+          stroke: $color-person-default;
+          stroke-width: 1px;
+        }
+
+        .death {
+          margin-left: 0.5em;
+          text-align: left;
+        }
       }
     }
   }

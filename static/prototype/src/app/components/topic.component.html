@@ -1,20 +1,23 @@
-<div class="topic-div main-viz">
-  <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
+<div class="topic-div main-viz" *ngIf="show">
   <header>
     <btn-link
       class="color-topic"
       [sectionTitle]="'Themen'"
       [invert]="detail"
       [route]="detail ? 'index' : 'topic'"></btn-link>
-    <span>Ohne Thema: xxx</span>
+    <span class="off-counter">Ohne Thema: {{ this.offResults }}</span>
   </header>
   <section class="viz-container">
-    <div class="topic-list">
+    <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
+    <div class="topic-list" *ngIf="!detail">
       <div *ngFor="let bin of topics | async" class="topic-bins">
         <div *ngFor="let t of bin" class="topic" (click)="onSelect(t)" [style]="setTopicHeight(t.percentage)">
           <span>{{t.keyword}}</span>
         </div>
       </div>
+    </div>
+    <div class="topic-list" *ngIf="detail">
+      <topic-detail [topics]="null"></topic-detail>
     </div>
   </section>
 </div>

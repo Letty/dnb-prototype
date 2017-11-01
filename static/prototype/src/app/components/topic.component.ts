@@ -6,9 +6,10 @@ import { SelectionService } from '../services/selection.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DataService } from '../services/data.service';
 import { RouterService } from '../services/router.service';
-import * as d3 from 'd3';
 
 import { ITopic } from '../app.interfaces';
+
+import { format } from 'd3';
 
 @Component({
   selector: 'topic',
@@ -19,12 +20,9 @@ export class TopicComponent implements OnInit {
 
   public detail = false;
   public show = true;
-  public loadingData = true;
   public topics: Observable<ITopic[]>;
-  private topicTree = {
-    'keyword': 'tree',
-    'children': []
-  };
+  public loadingData = true;
+  public offResults = '0';
 
   constructor(
     private api: ApiService,
@@ -42,12 +40,10 @@ export class TopicComponent implements OnInit {
     this.topics = this.dataService.topics;
     this.dataService.topics.subscribe(value => {
       this.loadingData = false;
-      // let counts: Array<number> = value.map(p => p.count);
-      // this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
+      this.offResults = format(',')(123456);
     });
 
     this.routerService.view.subscribe(view => {
-      this.show = view !== 'person';
       this.detail = view === 'topic';
     });
   }

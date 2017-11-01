@@ -1,21 +1,32 @@
-<div class="person-div main-viz" *ngIf="show">
-  <loading-data *ngIf="loadingData" class="color-person"></loading-data>
+<div class="person-div main-viz">
   <header>
     <btn-link
       class="color-person"
       [sectionTitle]="'Personen'"
       [invert]="detail"
       [route]="detail ? 'index' : 'person'"></btn-link>
-    <span>Ohne Person: xxx</span>
+    <span class="off-counter">Ohne Person: {{ this.offResults }}</span>
   </header>
   <section class="viz-container">
-    <div class="person-list" *ngIf="!detail">
+    <loading-data *ngIf="loadingData" class="color-person"></loading-data>
+    <div class="person-list-overview" *ngIf="!detail">
       <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
         <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
       </div>
     </div>
-    <div *ngIf="detail">
-      Person-Detail
+    <div class="person-list-detail" *ngIf="detail">
+      <ul>
+        <li *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
+          <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span>
+          <div class="life">
+            <span class="birth" [style]="setBirthWidth(p['date_of_birth'])">{{ p['date_of_birth'] }}</span>
+            <svg [style]="setLifeWidth(p['date_of_death'], p['date_of_birth'])" height="10px" viewBox="0 0 20 10" preserveAspectRatio="none">
+              <line x1="0" y1="5" x2="20" y2="5" class="lifespan" />
+            </svg>
+            <span class="death">{{ p['date_of_death'] }}</span>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 </div>

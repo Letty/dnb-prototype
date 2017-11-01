@@ -15,3 +15,11 @@ export interface IYear {
   year: number;
   count: number;
 }
+
+export interface IResult {
+  author: string;
+  title: string;
+  verlag: string;
+  year: number;
+  height: number;
+}
