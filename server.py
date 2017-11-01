@@ -306,12 +306,13 @@ def filter_by_year_person_result_year():
 @app.route('/setFilterForYearPersonResultTopic', methods=['PUT'])
 def filter_by_year_person_result_topic():
     params = json.loads(request.data.decode('utf-8'))
-    topic_result = {'data': None, 'error': None}
+    topic_result = {'data': {}, 'error': None}
+    t = []
 
     with connection.cursor() as cursor:
-        sql = 'select ai.i_id, ai.year, it.t_id, tc.keyword from dnb2.dnb_author_item ai, '\
-            'dnb2.dnb_item_topic it, dnb2.dnb_topic_count tc where  ai.a_id = %s '\
-            'and ai.year > %s and ai.year < %s and ai.i_id = it.i_id and it.t_id = tc.id'
+        sql = 'select ai.i_id, ai.year, it.t_id, item.title, tc.keyword from dnb_author_item ai, ' \
+            'dnb_item_topic it, dnb_topic_count tc, dnb_item item where  ai.a_id = %s ' \
+            'and ai.year > %s and ai.year < %s and ai.i_id = it.i_id and it.t_id = tc.id and item.id=ai.i_id'
 
         try:
             cursor.execute(sql, (params['person_id'],
@@ -319,6 +320,26 @@ def filter_by_year_person_result_topic():
         except:
             topic_result['error'] = str(sys.exc_info()[0])
         else:
-            topic_result['data'] = cursor.fetchAll()
-    print(topic_result['data'])
+            topics = {}
+            data = cursor.fetchall()
+            for d in data:
+                try:
+                    topics[d['t_id']]
+                except KeyError:
+                    topics[d['t_id']] = {
+                        'keyword': d['keyword'],
+                        'count': 1
+                    }
+                else:
+                    topics[d['t_id']]['count'] += 1
+
+            for key in topics:
+                t.append({'id': key, 'keyword': topics[key][
+                         'keyword'], 'count': topics[key]['count']})
+
+        topic_result['data'] = getTopicsPercentage(t)
     return jsonify(topic_result)
+
+
+def seq_iter(obj):
+    return obj if isinstance(obj, dict) else range(len(obj))
