@@ -51,7 +51,6 @@ export class DataService {
 
     this.api.getYears()
       .subscribe( data => {
-        console.log('data ', data);
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);
@@ -171,13 +170,12 @@ export class DataService {
 
     this.api.filterDataForYearPersonResultYear(minYear, maxYear, personID)
       .subscribe(data => {
-        console.log(data);
         this.setYear(data);
       });
 
     this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personID)
       .subscribe(data => {
-        console.log(data);
+        this.setTopic(data);
       })
 
   }
