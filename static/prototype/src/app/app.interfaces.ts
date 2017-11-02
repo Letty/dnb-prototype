@@ -8,6 +8,8 @@ export interface IPerson {
   id: string;
   name: string;
   lastname: string;
+  date_of_birth: string;
+  date_of_death: string;
   count: number;
 }
 

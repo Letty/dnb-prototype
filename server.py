@@ -212,9 +212,9 @@ def filter_by_topic_result_person():
     person_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
-        sql = 'select a.a_id id, ac.name, ac.lastname,a.count '\
-            'from dnb_author_topic a inner join dnb_author_count ac '\
-            'on a.a_id=ac.id where a.t_id =%s order by count desc limit 20'
+        sql = 'select a.a_id id, ac.name, ac.lastname, ac.date_of_birth, ac.date_of_death,a.count '\
+            'from dnb2.dnb_author_topic a, dnb2.dnb_author_count ac where a.t_id =%s '\
+            'and a.a_id=ac.id order by count desc limit 20'
         try:
             cursor.execute(sql, (topic_id))
         except:
@@ -251,8 +251,8 @@ def filter_by_year_result_person():
         #     'from dnb_author_item ai inner join dnb_author_count ac '\
         #     'on ai.a_id = ac.id where '\
         #     'ai.year > %s and ai.year < %s group by ai.a_id order by count desc limit 20'
-        sql = 'select ai.a_id id, ac.lastname, ac.name, count(ai.a_id) count '\
-            'from dnb_author_item ai, dnb_author_count ac '\
+        sql = 'select ai.a_id id, ac.lastname, ac.name, ac.date_of_birth, ac.date_of_death, '\
+            'count(ai.a_id) count from dnb_author_item ai, dnb_author_count ac '\
             'where ai.a_id = ac.id and ai.year > %s and ai.year < %s '\
             'group by ai.a_id order by count desc limit 20'
         try:
