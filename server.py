@@ -285,7 +285,7 @@ def filter_by_year_result_topic():
     return jsonify(topic_result)
 
 
-@app.route('setFilterForYearResultItems', methods=['PUT'])
+@app.route('/setFilterForYearResultItems', methods=['PUT'])
 def filter_by_year_result_items():
     years = json.loads(request.data.decode('utf-8'))
     items_result = {'data': None, 'error': None}
