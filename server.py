@@ -341,5 +341,31 @@ def filter_by_year_person_result_topic():
     return jsonify(topic_result)
 
 
+@app.route('/setFilterForYearPersonResultPerson', methods=['PUT'])
+def filter_by_year_person_result_person():
+    params = json.loads(request.data.decode('utf-8'))
+    person_result = {'data': {}, 'error': None}
+
+
+@app.route('/setFilterForYearPersonResultItems', methods=['PUT'])
+def filter_by_year_person_result_items():
+    params = json.loads(request.data.decode('utf-8'))
+    items_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select ai.i_id, ai.year, item.title from dnb_author_item ai, '\
+            'dnb_item item where  ai.a_id =%s and ai.year > %s and ai.year <%s '\
+            'and ai.i_id =  item.id'
+        try:
+            cursor.execute(sql, (params['person_id'],
+                                 params['min_year'], params['max_year']))
+        except:
+            items_result['error'] = str(sys.exc_info()[0])
+        else:
+            items_result['data'] = cursor.fetchall()
+
+    return jsonify(items_result)
+
+
 def seq_iter(obj):
     return obj if isinstance(obj, dict) else range(len(obj))
