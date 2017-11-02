@@ -21,93 +21,108 @@ export class ResultsListComponent implements OnInit {
   public results: IItem[] = [];
   public loadingData = true;
   private fakeData = [{
-        author: 'Sven Ellmers (Hg.), Steffen Herrmann (Hg.)',
+        name: 'Sven',
+        lastname: 'Ellmers (Hg.)',
         title: 'Korporation und Sittlichkeit',
-        verlag: 'Wilhelm Fink',
+        publisher: 'Wilhelm Fink',
         year: 2017,
         height: 43
       },{
-        author: 'Bernd Sommer, Harald Welzer',
+        name: 'Bernd',
+        lastname: 'Sommer',
         title: 'Transformationsdesign',
-        verlag: 'oekom',
+        publisher: 'oekom',
         year: 2016,
         height: 23
       },{
-        author: 'Wolfram Pyta (Hg.), Carsten Kretschmann (Hg.)',
+        name: 'Wolfram',
+        lastname: 'Pyta)',
         title: 'Bürgerlichkeit',
-        verlag: 'Franz Steiner Verlag',
+        publisher: 'Franz Steiner Verlag',
         year: 2015,
         height: 64
       },{
-        author: 'Andreas Fisahn',
+        name: 'Andreas',
+        lastname: 'Fisahn',
         title: 'Die Saat des Kadmos',
-        verlag: 'Westfälisches Dampfboot',
+        publisher: 'Westfälisches Dampfboot',
         year: 2010,
         height: 84
       },{
-        author: 'Hans U. Brauner, Kurt Heinrich',
+        name: 'Hans U.',
+        lastname: 'Brauner',
         title: 'Ent-Bürgerlichung',
-        verlag: 'Allitera Verlag',
+        publisher: 'Allitera Verlag',
         year: 2000,
         height: 35
       },{
-        author: 'Sven Ellmers (Hg.), Steffen Herrmann (Hg.)',
+        name: 'Sven',
+        lastname: 'Ellmers (Hg.)',
         title: 'Korporation und Sittlichkeit',
-        verlag: 'Wilhelm Fink',
+        publisher: 'Wilhelm Fink',
         year: 1990,
         height: 43
       },{
-        author: 'Bernd Sommer, Harald Welzer',
+        name: 'Bernd',
+        lastname: 'Sommer',
         title: 'Transformationsdesign',
-        verlag: 'oekom',
+        publisher: 'oekom',
         year: 1980,
         height: 23
       },{
-        author: 'Wolfram Pyta (Hg.), Carsten Kretschmann (Hg.)',
+        name: 'Wolfram',
+        lastname: 'Pyta)',
         title: 'Bürgerlichkeit',
-        verlag: 'Franz Steiner Verlag',
+        publisher: 'Franz Steiner Verlag',
         year: 1970,
         height: 64
       },{
-        author: 'Andreas Fisahn',
+        name: 'Andreas',
+        lastname: 'Fisahn',
         title: 'Die Saat des Kadmos',
-        verlag: 'Westfälisches Dampfboot',
+        publisher: 'Westfälisches Dampfboot',
         year: 1960,
         height: 84
       },{
-        author: 'Hans U. Brauner, Kurt Heinrich',
+        name: 'Hans U.',
+        lastname: 'Brauner',
         title: 'Ent-Bürgerlichung',
-        verlag: 'Allitera Verlag',
+        publisher: 'Allitera Verlag',
         year: 1950,
         height: 35
       },{
-        author: 'Sven Ellmers (Hg.), Steffen Herrmann (Hg.)',
+        name: 'Sven',
+        lastname: 'Ellmers (Hg.)',
         title: 'Korporation und Sittlichkeit',
-        verlag: 'Wilhelm Fink',
+        publisher: 'Wilhelm Fink',
         year: 1940,
         height: 43
       },{
-        author: 'Bernd Sommer, Harald Welzer',
+        name: 'Bernd',
+        lastname: 'Sommer',
         title: 'Transformationsdesign',
-        verlag: 'oekom',
+        publisher: 'oekom',
         year: 1930,
         height: 23
       },{
-        author: 'Wolfram Pyta (Hg.), Carsten Kretschmann (Hg.)',
+        name: 'Wolfram',
+        lastname: 'Pyta)',
         title: 'Bürgerlichkeit',
-        verlag: 'Franz Steiner Verlag',
+        publisher: 'Franz Steiner Verlag',
         year: 1920,
         height: 64
       },{
-        author: 'Andreas Fisahn',
+        name: 'Andreas',
+        lastname: 'Fisahn',
         title: 'Die Saat des Kadmos',
-        verlag: 'Westfälisches Dampfboot',
+        publisher: 'Westfälisches Dampfboot',
         year: 1910,
         height: 84
       },{
-        author: 'Hans U. Brauner, Kurt Heinrich',
+        name: 'Hans U.',
+        lastname: 'Brauner',
         title: 'Ent-Bürgerlichung',
-        verlag: 'Allitera Verlag',
+        publisher: 'Allitera Verlag',
         year: 1900,
         height: 35
       }];

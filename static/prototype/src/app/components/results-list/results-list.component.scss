@@ -32,6 +32,10 @@ $gutter-results-default: 10px;
 	  		padding: $distance-outer-default;
 	  		font-weight: bold;
 	  		line-height: 1.2em;
+
+        .author{
+          display: flex;
+        }
 	  	}
 
 	  	footer {

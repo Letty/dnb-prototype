@@ -5,11 +5,14 @@
       <ul>
         <li *ngFor="let result of bin" class="result">
           <header>
-            <span class="author">{{ result.author }}</span>
+            <span class="author">
+              <span>{{ result.name }}</span>
+              <span>&nbsp;{{ result.lastname }}</span>
+            </span>
             <span class="title">{{ result.title }}</span>
           </header>
           <footer>
-            <span class="verlag">{{ result.verlag }}</span>
+            <span class="publisher">{{ result.publisher }}</span>
             <span class="year">{{ result.year }}</span>
           </footer>
         </li>

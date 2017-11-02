@@ -17,9 +17,10 @@ export interface IYear {
 }
 
 export interface IItem {
-  author: string;
+  name: string;
+  lastname: string;
   title: string;
-  verlag: string;
+  publisher: object;
   year: number;
   height: number;
 }
