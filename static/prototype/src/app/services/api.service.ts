@@ -82,4 +82,11 @@ export class ApiService {
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
       .map(res => <ITopic[]>res.json().data);
   }
+
+  filterDataForYearPersonResultItems(yearMin: number, yearMax: number, personID: string): Observable<ITopic[]> {
+    this.loadingData$.emit('topic');
+    return this.http.put('/setFilterForYearPersonResultTopic',
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
+      .map(res => <ITopic[]>res.json().data);
+  }
 }

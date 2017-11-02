@@ -16,7 +16,7 @@ export interface IYear {
   count: number;
 }
 
-export interface IResult {
+export interface IItem {
   author: string;
   title: string;
   verlag: string;

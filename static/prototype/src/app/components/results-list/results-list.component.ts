@@ -1,7 +1,7 @@
 import { Component, ElementRef, Renderer2, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 
-import { IYear, IResult } from '../../app.interfaces';
+import { IYear, IItem } from '../../app.interfaces';
 import { SelectionService } from '../../services/selection.service';
 import { getClassMembers } from '@angular/compiler-cli/src/diagnostics/typescript_symbols';
 import { DataService } from '../../services/data.service';
@@ -18,7 +18,7 @@ import _ from 'lodash';
 export class ResultsListComponent implements OnInit {
   private _results: Observable<IYear[]>;
   public years: IYear[] = [];
-  public results: IResult[] = [];
+  public results: IItem[] = [];
   public loadingData = true;
   private fakeData = [{
         author: 'Sven Ellmers (Hg.), Steffen Herrmann (Hg.)',
