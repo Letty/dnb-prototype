@@ -3,7 +3,7 @@ import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 
-import {IPerson, ITopic, IYear} from '../app.interfaces';
+import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
 
 @Injectable()
 export class ApiService {
@@ -83,10 +83,10 @@ export class ApiService {
       .map(res => <ITopic[]>res.json().data);
   }
 
-  filterDataForYearPersonResultItems(yearMin: number, yearMax: number, personID: string): Observable<ITopic[]> {
-    this.loadingData$.emit('topic');
-    return this.http.put('/setFilterForYearPersonResultTopic',
+  filterDataForYearPersonResultItems(yearMin: number, yearMax: number, personID: string): Observable<IItem[]> {
+    this.loadingData$.emit('item');
+    return this.http.put('/setFilterForYearPersonResultItems',
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
-      .map(res => <ITopic[]>res.json().data);
+      .map(res => <IItem[]>res.json().data);
   }
 }
