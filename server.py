@@ -285,6 +285,29 @@ def filter_by_year_result_topic():
     return jsonify(topic_result)
 
 
+@app.route('setFilterForYearResultItems', methods=['PUT'])
+def filter_by_year_result_items():
+    years = json.loads(request.data.decode('utf-8'))
+    items_result = {'data': None, 'error': None}
+
+    # todo - row count befor result list
+    # todo - how to load dynamically the items? fetch one after another and
+    # make a datastream?
+    with connection.cursor() as cursor:
+        sql = 'select item.id, item.title, item.publisher, ac.name, ac.lastname from '\
+            'dnb_item item, dnb_author_item ai, dnb_author_count ac ' \
+            'where item.year > %s and item.year < %s and item.id = ai.i_id and '\
+            'ai.a_id = ac.id limit 20'
+        try:
+            cursor.execute(sql, (years[0], years[1]))
+        except:
+            items_result['error'] = str(sys.exc_info()[0])
+        else:
+            items_result['data'] = cursor.fetchall()
+
+    return jsonify(items_result)
+
+
 @app.route('/setFilterForYearPersonResultYear', methods=['PUT'])
 def filter_by_year_person_result_year():
     params = json.loads(request.data.decode('utf-8'))
