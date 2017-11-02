@@ -62,48 +62,6 @@ Zeitstrahl: immer einen kleinen als Filter
 * Person: coautoren und ähnliche autoren innerhalb des Zeitpunkts zu diesem Thema
 * Topics: ähnliche / verknüpfte topics innerhalb des Zeitpunkts von dieser person
 
-# Time Detail Page
-
-## No filter (false-false-false)
-
-* Time: default (all Items over Year)
-
-## Time filter (true-false-false)
-
-* Time: default (all Items over Year)
-* Filtering timespan 
-
-## Person filter (false-true-false)
-* Time: default (all Items over Year)
-* Person-Zeitleiste für ausgewählte Person
-
-## Topic filter (false-false-true)
-* Time: default (all Items over Year)
-* Topics-Zeitleiste für ausgewähltes Thema
-
-## Person and Topic filter (false-true-true)
-* Time: Time: default (all Items over Year)
-* Person-Zeitleiste für ausgewählte Person
-* Topics-Zeitleiste für ausgewähltes Thema
-* Ergebnis-Zeitleiste: Publikationen von Person zum Thema
-
-## Time and Person filter (true-true-false)
-
-* Time: Time: default (all Items over Year)
-* Filtering timespan 
-* Person-Zeitleiste für ausgewählte Person im Zeitraum
-
-## Time and Topic filter (true-false-true)
-* Time: Time: default (all Items over Year)
-* Filtering timespan 
-* Topic-Zeitleiste für ausgewählte Topic im Zeitraum
-
-## Time, Person and Topic filter (true-true-true)
-* Time: Time: default (all Items over Year)
-* Filtering timespan 
-* Person-Zeitleiste für ausgewählte Person im Zeitraum
-* Topic-Zeitleiste für ausgewählte Topic im Zeitraum
-* Ergebnis-Zeitleiste: Publikationen von Person zum Thema in Zeitraum
 
 # Person Page
 
