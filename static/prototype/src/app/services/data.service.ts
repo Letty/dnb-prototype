@@ -212,6 +212,8 @@ export class DataService {
       .subscribe(data => {
         this.setTopic(data);
       });
+    this.api.filterDataByYearResultItems(minYear, maxYear)
+      .subscribe(data => this.setItems(data));
   }
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
