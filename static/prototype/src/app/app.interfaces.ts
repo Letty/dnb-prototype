@@ -19,10 +19,14 @@ export interface IYear {
 }
 
 export interface IItem {
+  id: string,
   name: string;
   lastname: string;
   title: string;
-  publisher: object;
+  publisher: Array<{
+    name: string,
+    ort: string
+  }>;
   year: number;
   height: number;
 }
