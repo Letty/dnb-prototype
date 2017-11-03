@@ -15,7 +15,6 @@ import _ from 'lodash';
 
 export class ResultsListComponent implements OnInit {
   private items: Observable<IItem[]>;
-  public results: IItem[] = [];
   public loadingData = true;
 
   constructor(
@@ -30,7 +29,7 @@ export class ResultsListComponent implements OnInit {
     this.items = this.dataService.items;
     this.dataService.items.subscribe(value => {
       this.loadingData = false;
-      this.results = _.chunk(value, _.ceil(_.size(value) / 5));
+      this.items = _.chunk(value, _.ceil(_.size(value) / 5));
     })
 
   }
