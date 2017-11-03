@@ -376,9 +376,9 @@ def filter_by_year_person_result_items():
     items_result = {'data': {}, 'error': None}
 
     with connection.cursor() as cursor:
-        sql = 'select ai.i_id id, ai.year, item.title from dnb_author_item ai, '\
-            'dnb_item item where  ai.a_id =%s and ai.year > %s and ai.year <%s '\
-            'and ai.i_id =  item.id'
+        sql = 'select ai.i_id id, ai.year, item.title, ac.name, ac.lastname from dnb_author_item ai, '\
+            'dnb_item item, dnb_author_count ac where  ai.a_id =%s and ai.year > %s and ai.year <%s '\
+            'and ai.i_id = item.id and ai.a_id = ac.id'
         try:
             cursor.execute(sql, (params['person_id'],
                                  params['min_year'], params['max_year']))
