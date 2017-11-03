@@ -11,7 +11,8 @@ svg {
     fill: $color-topic-default;
     text-anchor: middle;
   }
-  line {
+  path {
+    fill: none;
     stroke: $color-topic-default;
   }
 }

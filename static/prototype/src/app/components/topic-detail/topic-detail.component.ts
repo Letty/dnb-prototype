@@ -28,6 +28,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public height = 0;
   public translate = 'translate(0 0)';
 
+  public p1Corner = [0, 0];
+  public p2Corner = [0, 0];
+
   constructor() {}
 
   // Listeners
@@ -48,6 +51,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     this.topics.subscribe(value => {
       if (this.nodes == null) { this.nodes = []; }
+
       const nodes = _.cloneDeep(value.reduce(function(a, b) {
         return a.concat(b);
       }, []));
@@ -66,11 +70,13 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
       this.links = this.randomLinks();
 
-      const collisionForce = rectCollide()
-        .size((d) => {
-            return [this.width / 5 + 20, d.height + 20];
-        });
-        // .iterations(12);
+      const collisionForce = rectCollide();
+
+      collisionForce.size((d) => {
+        return [this.width / 5 + 20, d.height + 20];
+      });
+
+      collisionForce.iterations(12);
 
       this.simulation
         .nodes(this.nodes)
@@ -93,7 +99,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     return d3.forceSimulation()
       .force('link', d3.forceLink()
         .id(function (d: ITopic) { return `${d.id}`; })
-        .strength(0.05)
+        .strength(d => {
+          console.log(d);
+          // d.value * 0.02
+          return 0.02;
+        })
         .distance(200)
       )
       .force('charge', d3.forceManyBody()
@@ -103,7 +113,6 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   }
 
   ticked(): void {
-    console.log(this.links[0]);
     this.nodes.forEach((n, i) => {
       n.x = Math.max(n.x, (-this.width + this.width / 5) / 2);
       n.x = Math.min(n.x, (this.width - this.width / 5) / 2);
@@ -111,6 +120,71 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       n.y = Math.max(n.y, (-this.height + n.height) / 2);
       n.y = Math.min(n.y, (this.height - n.height) / 2);
 
+    });
+
+    this.links.filter((d, i) => i >= 0).forEach(link => {
+      const p1 = [link.source.x, link.source.y];
+      const p2 = [link.target.x, link.target.y];
+
+      const dist = [p2[0] - p1[0], p2[1] - p1[1]];
+
+      const dir = [dist[0] > 0 ? 1 : -1, dist[1] > 0 ? 1 : -1];
+
+      const p1Corner = [link.source.x + (this.width / 10) * dir[0],
+        link.source.y + (link.source.height / 2) * dir[1]];
+
+      const p2Corner = [link.target.x + (this.width / 10) * -dir[0],
+        link.target.y + (link.target.height / 2) * -dir[1]];
+
+      const cDist = [p2Corner[0] - p1Corner[0], p2Corner[1] - p1Corner[1]];
+
+
+      let anchor = [];
+
+      if (dir[0] === -1 && dir[1] === -1) {
+        if (cDist[0] > cDist[1]) {
+          anchor = [0, -1];
+        } else {
+          anchor = [-1, 0];
+        }
+      } else if (dir[0] === 1 && dir[1] === -1) {
+        if (cDist[0] > -cDist[1]) {
+          anchor = [1, 0];
+        } else {
+          anchor = [0, -1];
+        }
+      } else if (dir[0] === 1 && dir[1] === 1) {
+        if (cDist[0] > cDist[1]) {
+          anchor = [1, 0];
+        } else {
+          anchor = [0, 1];
+        }
+      } else {
+        if (cDist[0] > -cDist[1]) {
+          anchor = [0, 1];
+        } else {
+          anchor = [-1, 0];
+        }
+      }
+
+      const s = {
+        x: link.source.x + (this.width / 10) * anchor[0],
+        y: link.source.y + (link.source.height / 2) * anchor[1]
+      };
+
+      const t = {
+        x: link.target.x + (this.width / 10) * -anchor[0],
+        y: link.target.y + (link.target.height / 2) * -anchor[1]
+      };
+
+      const offset = {
+        x: anchor[0] !== 0 ? (t.x - s.x) * 0.25 : 0,
+        y: anchor[0] !== 0 ? 0 : (t.y - s.y) * 0.25,
+      };
+
+      link.path = `M ${s.x},${s.y} C${s.x + offset.x},${s.y + offset.y} ${t.x - offset.x},${t.y - offset.y} ${t.x},${t.y}`;
+      link.sourceAnchor = s;
+      link.targetAnchor = t;
     });
   }
 
@@ -136,8 +210,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     return '.'.repeat(40).split('').map(d => {
       return {
         source: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
-        target: this.nodes[Math.floor(Math.random() * this.nodes.length)].id
+        target: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
+        value: Math.ceil(Math.random() * 4)
       };
-    });
+    }).filter(d => d.source.id === d.target.id);
   }
 }

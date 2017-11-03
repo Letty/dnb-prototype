@@ -81,17 +81,22 @@ function rectCollide () {
   }
 
   force.size = function (_) {
-    return (arguments.length
-      ? (size = typeof _ === 'function' ? _ : constant(_), force)
-      : size)
+    if (_ != null) size = typeof _ === 'function' ? _ : constant(_)
+    return force
+    // return (arguments.length
+    //   ? (size = typeof _ === 'function' ? _ : constant(_), force)
+    //   : size)
   }
 
   force.strength = function (_) {
-    return (arguments.length ? (strength = +_, force) : strength)
+    if (_ != null) strength = +_
+    return force
+    // return (arguments.length ? (strength = +_, force) : strength)
   }
 
   force.iterations = function (_) {
-    return (arguments.length ? (iterations = +_, force) : iterations)
+    if (_ != null) iterations = +_
+    return force
   }
 
   return force
