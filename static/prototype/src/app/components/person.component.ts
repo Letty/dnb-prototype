@@ -48,16 +48,16 @@ export class PersonComponent implements OnInit {
     this.persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       _.each(value, person => {
-        person['date_of_birth'] = _.random(1100, 1900);
-        person['date_of_death'] = person['date_of_birth'] + _.random(10, 100);
+        // person['date_of_birth'] = _.random(1100, 1900);
+        // person['date_of_death'] = person['date_of_birth'] + _.random(10, 100);
       });
 
-      const years_birth: Array<number> = value.map(p => p['date_of_birth']);
-      const years_death: Array<number> = value.map(p => p['date_of_death']);
+      // const years_birth: Array<number> = value.map(p => p['date_of_birth']);
+      // const years_death: Array<number> = value.map(p => p['date_of_death']);
 
-      const years = years_birth.concat(years_death);
+      // const years = years_birth.concat(years_death);
 
-      this.yearScale.domain([_.min(years), _.max(years)]);
+      // this.yearScale.domain([_.min(years), _.max(years)]);
 
       this.loadingData = false;
       const counts: Array<number> = value.map(p => p.count);
