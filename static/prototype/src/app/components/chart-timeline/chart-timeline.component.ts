@@ -162,7 +162,11 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     const years = this.years.filter(y => {
       return y.year <= this.maxYear && y.year >= this.minYear;
     });
-    this.updateRuler(_.maxBy(years, 'count').year);
+    if (years != null && years.length) {
+      this.updateRuler(_.maxBy(years, 'count').year);
+    } else {
+      this.updateRuler(this.maxYear);
+    }
   }
 
   updateRuler (fullyear) {
