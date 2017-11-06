@@ -19,7 +19,7 @@ export interface IYear {
 }
 
 export interface IItem {
-  id: string,
+  id: string;
   name: string;
   lastname: string;
   title: string;
