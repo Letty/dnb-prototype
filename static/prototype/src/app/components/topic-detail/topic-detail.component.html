@@ -3,12 +3,26 @@
     <g *ngIf="nodes" [attr.transform]="translate">
       <g *ngFor="let link of links">
         <path [attr.d]="link.path" [attr.stroke-width]="link.value"></path>
+      </g>
+    </g>
+  </svg>
+  <div class="topics" [style.height]="height + 'px'">
+    <div class="wrapper">
+      <div class="node" *ngFor="let node of nodes"
+        [style.transform]="getTranslate(node)"
+        [style.width]="width / 5 + 'px'"
+        [style.height]="node.height + 'px'">
+        <span class="label">
+          {{node.keyword}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <svg #svg width="100%" [attr.height]="height">
+    <g *ngIf="nodes" [attr.transform]="translate">
+      <g *ngFor="let link of links">
         <circle *ngIf="link.sourceAnchor" r="3" [attr.cx]="link.sourceAnchor.x" [attr.cy]="link.sourceAnchor.y"></circle>
         <circle *ngIf="link.targetAnchor" r="3" [attr.cx]="link.targetAnchor.x" [attr.cy]="link.targetAnchor.y"></circle>
-      </g>
-      <g *ngFor="let node of nodes" [attr.transform]="getTranslate(node.x, node.y)">
-        <rect [attr.x]="-this.width / 10" [attr.y]="-node.height / 2" [attr.width]="this.width / 5" [attr.height]="node.height"></rect>
-        <text y="5">{{node.keyword}}</text>
       </g>
     </g>
   </svg>

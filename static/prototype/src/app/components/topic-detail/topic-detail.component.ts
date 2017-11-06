@@ -1,12 +1,13 @@
 import {Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges, HostListener} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import * as d3 from 'd3';
 import _ from 'lodash';
 
 import {ITopic} from '../../app.interfaces';
 
-import { debounce } from '../../decorators';
+import {debounce} from '../../decorators';
 
 import rectCollide from './forceforce';
 
@@ -31,12 +32,16 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public p1Corner = [0, 0];
   public p2Corner = [0, 0];
 
-  constructor() {}
+  constructor(private sanitizer: DomSanitizer) {}
 
   // Listeners
   @HostListener('window:resize', ['$event'])
   @debounce(250)
   onResize(event) {
+    console.log('resize');
+    this.width = this.svg.nativeElement.clientWidth;
+    this.translate = `translate(${this.width / 2} ${this.height / 2})`;
+    this.simulate(this.nodes);
   }
 
   // Life-cycle hooks
@@ -49,16 +54,26 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     this.simulation = this.getSimulation();
 
-    this.topics.subscribe(value => {
+    this.topics.subscribe(values => {
       if (this.nodes == null) { this.nodes = []; }
 
-      const nodes = _.cloneDeep(value.reduce(function(a, b) {
+      const _values = _.cloneDeep(values);
+
+      _values.forEach((group, i) => {
+        let yOffset = 0;
+        group.forEach(d => {
+
+          d.height = Math.max(d.percentage * 2, 32);
+          d.x = i * this.width / 5;
+          d.y = yOffset;
+          yOffset += d.height;
+        });
+        yOffset = 0;
+      });
+
+      const nodes = _.cloneDeep(_values.reduce(function(a, b) {
         return a.concat(b);
       }, []));
-
-      nodes.forEach(n => {
-        n.height = Math.max(n.percentage * 2, 20);
-      });
 
       this.nodes = this.nodes.filter(oldNode =>
         nodes.find(newNode => newNode.id === oldNode.id)
@@ -68,32 +83,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         this.nodes.find(oldNode => newNode.id === oldNode.id) == null
       ));
 
-      if (this.nodes.length === 0) {
-        this.links = [];
-        return;
-      }
-
-      this.links = this.randomLinks();
-      console.log(this.links);
-
-      const collisionForce = rectCollide();
-
-      collisionForce.size((d) => {
-        return [this.width / 5 + 20, d.height + 20];
-      });
-
-      collisionForce.iterations(12);
-
-      this.simulation
-        .nodes(this.nodes)
-        .on('tick', () => {this.ticked(); })
-        // .force('cf', (a) => this.customForce(a));
-        .force('collision', collisionForce)
-        .force('center', d3.forceCenter(0, 0));
-
-      this.simulation.force('link').links(this.links);
-
-      this.simulation.alpha(1).restart();
+      this.simulate(values);
     });
   }
 
@@ -106,15 +96,47 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       .force('link', d3.forceLink()
         .id(function (d: ITopic) { return `${d.id}`; })
         .strength(d => {
-          // d.value * 0.02
-          return 0.02;
+          return (d as any).value * 0.01;
         })
-        .distance(200)
+        // .distance(200)
       )
       .force('charge', d3.forceManyBody()
         .strength(-200)
       );
       // .alphaDecay(0.006883951579);
+  }
+
+  simulate(values): void {
+
+    if (this.nodes.length === 0) {
+      this.links = [];
+      return;
+    }
+
+    console.log(this.nodes);
+
+    this.links = this.randomLinks();
+
+    const collisionForce = rectCollide();
+
+    collisionForce.size((d) => {
+      return [this.width / 5 + 20, d.height + 20];
+    });
+
+    collisionForce.iterations(1);
+
+    collisionForce.strength(1);
+
+    this.simulation
+      .nodes(this.nodes)
+      .on('tick', () => {this.ticked(); })
+      // .force('cf', (a) => this.customForce(a));
+      .force('collision', collisionForce)
+      .force('center', d3.forceCenter(0, 0));
+
+    this.simulation.force('link').links(this.links);
+
+    this.simulation.alpha(1).restart();
   }
 
   ticked(): void {
@@ -193,8 +215,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  getTranslate(x, y): string {
-    return `translate(${x} ${y})`;
+  getTranslate(n) {
+    const transform = `translate(${n.x - this.width / 10}px, ${n.y - n.height / 2}px)`;
+    return this.sanitizer.bypassSecurityTrustStyle(transform);
   }
 
   customForce(alpha): void {
