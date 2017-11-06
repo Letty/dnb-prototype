@@ -69,6 +69,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       ));
 
       this.links = this.randomLinks();
+      console.log(this.links);
 
       const collisionForce = rectCollide();
 
@@ -107,8 +108,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       )
       .force('charge', d3.forceManyBody()
         .strength(-200)
-      )
-      .alphaDecay(0.006883951579);
+      );
+      // .alphaDecay(0.006883951579);
   }
 
   ticked(): void {
@@ -212,6 +213,6 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         target: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
         value: Math.ceil(Math.random() * 4)
       };
-    }).filter(d => d.source.id === d.target.id);
+    }).filter(d => d.source !== d.target);
   }
 }
