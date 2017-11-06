@@ -69,7 +69,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
         .extent([[0, 0], [this.width, this.height]])
         .on('brush end', () => {
           const sel = d3.event.selection;
-          if (d3.event.type === 'end' && sel && (sel[0] !== 0 && sel[1] !== this.width)) {
+          if (d3.event.type === 'end' && sel) {
             this.selection.setYear(
               Math.round(this.xScale.invert(sel[0])),
               Math.round(this.xScale.invert(sel[1]))

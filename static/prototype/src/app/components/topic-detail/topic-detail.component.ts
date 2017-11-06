@@ -68,6 +68,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         this.nodes.find(oldNode => newNode.id === oldNode.id) == null
       ));
 
+      if (this.nodes.length === 0) {
+        this.links = [];
+        return;
+      }
+
       this.links = this.randomLinks();
       console.log(this.links);
 
@@ -207,6 +212,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   }
 
   randomLinks() {
+    if (this.nodes == null) { return; }
     return '.'.repeat(40).split('').map(d => {
       return {
         source: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
