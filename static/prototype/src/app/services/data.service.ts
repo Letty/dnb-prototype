@@ -3,24 +3,22 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import {ApiService} from '../services/api.service';
 import {SelectionService} from './selection.service';
-import {IPerson, ITopic, IYear} from '../app.interfaces';
+import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class DataService {
   public loadingData$: EventEmitter<string>;
 
-  private defaultYear: Array<IYear>;
-  private defaultPerson: Array<IPerson>;
-  private defaultTopic: Array<ITopic>;
-
   topics: Observable<ITopic[]>;
   persons: Observable<IPerson[]>;
   years: Observable<IYear[]>;
+  items: Observable<IItem[]>
 
   private _topics: BehaviorSubject<ITopic[]>;
   private _persons: BehaviorSubject<IPerson[]>;
   private _years: BehaviorSubject<IYear[]>;
+  private _items: BehaviorSubject<IItem[]>;
 
   private year: Array<IYear>;
 
@@ -32,25 +30,66 @@ export class DataService {
     defaultTopics: ITopic[],
 
     years: IYear[],
-    defaultYears: IYear[]
+    defaultYears: IYear[],
+
+    items: IItem[],
+    defaultItems: IItem[]
   };
+
+  private fakeData = [{
+    id: '1',
+    name: 'Sven',
+    lastname: 'Ellmers (Hg.)',
+    title: 'Korporation und Sittlichkeit',
+    publisher: [{
+      name: 'Wilhelm Fink',
+      ort: ''
+    }],
+    year: 2017,
+    height: 45
+  }, {
+    id: '1',
+    name: 'Bernd',
+    lastname: 'Sommer',
+    title: 'Transformationsdesign',
+    publisher: [{
+      name: 'Wilhelm Fink',
+      ort: ''
+    }],
+    year: 2016,
+    height: 58
+  }, {
+    id: '1',
+    name: 'Wolfram',
+    lastname: 'Pyta)',
+    title: 'Bürgerlichkeit',
+    publisher: [{
+      name: 'Wilhelm Fink',
+      ort: ''
+    }],
+    year: 2015,
+    height: 70
+  }];
 
   constructor(private api: ApiService, private selection: SelectionService) {
     this.dataStore = {
       persons: [], defaultPersons: [],
       topics: [], defaultTopics: [],
-      years: [], defaultYears: []
+      years: [], defaultYears: [],
+      items: [], defaultItems: []
     };
     this._topics = <BehaviorSubject<ITopic[]>>new BehaviorSubject([]);
     this._persons = <BehaviorSubject<IPerson[]>>new BehaviorSubject([]);
     this._years = <BehaviorSubject<IYear[]>>new BehaviorSubject([]);
+    this._items = <BehaviorSubject<IItem[]>>new BehaviorSubject([]);
 
     this.topics = this._topics.asObservable();
     this.persons = this._persons.asObservable();
     this.years = this._years.asObservable();
+    this.items = this._items.asObservable();
 
     this.api.getYears()
-      .subscribe( data => {
+      .subscribe(data => {
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);
@@ -69,6 +108,10 @@ export class DataService {
         this.dataStore.defaultTopics = data;
         this._topics.next(Object.assign({}, this.dataStore).topics);
       }, err => console.log('error while loading default topics'));
+
+    this.dataStore.items = this.fakeData;
+    this.dataStore.defaultItems = this.fakeData;
+    this._items.next(Object.assign({}, this.dataStore).items);
   }
 
   setYear(years_: IYear[]): void {
@@ -84,6 +127,11 @@ export class DataService {
   setPerson(persons_: IPerson[]): void {
     this.dataStore.persons = persons_;
     this._persons.next(Object.assign({}, this.dataStore).persons);
+  }
+
+  setItems(items_: IItem[]): void {
+    this.dataStore.items = items_;
+    this._items.next(Object.assign({}, this.dataStore).items);
   }
 
   setFilter(): void {
@@ -164,6 +212,8 @@ export class DataService {
       .subscribe(data => {
         this.setTopic(data);
       });
+    this.api.filterDataByYearResultItems(minYear, maxYear)
+      .subscribe(data => this.setItems(data));
   }
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
@@ -180,7 +230,7 @@ export class DataService {
 
     this.api.filterDataForYearPersonResultItems(minYear, maxYear, personID)
       .subscribe(data => {
-        console.log(data);
+        this.setItems(data);
       });
 
   }

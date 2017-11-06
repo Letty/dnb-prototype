@@ -1,15 +1,18 @@
 <div class="results-list">
   <loading-data *ngIf="loadingData" class="color-year"></loading-data>
   <ul>
-    <li *ngFor="let bin of results" class="result-bin">
+    <li *ngFor="let bin of items" class="result-bin">
       <ul>
         <li *ngFor="let result of bin" class="result">
           <header>
-            <span class="author">{{ result.author }}</span>
+            <span class="author">
+              <span>{{ result.name }}</span>
+              <span>&nbsp;{{ result.lastname }}</span>
+            </span>
             <span class="title">{{ result.title }}</span>
           </header>
           <footer>
-            <span class="verlag">{{ result.verlag }}</span>
+            <span class="publisher">{{ result.publisher }}</span>
             <span class="year">{{ result.year }}</span>
           </footer>
         </li>

@@ -8,6 +8,8 @@ export interface IPerson {
   id: string;
   name: string;
   lastname: string;
+  date_of_birth: string;
+  date_of_death: string;
   count: number;
 }
 
@@ -17,9 +19,14 @@ export interface IYear {
 }
 
 export interface IItem {
-  author: string;
+  id: string,
+  name: string;
+  lastname: string;
   title: string;
-  verlag: string;
+  publisher: Array<{
+    name: string,
+    ort: string
+  }>;
   year: number;
   height: number;
 }
