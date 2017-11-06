@@ -100,7 +100,6 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       .force('link', d3.forceLink()
         .id(function (d: ITopic) { return `${d.id}`; })
         .strength(d => {
-          console.log(d);
           // d.value * 0.02
           return 0.02;
         })
