@@ -65,7 +65,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
           d.height = Math.max(d.percentage * 2, 32);
           d.x = i * this.width / 5;
-          d.y = yOffset;
+          d.y = yOffset + d.height / 2;
           yOffset += d.height;
         });
         yOffset = 0;
