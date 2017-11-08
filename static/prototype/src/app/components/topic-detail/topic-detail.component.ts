@@ -84,7 +84,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       const height = 300;
       let remainingWidth = this.width;
       let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + b);
-      const packs = [{
+      let packs = [{
         width: 0,
         count: 0,
         nodes: []
@@ -104,35 +104,19 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           }
         });
 
-        let packWidth = pack.count / remainingCount * remainingWidth;
+        const packWidth = pack.count / remainingCount * remainingWidth;
 
-        if (packWidth > this.width * 0.2) {
+        if (packWidth > this.width * 0.15) {
           hasSpace = false;
         }
-
-        // if (pack.nodes.length > 5) {
-        //   hasSpace = false;
-        // }
 
         if (hasSpace) {
           pack.count = packCount;
           pack.nodes.push(node);
-        }
-
-        if (!hasSpace) {
+        } else {
           pack.width = packWidth;
           remainingCount -= pack.count;
           remainingWidth -= pack.width;
-
-          let yOffset = 0;
-
-          pack.nodes.forEach(pNode => {
-            pNode.width = packWidth;
-            pNode.height = (pNode.count / pack.count * height);
-            pNode.x = remainingWidth + pNode.width / 2;
-            pNode.y = yOffset + pNode.height / 2;
-            yOffset += pNode.height;
-          });
 
           packs.push({
             width: 0,
@@ -143,29 +127,39 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
         if (i >= nodes.length - 1) {
           pack = packs[packs.length - 1];
-
-          packWidth = pack.count / remainingCount * remainingWidth;
-          console.log(packWidth);
-          let yOffset = 0;
-
-          remainingWidth -= packWidth;
-
-          console.log(remainingWidth);
-
-          pack.nodes.forEach(pNode => {
-            pNode.width = packWidth;
-            pNode.height = (pNode.count / pack.count * height);
-            pNode.x = remainingWidth + pNode.width / 2;
-            pNode.y = yOffset + pNode.height / 2;
-            yOffset += pNode.height;
-          });
+          pack.width = pack.count / remainingCount * remainingWidth;
         }
       });
 
-      console.log(packs);
+      packs = _.orderBy(packs, p => -p.width / p.nodes.length);
+      const packsA = packs.filter((d, i) => i % 2 === 0).reverse();
+      const packsB = packs.filter((d, i) => i % 2 === 1);
+      packs = packsA.concat(packsB);
+
+      let xOffset = 0;
+      packs.forEach(p => {
+        let yOffset = 0;
+
+        p.nodes.forEach(n => {
+          n.width = p.width;
+          n.height = (n.count / p.count * height);
+          n.x = xOffset + n.width / 2;
+          n.y = yOffset + n.height / 2;
+
+          yOffset += n.height;
+        });
+        xOffset += p.width;
+      });
 
       this.nodes = this.nodes.filter(oldNode =>
-        nodes.find(newNode => newNode.id === oldNode.id)
+        nodes.find(newNode => {
+          if (newNode.id === oldNode.id) {
+            oldNode.width = newNode.width;
+            oldNode.height = newNode.height;
+            return true;
+          }
+          return false;
+        })
       );
 
       this.nodes = this.nodes.concat(nodes.filter(newNode =>
@@ -185,8 +179,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       .force('link', d3.forceLink()
         .id(function (d: ITopic) { return `${d.id}`; })
         .strength(d => {
-          // return 0;
-          return (d as any).value * 0.001;
+          return 0;
+          // return (d as any).value * 0.0025;
         })
         // .distance(200)
       )
@@ -283,13 +277,13 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       }
 
       const s = {
-        x: link.source.x + (link.source.width / 10) * anchor[0],
-        y: link.source.y + (link.source.height / 2) * anchor[1]
+        x: link.source.x + (link.source.width / 2 - 2) * anchor[0],
+        y: link.source.y + (link.source.height / 2 - 2) * anchor[1]
       };
 
       const t = {
-        x: link.target.x + (link.target.width / 10) * -anchor[0],
-        y: link.target.y + (link.target.height / 2) * -anchor[1]
+        x: link.target.x + (link.target.width / 2 - 2) * -anchor[0],
+        y: link.target.y + (link.target.height / 2 - 2) * -anchor[1]
       };
 
       const offset = {
