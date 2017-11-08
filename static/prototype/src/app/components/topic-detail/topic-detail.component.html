@@ -8,13 +8,15 @@
   </svg>
   <div class="topics" [style.height]="height + 'px'">
     <div class="wrapper">
-      <div class="node" *ngFor="let node of nodes"
+      <div class="bbox" *ngFor="let node of nodes"
         [style.transform]="getTranslate(node)"
-        [style.width]="width / 5 + 'px'"
+        [style.width]="node.width + 'px'"
         [style.height]="node.height + 'px'">
-        <span class="label">
-          {{node.keyword}}
-        </span>
+        <div class="node">
+          <span class="label">
+            {{node.keyword}}
+          </span>
+        </div>
       </div>
     </div>
   </div>
