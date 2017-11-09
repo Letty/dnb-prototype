@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges, HostListener} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, SimpleChanges, HostListener} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -17,7 +17,7 @@ import rectCollide from './forceforce';
   styleUrls: ['./topic-detail.component.scss']
 })
 
-export class TopicDetailComponent implements OnInit, OnChanges {
+export class TopicDetailComponent implements OnInit {
   @Input() topics: Observable<ITopic[]>;
 
   @ViewChild('svg') svg;
@@ -40,17 +40,13 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   onResize(event) {
     console.log('resize');
     this.width = this.svg.nativeElement.clientWidth;
-    // this.translate = `translate(${this.width / 2} ${this.height / 2})`;
     this.simulate(this.nodes);
   }
 
   // Life-cycle hooks
   ngOnInit () {
-
     this.width = this.svg.nativeElement.clientWidth;
     this.height = window.innerHeight - 288;
-
-    // this.translate = `translate(${this.width / 2} ${this.height / 2})`;
 
     this.simulation = this.getSimulation();
 
@@ -59,27 +55,13 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
       const _values = _.cloneDeep(values);
 
-      _values.forEach((group, i) => {
-        let yOffset = 0;
-        group.forEach(d => {
-
-          d.height = Math.max(d.percentage * 2, 0);
-          d.x = i * this.width / 5 + this.width / 10;
-          d.y = yOffset + d.height / 2;
-          yOffset += d.height;
-        });
-        yOffset = 0;
-      });
-
       let nodes = _values.reduce(function(a, b) {
         return a.concat(b);
       }, []);
 
-      nodes = _.sortBy(nodes, 'count');
+      if (nodes.length === 0) { return; }
 
-      if (nodes.length === 0) {
-        return;
-      }
+      nodes = _.sortBy(nodes, 'count');
 
       const height = 300;
       let remainingWidth = this.width;
@@ -106,7 +88,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
         const packWidth = pack.count / remainingCount * remainingWidth;
 
-        if (packWidth > this.width * 0.15) {
+        if (pack.nodes.length > 1 && packWidth > this.width * 0.15) {
           hasSpace = false;
         }
 
@@ -166,11 +148,30 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         this.nodes.find(oldNode => newNode.id === oldNode.id) == null
       ));
 
+      for (let i = 0; i <= 1; i += 0.25) {
+        this.nodes.push({
+          type: 'gravity',
+          x: this.width,
+          y: this.height * i,
+          fx: this.width,
+          fy: this.height * i,
+          width: 0,
+          height: 0
+        });
+
+        this.nodes.push({
+          type: 'gravity',
+          x: 0,
+          y: this.height * i,
+          fx: 0,
+          fy: this.height * i,
+          width: 0,
+          height: 0
+        });
+      }
+
       this.simulate(values);
     });
-  }
-
-  ngOnChanges (changes: SimpleChanges) {
   }
 
   // Methods
@@ -178,20 +179,13 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     return d3.forceSimulation()
       .force('link', d3.forceLink()
         .id(function (d: ITopic) { return `${d.id}`; })
-        .strength(d => {
-          return 0;
-          // return (d as any).value * 0.0025;
-        })
-        // .distance(200)
+        .strength(0)
       )
       .force('charge', d3.forceManyBody()
-        .strength(-200)
-      );
-      // .alphaDecay(0.006883951579);
+        .strength(d => (d as any).type === 'gravity' ? -200 - Math.random() * 400 : -200));
   }
 
   simulate(values): void {
-
     if (this.nodes.length === 0) {
       this.links = [];
       return;
@@ -211,26 +205,24 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     this.simulation
       .nodes(this.nodes)
-      // ;
       .on('tick', () => {this.ticked(); })
       .force('collision', collisionForce);
-      // .force('center', d3.forceCenter(this.width / 2, this.height / 2));
 
     this.simulation.force('link').links(this.links);
-
     this.simulation.alpha(1).restart();
   }
 
   ticked(): void {
-    this.nodes.forEach((n, i) => {
+    // keep nodes in bounding box
+    this.nodes.filter(d => d.type !== 'gravity').forEach((n, i) => {
       n.x = Math.max(n.x, n.width * 0.5);
       n.x = Math.min(n.x, this.width - n.width * 0.5);
 
       n.y = Math.max(n.y, n.height * 0.5);
       n.y = Math.min(n.y, this.height - n.height * 0.5);
-
     });
 
+    // calculate link anchors
     this.links.filter((d, i) => i >= 0).forEach(link => {
       const p1 = [link.source.x, link.source.y];
       const p2 = [link.target.x, link.target.y];
@@ -297,34 +289,23 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  getTranslate(n, isSVG) {
-    if (isSVG) { return `translate(${n.x - n.width / 2} ${n.y - n.height / 2})`; }
+  getTranslate(n) {
     const transform = `translate(${n.x - n.width / 2}px, ${n.y - n.height / 2}px)`;
     return this.sanitizer.bypassSecurityTrustStyle(transform);
   }
 
-  customForce(alpha): void {
-    this.nodes.forEach((n, i) => {
-      const hw = this.width / 2;
-      const hh = this.height / 2;
-      if ((n.x < -hw && n.vx < 0) || (n.x > hw && n.vx > 0)) {
-        n.vx *= -1;
-      }
-
-      if ((n.y < -hh && n.vy < 0) || (n.y > hh && n.vy > 0)) {
-        n.vy *= -1;
-      }
-    });
-  }
-
   randomLinks() {
     if (this.nodes == null) { return; }
-    return '.'.repeat(20).split('').map(d => {
-      return {
-        source: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
-        target: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
-        value: Math.ceil(Math.random() * 4)
-      };
-    }).filter(d => d.source !== d.target);
+    const topics = this.nodes.filter(n => n.type !== 'gravity');
+    return _.uniqBy(
+      '.'.repeat(20).split('').map(d => {
+        return {
+          source: topics[Math.floor(Math.random() * (topics.length))].id,
+          target: topics[Math.floor(Math.random() * (topics.length))].id,
+          value: Math.ceil(Math.random() * 4)
+        };
+      }).filter(d => d.source !== d.target),
+      d => d.source + d.target
+    );
   }
 }
