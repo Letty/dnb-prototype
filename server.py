@@ -392,3 +392,6 @@ def filter_by_year_person_result_items():
 
 def seq_iter(obj):
     return obj if isinstance(obj, dict) else range(len(obj))
+
+# for aws foo
+#app.run(host='0.0.0.0', port=80)

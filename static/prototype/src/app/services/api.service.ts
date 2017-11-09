@@ -8,6 +8,7 @@ import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
 @Injectable()
 export class ApiService {
   private headers = new Headers();
+  // private server = ''; // set to '' for production
   private server = 'http://localhost:5000'; // set to '' for production
   public loadingData$: EventEmitter<string>;
 
