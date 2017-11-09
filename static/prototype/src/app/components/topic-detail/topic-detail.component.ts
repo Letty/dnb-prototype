@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, SimpleChanges, HostListener} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, ViewChild, SimpleChanges, HostListener} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -17,8 +17,9 @@ import rectCollide from './forceforce';
   styleUrls: ['./topic-detail.component.scss']
 })
 
-export class TopicDetailComponent implements OnInit {
+export class TopicDetailComponent implements OnInit, OnChanges {
   @Input() topics: Observable<ITopic[]>;
+  @Input() forces = false;
 
   @ViewChild('svg') svg;
 
@@ -38,15 +39,16 @@ export class TopicDetailComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   @debounce(250)
   onResize(event) {
-    console.log('resize');
     this.width = this.svg.nativeElement.clientWidth;
+    this.height = this.svg.nativeElement.clientHeight;
+    this.pack(this.nodes.filter(n => n.type !== 'gravity'));
     this.simulate(this.nodes);
   }
 
   // Life-cycle hooks
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = window.innerHeight - 288;
+    this.height = this.svg.nativeElement.clientHeight;
 
     this.simulation = this.getSimulation();
 
@@ -55,89 +57,25 @@ export class TopicDetailComponent implements OnInit {
 
       const _values = _.cloneDeep(values);
 
-      let nodes = _values.reduce(function(a, b) {
+      const nodes = _values.reduce(function(a, b) {
         return a.concat(b);
       }, []);
 
       if (nodes.length === 0) { return; }
 
-      nodes = _.sortBy(nodes, 'count');
-
-      const height = 300;
-      let remainingWidth = this.width;
-      let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + b);
-      let packs = [{
-        width: 0,
-        count: 0,
-        nodes: []
-      }];
-
-      const minHeight = 32 / height;
-
-      nodes.forEach((node, i) => {
-        let pack = packs[packs.length - 1];
-        const packCount = pack.count + node.count;
-
-        let hasSpace = true;
-
-        pack.nodes.forEach(pNode => {
-          if (pNode.count / packCount < minHeight) {
-            hasSpace = false;
-          }
-        });
-
-        const packWidth = pack.count / remainingCount * remainingWidth;
-
-        if (pack.nodes.length > 1 && packWidth > this.width * 0.15) {
-          hasSpace = false;
-        }
-
-        if (hasSpace) {
-          pack.count = packCount;
-          pack.nodes.push(node);
-        } else {
-          pack.width = packWidth;
-          remainingCount -= pack.count;
-          remainingWidth -= pack.width;
-
-          packs.push({
-            width: 0,
-            count: node.count,
-            nodes: [node]
-          });
-        }
-
-        if (i >= nodes.length - 1) {
-          pack = packs[packs.length - 1];
-          pack.width = pack.count / remainingCount * remainingWidth;
-        }
-      });
-
-      packs = _.orderBy(packs, p => -p.width / p.nodes.length);
-      const packsA = packs.filter((d, i) => i % 2 === 0).reverse();
-      const packsB = packs.filter((d, i) => i % 2 === 1);
-      packs = packsA.concat(packsB);
-
-      let xOffset = 0;
-      packs.forEach(p => {
-        let yOffset = 0;
-
-        p.nodes.forEach(n => {
-          n.width = p.width;
-          n.height = (n.count / p.count * height);
-          n.x = xOffset + n.width / 2;
-          n.y = yOffset + n.height / 2;
-
-          yOffset += n.height;
-        });
-        xOffset += p.width;
-      });
+      this.pack(nodes);
 
       this.nodes = this.nodes.filter(oldNode =>
         nodes.find(newNode => {
           if (newNode.id === oldNode.id) {
             oldNode.width = newNode.width;
             oldNode.height = newNode.height;
+
+            if (this.forces === false) {
+              oldNode.x = newNode.x;
+              oldNode.y = newNode.y;
+            }
+
             return true;
           }
           return false;
@@ -155,6 +93,7 @@ export class TopicDetailComponent implements OnInit {
           y: this.height * i,
           fx: this.width,
           fy: this.height * i,
+          multiplyer: i,
           width: 0,
           height: 0
         });
@@ -165,6 +104,7 @@ export class TopicDetailComponent implements OnInit {
           y: this.height * i,
           fx: 0,
           fy: this.height * i,
+          multiplyer: i,
           width: 0,
           height: 0
         });
@@ -174,6 +114,27 @@ export class TopicDetailComponent implements OnInit {
     });
   }
 
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes.forces && !changes.forces.firstChange) {
+      window.setTimeout(() => {
+        if (changes.forces.currentValue) {
+          this.nodes.forEach(n => {
+            n.y += ((this.svg.nativeElement.clientHeight + 56) / 2);
+          });
+          this.height = this.svg.nativeElement.clientHeight;
+          this.simulate(this.nodes);
+        } else {
+          this.simulation.alpha(0);
+          this.pack(this.nodes.filter(n => n.type !== 'gravity'));
+        }
+      }, 0);
+    }
+    //   if (!changes.years.firstChange) {
+    //     this.init = true;
+    //   }
+    //   this.updatePath();
+    // }
+  }
   // Methods
   getSimulation() {
     return d3.forceSimulation()
@@ -186,10 +147,14 @@ export class TopicDetailComponent implements OnInit {
   }
 
   simulate(values): void {
-    if (this.nodes.length === 0) {
+    if (this.nodes.length === 0 || this.forces === false) {
       this.links = [];
       return;
     }
+
+    this.nodes.filter(n => n.type === 'gravity').forEach(n => {
+      n.fy = this.height * n.multiplyer;
+    });
 
     this.links = this.randomLinks();
 
@@ -212,7 +177,87 @@ export class TopicDetailComponent implements OnInit {
     this.simulation.alpha(1).restart();
   }
 
+  pack(nodes): void {
+    if (nodes.length === 0) { return; }
+
+    nodes = _.sortBy(nodes, 'count');
+
+    const height = this.forces ? (this.svg.nativeElement.clientHeight - 56) / 2 : this.svg.nativeElement.clientHeight;
+    let remainingWidth = this.width;
+    let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + b);
+    let packs = [{
+      width: 0,
+      count: 0,
+      nodes: []
+    }];
+
+    const minHeight = 32 / height;
+
+    nodes.forEach((node, i) => {
+      let pack = packs[packs.length - 1];
+      const packCount = pack.count + node.count;
+
+      let hasSpace = true;
+
+      pack.nodes.forEach(pNode => {
+        if (pNode.count / packCount < minHeight) {
+          hasSpace = false;
+        }
+      });
+
+      const packWidth = pack.count / remainingCount * remainingWidth;
+
+      if (pack.nodes.length > 1 && packWidth > this.width * 0.15) {
+        hasSpace = false;
+      }
+
+      if (hasSpace) {
+        pack.count = packCount;
+        pack.nodes.push(node);
+      } else {
+        pack.width = packWidth;
+        remainingCount -= pack.count;
+        remainingWidth -= pack.width;
+
+        packs.push({
+          width: 0,
+          count: node.count,
+          nodes: [node]
+        });
+      }
+
+      if (i >= nodes.length - 1) {
+        pack = packs[packs.length - 1];
+        pack.width = pack.count / remainingCount * remainingWidth;
+      }
+    });
+
+    packs = _.orderBy(packs, p => -p.width / p.nodes.length);
+    const packsA = packs.filter((d, i) => i % 2 === 0).reverse();
+    const packsB = packs.filter((d, i) => i % 2 === 1);
+    packs = packsA.concat(packsB);
+
+    let xOffset = 0;
+    packs.forEach(p => {
+      let yOffset = 0;
+      p.nodes.forEach(n => {
+        n.width = p.width;
+        n.height = (n.count / p.count * height);
+        n.x = xOffset + n.width / 2;
+        n.y = yOffset + n.height / 2;
+
+        yOffset += n.height;
+      });
+      xOffset += p.width;
+    });
+  }
+
   ticked(): void {
+    if (this.forces === false) {
+      this.pack(this.nodes.filter(n => n.type !== 'gravity'));
+      return;
+    }
+
     // keep nodes in bounding box
     this.nodes.filter(d => d.type !== 'gravity').forEach((n, i) => {
       n.x = Math.max(n.x, n.width * 0.5);

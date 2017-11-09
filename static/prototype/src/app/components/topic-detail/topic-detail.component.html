@@ -1,12 +1,12 @@
-<div class="chart-timeline year-area-svg">
-  <svg #svg width="100%" [attr.height]="height">
-    <g *ngIf="nodes" [attr.transform]="translate">
+<div class="chart-topic">
+  <svg #svg width="100%" height="100%">
+    <g *ngIf="nodes && forces" [attr.transform]="translate">
       <g *ngFor="let link of links">
         <path [attr.d]="link.path" [attr.stroke-width]="link.value"></path>
       </g>
     </g>
   </svg>
-  <div class="topics" [style.height]="height + 'px'">
+  <div class="topics">
     <div class="wrapper">
       <ng-container *ngFor="let node of nodes">
       <div class="bbox" *ngIf="node.type !== 'gravity'"
@@ -22,8 +22,8 @@
     </ng-container>
     </div>
   </div>
-  <svg #svg width="100%" [attr.height]="height">
-    <g *ngIf="nodes" [attr.transform]="translate">
+  <svg #svg width="100%" height="100%">
+    <g *ngIf="nodes && forces" [attr.transform]="translate">
       <g *ngFor="let link of links">
         <circle *ngIf="link.sourceAnchor" r="3" [attr.cx]="link.sourceAnchor.x" [attr.cy]="link.sourceAnchor.y"></circle>
         <circle *ngIf="link.targetAnchor" r="3" [attr.cx]="link.targetAnchor.x" [attr.cy]="link.targetAnchor.y"></circle>
