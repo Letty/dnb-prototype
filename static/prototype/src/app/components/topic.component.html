@@ -9,15 +9,15 @@
   </header>
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
-    <div class="topic-list" *ngIf="!detail">
+    <!-- <div class="topic-list" *ngIf="!detail">
       <div *ngFor="let bin of topics | async" class="topic-bins">
         <div *ngFor="let t of bin" class="topic" (click)="onSelect(t)" [style]="setTopicHeight(t.percentage)">
           <span>{{t.keyword}}</span>
         </div>
       </div>
-    </div>
-    <div class="topic-list-detail" *ngIf="detail">
-      <topic-detail [topics]="topics"></topic-detail>
-    </div>
+    </div> -->
+    <!-- <div class="topic-list-detail" *ngIf="detail"> -->
+    <topic-detail [topics]="topics" [forces]="detail"></topic-detail>
+    <!-- </div> -->
   </section>
 </div>

@@ -2,6 +2,8 @@ $gutter-topics-default: 4px;
 
 .topic-div {
 
+  height: 100%;
+
   header .off-counter {
     color: $color-topic-default;
     font-size: 0.8em;
@@ -41,5 +43,11 @@ $gutter-topics-default: 4px;
   }
   .topic-list-detail {
     height: 100%;
+  }
+
+  .viz-container {
+    height: calc(100% - 56px);
+    box-sizing: border-box;
+    padding: 0 0 8px 0;
   }
 }
