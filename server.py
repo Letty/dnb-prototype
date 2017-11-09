@@ -132,7 +132,9 @@ def get_start_results():
     year = date.today().year
 
     with connection.cursor() as cursor:
-        sql = 'select * from dnb_item where year = %s limit 30'
+        sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
+            'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 30'
         cursor.execute(sql, (year))
         result = cursor.fetchall()
         return jsonify(result)
