@@ -1,11 +1,30 @@
 <div class="chart-timeline year-area-svg">
   <svg #svg width="100%" [attr.height]="height">
     <g *ngIf="nodes" [attr.transform]="translate">
-      <line *ngFor="let link of links"
-        [attr.x1]="link.source.x" [attr.x2]="link.target.x" [attr.y1]="link.source.y" [attr.y2]="link.target.y"></line>
-      <g *ngFor="let node of nodes" [attr.transform]="getTranslate(node.x, node.y)">
-        <rect [attr.x]="-this.width / 10" [attr.y]="-node.height / 2" [attr.width]="this.width / 5" [attr.height]="node.height"></rect>
-        <text y="5">{{node.keyword}}</text>
+      <g *ngFor="let link of links">
+        <path [attr.d]="link.path" [attr.stroke-width]="link.value"></path>
+      </g>
+    </g>
+  </svg>
+  <div class="topics" [style.height]="height + 'px'">
+    <div class="wrapper">
+      <div class="bbox" *ngFor="let node of nodes"
+        [style.transform]="getTranslate(node)"
+        [style.width]="node.width + 'px'"
+        [style.height]="node.height + 'px'">
+        <div class="node">
+          <span class="label">
+            {{node.keyword}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg #svg width="100%" [attr.height]="height">
+    <g *ngIf="nodes" [attr.transform]="translate">
+      <g *ngFor="let link of links">
+        <circle *ngIf="link.sourceAnchor" r="3" [attr.cx]="link.sourceAnchor.x" [attr.cy]="link.sourceAnchor.y"></circle>
+        <circle *ngIf="link.targetAnchor" r="3" [attr.cx]="link.targetAnchor.x" [attr.cy]="link.targetAnchor.y"></circle>
       </g>
     </g>
   </svg>

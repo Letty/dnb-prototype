@@ -13,7 +13,7 @@ export class DataService {
   topics: Observable<ITopic[]>;
   persons: Observable<IPerson[]>;
   years: Observable<IYear[]>;
-  items: Observable<IItem[]>
+  items: Observable<IItem[]>;
 
   private _topics: BehaviorSubject<ITopic[]>;
   private _persons: BehaviorSubject<IPerson[]>;
