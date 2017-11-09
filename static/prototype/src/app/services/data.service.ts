@@ -169,7 +169,7 @@ export class DataService {
     } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
       (filter['min_year'] === null && filter['max_year'] === null)) {
       // z: false  -  a: true  -  t: true
-
+      this.filterDataByPersonAndTopic(filter['person_id'], filter['topic_id']);
 
     } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
       (filter['min_year'] !== null && filter['max_year'] !== null)) {
@@ -242,6 +242,11 @@ export class DataService {
       .subscribe(data => {
         this.setItems(data);
       });
+  }
+
+  filterDataByPersonAndTopic(personID: string, topicID: string): void {
+    this.api.filterDataForPersonTopicResultItems(personID, topicID)
+      .subscribe(data => this.setItems(data));
   }
 
   filterDataByYearAndTopic(minYear: number, maxYear: number, topicID: string): void {

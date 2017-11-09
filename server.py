@@ -437,6 +437,26 @@ def filter_by_year_person_result_items():
     return jsonify(items_result)
 
 
+@app.route('/setFilterForPersonTopicResultItems', methods=['PUT'])
+def filter_by_person_topic_result_items():
+    params = json.loads(request.data.decode('utf-8'))
+    items_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select item.id, item.title, item.publisher, ac.name, ac.lastname '\
+            'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
+            'where ai.a_id =%s and it.t_id = %s and item.id = ai.i_id '\
+            'and ai.a_id = ac.id and ai.i_id = it.i_id limit 100'
+        try:
+            cursor.execute(sql, (params['person_id'], params['topic_id']))
+        except:
+            items_result['error'] = str(sys.exc_info()[0])
+        else:
+            items_result['data'] = cursor.fetchall()
+
+    return jsonify(items_result)
+
+
 @app.route('/setFilterForYearTopicResultItems', methods=['PUT'])
 def filter_by_year_topic_result_items():
     params = json.loads(request.data.decode('utf-8'))
