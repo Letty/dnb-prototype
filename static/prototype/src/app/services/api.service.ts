@@ -34,7 +34,7 @@ export class ApiService {
 
   getResults(): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.get('/getStartResults').map(res => <IItem[]>res.json());
+    return this.http.get(`${this.server}/getStartResults`).map(res => <IItem[]>res.json());
   }
 
 
