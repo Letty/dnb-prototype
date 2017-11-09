@@ -32,6 +32,11 @@ export class ApiService {
     return this.http.get(`${this.server}/getTimeline`).map(res => <IYear[]>res.json());
   }
 
+  getResults(): Observable<IItem[]> {
+    this.loadingData$.emit('item');
+    return this.http.get('/getStartResults').map(res => <IItem[]>res.json());
+  }
+
 
   filterDataByPersonResultYear(personID: string): Observable<IYear[]> {
     this.loadingData$.emit('year');
