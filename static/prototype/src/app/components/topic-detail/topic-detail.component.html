@@ -8,7 +8,8 @@
   </svg>
   <div class="topics" [style.height]="height + 'px'">
     <div class="wrapper">
-      <div class="bbox" *ngFor="let node of nodes"
+      <ng-container *ngFor="let node of nodes">
+      <div class="bbox" *ngIf="node.type !== 'gravity'"
         [style.transform]="getTranslate(node)"
         [style.width]="node.width + 'px'"
         [style.height]="node.height + 'px'">
@@ -18,6 +19,7 @@
           </span>
         </div>
       </div>
+    </ng-container>
     </div>
   </div>
   <svg #svg width="100%" [attr.height]="height">

@@ -106,7 +106,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
         const packWidth = pack.count / remainingCount * remainingWidth;
 
-        if (packWidth > this.width * 0.15) {
+        if (pack.nodes.length > 1 && packWidth > this.width * 0.15) {
           hasSpace = false;
         }
 
@@ -166,6 +166,28 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         this.nodes.find(oldNode => newNode.id === oldNode.id) == null
       ));
 
+      for (let i = 0; i <= 1; i += 0.25) {
+        this.nodes.push({
+          type: 'gravity',
+          x: this.width,
+          y: this.height * i,
+          fx: this.width,
+          fy: this.height * i,
+          width: 0,
+          height: 0
+        });
+
+        this.nodes.push({
+          type: 'gravity',
+          x: 0,
+          y: this.height * i,
+          fx: 0,
+          fy: this.height * i,
+          width: 0,
+          height: 0
+        });
+      }
+
       this.simulate(values);
     });
   }
@@ -185,7 +207,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         // .distance(200)
       )
       .force('charge', d3.forceManyBody()
-        .strength(-200)
+        .strength((d, i) => {
+          if ((d as any).type === 'gravity') { return -200 - Math.random() * 400; }
+          return -400;
+          // return i % 2 ? 200 : -200;
+        })
       );
       // .alphaDecay(0.006883951579);
   }
@@ -198,6 +224,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     }
 
     this.links = this.randomLinks();
+
+    console.log(this.links.length);
 
     const collisionForce = rectCollide();
 
@@ -222,7 +250,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   }
 
   ticked(): void {
-    this.nodes.forEach((n, i) => {
+    this.nodes.filter(d => d.type !== 'gravity').forEach((n, i) => {
       n.x = Math.max(n.x, n.width * 0.5);
       n.x = Math.min(n.x, this.width - n.width * 0.5);
 
@@ -319,12 +347,16 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   randomLinks() {
     if (this.nodes == null) { return; }
-    return '.'.repeat(20).split('').map(d => {
-      return {
-        source: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
-        target: this.nodes[Math.floor(Math.random() * this.nodes.length)].id,
-        value: Math.ceil(Math.random() * 4)
-      };
-    }).filter(d => d.source !== d.target);
+    const topics = this.nodes.filter(n => n.type !== 'gravity');
+    return _.uniqBy(
+      '.'.repeat(20).split('').map(d => {
+        return {
+          source: topics[Math.floor(Math.random() * (topics.length))].id,
+          target: topics[Math.floor(Math.random() * (topics.length))].id,
+          value: Math.ceil(Math.random() * 4)
+        };
+      }).filter(d => d.source !== d.target),
+      d => d.source + d.target
+    );
   }
 }

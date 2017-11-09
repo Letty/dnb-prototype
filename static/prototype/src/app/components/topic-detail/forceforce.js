@@ -50,6 +50,11 @@ function rectCollide () {
             data.vy += y * (1 - m)
           }
         }
+
+        // if (data.x === node.x) {
+        //   data.vx *= 2
+        //   node.vx *= -2
+        // }
       }
 
       return x0 > xi + xSize || y0 > yi + ySize ||
