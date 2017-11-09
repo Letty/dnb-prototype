@@ -109,9 +109,13 @@ export class DataService {
         this._topics.next(Object.assign({}, this.dataStore).topics);
       }, err => console.log('error while loading default topics'));
 
-    this.dataStore.items = this.fakeData;
-    this.dataStore.defaultItems = this.fakeData;
-    this._items.next(Object.assign({}, this.dataStore).items);
+    this.api.getResults()
+      .subscribe(data => {
+        this.dataStore.items = data;
+        this.dataStore.defaultItems = data;
+        this._items.next(Object.assign({}, this.dataStore).items);
+      }, err => console.log('error while loading start results'));
+
   }
 
   setYear(years_: IYear[]): void {

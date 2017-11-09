@@ -8,6 +8,7 @@ import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
 @Injectable()
 export class ApiService {
   private headers = new Headers();
+  // private server = ''; // set to '' for production
   private server = 'http://localhost:5000'; // set to '' for production
   public loadingData$: EventEmitter<string>;
 
@@ -29,6 +30,11 @@ export class ApiService {
   getYears(): Observable<IYear[]> {
     this.loadingData$.emit('year');
     return this.http.get(`${this.server}/getTimeline`).map(res => <IYear[]>res.json());
+  }
+
+  getResults(): Observable<IItem[]> {
+    this.loadingData$.emit('item');
+    return this.http.get('/getStartResults').map(res => <IItem[]>res.json());
   }
 
 

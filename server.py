@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS  # remove for production
 import json
-from datetime import datetime
+from datetime import datetime, date
 import pymysql.cursors
 
 app = Flask(__name__, static_url_path='')
@@ -123,6 +123,16 @@ def get_top_people():
     with connection.cursor() as cursor:
         sql = 'select * from dnb_author_count order by count DESC limit 20'
         cursor.execute(sql)
+        result = cursor.fetchall()
+        return jsonify(result)
+
+
+@app.route('/getStartResults')
+def get_start_results():
+    year = date.today().year
+    with connection.cursor() as cursor:
+        sql = 'select * from dnb_item where year = %s limit 30'
+        cursor.execute(sql, (year))
         result = cursor.fetchall()
         return jsonify(result)
 
@@ -392,3 +402,6 @@ def filter_by_year_person_result_items():
 
 def seq_iter(obj):
     return obj if isinstance(obj, dict) else range(len(obj))
+
+# for aws foo
+#app.run(host='0.0.0.0', port=80)
