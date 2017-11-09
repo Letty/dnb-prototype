@@ -51,6 +51,12 @@ export class ApiService {
       res => <ITopic[]>res.json().data);
   }
 
+  filterDataByPersonResultItems(personID:string): Observable<IItem[]> {
+    this.loadingData$.emit('item');
+    return this.http.put('/setFilterForPersonResultItems', personID, this.headers)
+      .map(res => <IItem[]>res.json().data)
+  }
+
   filterDataByTopicResultYear(topicID: string): Observable<IYear[]> {
     this.loadingData$.emit('year');
     return this.http.put(`${this.server}/setFilterForTopicResultYear`, topicID, this.headers).map(

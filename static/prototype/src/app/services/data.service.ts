@@ -194,6 +194,9 @@ export class DataService {
       .subscribe(data => {
         this.setYear(data);
       });
+
+    this.api.filterDataByPersonResultItems(personID)
+      .subscribe(data => this.setItems(data));
   }
 
   filterDataByTopic(topicID: string): void {
