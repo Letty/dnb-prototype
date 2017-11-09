@@ -134,7 +134,7 @@ def get_start_results():
     with connection.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
-            'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 30'
+            'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 50'
         cursor.execute(sql, (year))
         result = cursor.fetchall()
         return jsonify(result)
@@ -212,7 +212,7 @@ def filter_by_person_result_items():
     with connection.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
-            'where ai.a_id = %s and item.id = ai.i_id and ai.a_id = ac.id limit 500'
+            'where ai.a_id = %s and item.id = ai.i_id and ai.a_id = ac.id limit 100'
         try:
             cursor.execute(sql, (person_id))
         except:
@@ -281,7 +281,7 @@ def filter_by_topic_result_items():
     with connection.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it, dnb_item item '\
-            'where it.t_id = %s and it.i_id = ai.i_id and item.id = ai.i_id and ai.a_id = ac.id limit 500'
+            'where it.t_id = %s and it.i_id = ai.i_id and item.id = ai.i_id and ai.a_id = ac.id limit 100'
         try:
             cursor.execute(sql, (topic_id))
         except:
@@ -446,7 +446,7 @@ def filter_by_year_person_topic_result_items():
         sql = 'select item.id, item.title, item.publisher, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
             'where ai.a_id =%s and ai.year > %s and ai.year < %s and it.t_id = %s and '\
-            'item.id = ai.i_id and ai.a_id = ac.id and ai.i_id = it.i_id limit 500'
+            'item.id = ai.i_id and ai.a_id = ac.id and ai.i_id = it.i_id limit 100'
         try:
             cursor.execute(sql, (params['person_id'], params['min_year'],
                                  params['max_year'], params['topic_id']))
