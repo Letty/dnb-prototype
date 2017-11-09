@@ -1,6 +1,8 @@
 import {Component, Input, OnInit, OnChanges, ViewChild, SimpleChanges, HostListener} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SelectionService } from '../../services/selection.service';
+import { DataService } from '../../services/data.service';
 
 import * as d3 from 'd3';
 import _ from 'lodash';
@@ -33,7 +35,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public p1Corner = [0, 0];
   public p2Corner = [0, 0];
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer,
+              private selection: SelectionService,
+              private dataService: DataService) {}
 
   // Listeners
   @HostListener('window:resize', ['$event'])
@@ -112,6 +116,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
       this.simulate(values);
     });
+  }
+
+  onSelect(topic: ITopic): void {
+    this.selection.setTopic(topic);
+    this.dataService.setFilter();
   }
 
   ngOnChanges (changes: SimpleChanges) {
