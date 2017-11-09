@@ -175,7 +175,8 @@ export class DataService {
     } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
       (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: true  -  t: true
-
+      this.filterDataByYearAndPersonAndTopic(filter['min_year'], filter['max_year'],
+        filter['person_id'], filter['topic_id'])
 
     } else {
       // z: false  -  a: false  -  t: false
@@ -242,7 +243,11 @@ export class DataService {
       .subscribe(data => {
         this.setItems(data);
       });
+  }
 
+  filterDataByYearAndPersonAndTopic(minYear: number, maxYear: number, personID: string, topicID: string): void {
+    this.api.filterDataForYearPersonTopicResultItems(minYear, maxYear, personID, topicID)
+      .subscribe(data => this.setItems(data));
   }
 
   getYear(): Array<IYear> {
