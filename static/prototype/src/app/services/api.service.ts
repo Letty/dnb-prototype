@@ -117,6 +117,14 @@ export class ApiService {
       .map(res => <IItem[]>res.json().data);
   }
 
+  filterDataForPersonTopicResultYear(personID: string, topicID: string): Observable<IYear[]> {
+    this.loadingData$.emit('item');
+    return this.http.put(`${this.server}/setFilterForPersonTopicResultYear`,
+      JSON.stringify({'person_id': personID, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <IYear[]>res.json().data);
+  }
+
   filterDataForPersonTopicResultItems(personID: string, topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
     return this.http.put(`${this.server}/setFilterForPersonTopicResultItems`,
@@ -125,12 +133,29 @@ export class ApiService {
       .map(res => <IItem[]>res.json().data);
   }
 
+  filterDataForYearTopicResultYear(yearMin: number, yearMax: number, topicID: string): Observable<IYear[]> {
+    this.loadingData$.emit('item');
+    return this.http.put(`${this.server}/setFilterForYearTopicResultYear`,
+      JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <IYear[]>res.json().data);
+  }
+
   filterDataForYearTopicResultItems(yearMin: number, yearMax: number, topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
     return this.http.put(`${this.server}/setFilterForYearTopicResultItems`,
       JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
+  }
+
+  filterDataForYearPersonTopicResultYear(yearMin: number, yearMax: number, personID: string,
+                                          topicID: string): Observable<IYear[]> {
+    this.loadingData$.emit('item');
+    return this.http.put(`${this.server}/setFilterForYearPersonTopicResultYear`,
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <IYear[]>res.json().data);
   }
 
   filterDataForYearPersonTopicResultItems(yearMin: number, yearMax: number, personID: string,

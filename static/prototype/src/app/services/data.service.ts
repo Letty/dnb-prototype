@@ -245,16 +245,25 @@ export class DataService {
   }
 
   filterDataByPersonAndTopic(personID: string, topicID: string): void {
+    this.api.filterDataForPersonTopicResultYear(personID, topicID)
+      .subscribe(data => this.setYear(data));
+
     this.api.filterDataForPersonTopicResultItems(personID, topicID)
       .subscribe(data => this.setItems(data));
   }
 
   filterDataByYearAndTopic(minYear: number, maxYear: number, topicID: string): void {
+    this.api.filterDataForYearTopicResultYear(minYear, maxYear, topicID)
+      .subscribe(data => this.setYear(data));
+
     this.api.filterDataForYearTopicResultItems(minYear, maxYear, topicID)
       .subscribe(data => this.setItems(data));
   }
 
   filterDataByYearAndPersonAndTopic(minYear: number, maxYear: number, personID: string, topicID: string): void {
+    this.api.filterDataForYearPersonTopicResultYear(minYear, maxYear, personID, topicID)
+      .subscribe(data => this.setYear(data));
+
     this.api.filterDataForYearPersonTopicResultItems(minYear, maxYear, personID, topicID)
       .subscribe(data => this.setItems(data));
   }

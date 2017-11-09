@@ -437,6 +437,24 @@ def filter_by_year_person_result_items():
     return jsonify(items_result)
 
 
+@app.route('/setFilterForPersonTopicResultYear', methods=['PUT'])
+def filter_by_person_topic_result_year():
+    params = json.loads(request.data.decode('utf-8'))
+    year_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select count(ai.i_id) count, ai.year from dnb_author_item ai, dnb_item_topic it '\
+            'where ai.a_id =%s and it.t_id = %s and ai.i_id = it.i_id group by ai.year'
+        try:
+            cursor.execute(sql, (params['person_id'], params['topic_id']))
+        except:
+            year_result['error'] = str(sys.exc_info()[0])
+        else:
+            year_result['data'] = cursor.fetchall()
+
+    return jsonify(year_result)
+
+
 @app.route('/setFilterForPersonTopicResultItems', methods=['PUT'])
 def filter_by_person_topic_result_items():
     params = json.loads(request.data.decode('utf-8'))
@@ -455,6 +473,26 @@ def filter_by_person_topic_result_items():
             items_result['data'] = cursor.fetchall()
 
     return jsonify(items_result)
+
+
+@app.route('/setFilterForYearTopicResultYear', methods=['PUT'])
+def filter_by_year_topic_result_year():
+    params = json.loads(request.data.decode('utf-8'))
+    year_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select count(ai.i_id) count, ai.year from dnb_author_item ai, dnb_item_topic it '\
+            'where ai.year > %s and ai.year < %s and it.t_id = %s '\
+            'and ai.i_id = it.i_id group by ai.year'
+        try:
+            cursor.execute(sql, (params['min_year'],
+                                 params['max_year'], params['topic_id']))
+        except:
+            year_result['error'] = str(sys.exc_info()[0])
+        else:
+            year_result['data'] = cursor.fetchall()
+
+    return jsonify(year_result)
 
 
 @app.route('/setFilterForYearTopicResultItems', methods=['PUT'])
@@ -476,6 +514,26 @@ def filter_by_year_topic_result_items():
             items_result['data'] = cursor.fetchall()
 
     return jsonify(items_result)
+
+
+@app.route('/setFilterForYearPersonTopicResultYear', methods=['PUT'])
+def filter_by_year_person_topic_result_year():
+    params = json.loads(request.data.decode('utf-8'))
+    year_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select count(ai.i_id) count, ai.year from dnb_author_item ai, dnb_item_topic it '\
+            'where ai.a_id =%s and ai.year > %s and ai.year < %s and it.t_id = %s and '\
+            'ai.i_id = it.i_id group by ai.year'
+        try:
+            cursor.execute(sql, (params['person_id'], params['min_year'],
+                                 params['max_year'], params['topic_id']))
+        except:
+            year_result['error'] = str(sys.exc_info()[0])
+        else:
+            year_result['data'] = cursor.fetchall()
+
+    return jsonify(year_result)
 
 
 @app.route('/setFilterForYearPersonTopicResultItems', methods=['PUT'])
