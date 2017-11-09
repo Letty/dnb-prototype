@@ -130,6 +130,7 @@ def get_top_people():
 @app.route('/getStartResults')
 def get_start_results():
     year = date.today().year
+
     with connection.cursor() as cursor:
         sql = 'select * from dnb_item where year = %s limit 30'
         cursor.execute(sql, (year))
@@ -257,13 +258,9 @@ def filter_by_year_result_person():
     person_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
-        # sql = 'select ai.a_id, ac.lastname, ac.name, count(ai.a_id) count '\
-        #     'from dnb_author_item ai inner join dnb_author_count ac '\
-        #     'on ai.a_id = ac.id where '\
-        #     'ai.year > %s and ai.year < %s group by ai.a_id order by count desc limit 20'
         sql = 'select ai.a_id id, ac.lastname, ac.name, ac.date_of_birth, ac.date_of_death, '\
             'count(ai.a_id) count from dnb_author_item ai, dnb_author_count ac '\
-            'where ai.a_id = ac.id and ai.year > %s and ai.year < %s '\
+            'where ai.a_id = ac.id and ai.year >= %s and ai.year <= %s '\
             'group by ai.a_id order by count desc limit 20'
         try:
             cursor.execute(sql, (years[0], years[1]))
@@ -284,7 +281,7 @@ def filter_by_year_result_topic():
     with connection.cursor() as cursor:
         sql = 'select it.t_id id, tc.keyword, count(it.t_id) count '\
             'from dnb_item_topic it inner join dnb_topic_count tc '\
-            'on it.t_id = tc.id where it.year > %s and it.year < %s '\
+            'on it.t_id = tc.id where it.year >= %s and it.year <= %s '\
             'group by it.t_id order by count desc limit 20'
         try:
             cursor.execute(sql, (years[0], years[1]))
@@ -306,7 +303,7 @@ def filter_by_year_result_items():
     with connection.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.name, ac.lastname from '\
             'dnb_item item, dnb_author_item ai, dnb_author_count ac ' \
-            'where item.year > %s and item.year < %s and item.id = ai.i_id and '\
+            'where item.year >= %s and item.year <= %s and item.id = ai.i_id and '\
             'ai.a_id = ac.id limit 20'
         try:
             cursor.execute(sql, (years[0], years[1]))
@@ -325,7 +322,7 @@ def filter_by_year_person_result_year():
 
     with connection.cursor() as cursor:
         sql = 'select a_id id, count(a_id) as count, year from dnb_author_item '\
-            'where a_id = %s and year > %s and year < %s GROUP by a_id, year'
+            'where a_id = %s and year >= %s and year <= %s GROUP by a_id, year'
         try:
             cursor.execute(sql, (params['person_id'],
                                  params['min_year'], params['max_year']))
@@ -345,7 +342,7 @@ def filter_by_year_person_result_topic():
     with connection.cursor() as cursor:
         sql = 'select ai.i_id, ai.year, it.t_id, item.title, tc.keyword from dnb_author_item ai, ' \
             'dnb_item_topic it, dnb_topic_count tc, dnb_item item where  ai.a_id = %s ' \
-            'and ai.year > %s and ai.year < %s and ai.i_id = it.i_id and it.t_id = tc.id and item.id=ai.i_id'
+            'and ai.year >= %s and ai.year <= %s and ai.i_id = it.i_id and it.t_id = tc.id and item.id=ai.i_id'
 
         try:
             cursor.execute(sql, (params['person_id'],
@@ -387,7 +384,7 @@ def filter_by_year_person_result_items():
 
     with connection.cursor() as cursor:
         sql = 'select ai.i_id id, ai.year, item.title, ac.name, ac.lastname from dnb_author_item ai, '\
-            'dnb_item item, dnb_author_count ac where  ai.a_id =%s and ai.year > %s and ai.year <%s '\
+            'dnb_item item, dnb_author_count ac where  ai.a_id =%s and ai.year >= %s and ai.year <=%s '\
             'and ai.i_id = item.id and ai.a_id = ac.id'
         try:
             cursor.execute(sql, (params['person_id'],
