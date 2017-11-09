@@ -212,7 +212,7 @@ def filter_by_person_result_items():
     with connection.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
-            'where ai.a_id = %s and item.id = ai.i_id and ai.a_id = ac.id '
+            'where ai.a_id = %s and item.id = ai.i_id and ai.a_id = ac.id limit 500'
         try:
             cursor.execute(sql, (person_id))
         except:
@@ -271,6 +271,24 @@ def filter_by_topic_result_topic():
     #
     #
     return jsonify(person_result)
+
+
+@app.route('/setFilterForTopicResultItems', methods=['PUT'])
+def filter_by_topic_result_items():
+    topic_id = request.data.decode('utf-8')
+    items_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it, dnb_item item '\
+            'where it.t_id = %s and it.i_id = ai.i_id and item.id = ai.i_id and ai.a_id = ac.id limit 500'
+        try:
+            cursor.execute(sql, (topic_id))
+        except:
+            items_result['error'] = str(sys.exc_info()[0])
+        else:
+            items_result['data'] = cursor.fetchall()
+    return jsonify(items_result)
 
 
 @app.route('/setFilterForYearResultPerson', methods=['PUT'])
@@ -423,4 +441,4 @@ def seq_iter(obj):
     return obj if isinstance(obj, dict) else range(len(obj))
 
 # for aws foo
-#app.run(host='0.0.0.0', port=80)
+# app.run(host='0.0.0.0', port=80)
