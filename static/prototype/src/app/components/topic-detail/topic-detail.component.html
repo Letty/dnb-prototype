@@ -14,7 +14,7 @@
              [style.width]="node.width + 'px'"
              [style.height]="node.height + 'px'">
           <div class="node" (click)="onSelect(node)">
-          <span class="label">
+          <span class="label" [style.font-size]="node.fontSize + 'px'">
             {{node.keyword}}
           </span>
           </div>

@@ -224,7 +224,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         pack.count = packCount;
         pack.nodes.push(node);
       } else {
-        pack.width = packWidth;
+        pack.width = Math.max(packWidth, 64);
         remainingCount -= pack.count;
         remainingWidth -= pack.width;
 
@@ -246,6 +246,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     const packsB = packs.filter((d, i) => i % 2 === 1);
     packs = packsA.concat(packsB);
 
+    console.log(packs);
+
     let xOffset = 0;
     packs.forEach(p => {
       let yOffset = 0;
@@ -254,6 +256,10 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         n.height = (n.count / p.count * height);
         n.x = xOffset + n.width / 2;
         n.y = yOffset + n.height / 2;
+
+        n.fontSize =
+          n.width >= 200 && n.height >= 64 ? 18 :
+          n.width >= 128 && n.height >= 48 ? 14 : 12;
 
         yOffset += n.height;
       });
