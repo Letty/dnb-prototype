@@ -164,7 +164,7 @@ export class DataService {
     } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
       (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: false  -  t: true
-      this.filterDataByYearAndTopic(filter['min_year'], filter['max_year'], filter['topic_id'])
+      this.filterDataByYearAndTopic(filter['min_year'], filter['max_year'], filter['topic_id']);
 
     } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
       (filter['min_year'] === null && filter['max_year'] === null)) {
@@ -175,12 +175,15 @@ export class DataService {
       (filter['min_year'] !== null && filter['max_year'] !== null)) {
       // z: true  -  a: true  -  t: true
       this.filterDataByYearAndPersonAndTopic(filter['min_year'], filter['max_year'],
-        filter['person_id'], filter['topic_id'])
+        filter['person_id'], filter['topic_id']);
 
     } else {
       // z: false  -  a: false  -  t: false
       // defaultwerte
-
+      this.setItems(this.dataStore.defaultItems);
+      this.setTopic(this.dataStore.defaultTopics);
+      this.setYear(this.dataStore.defaultYears);
+      this.setPerson(this.dataStore.defaultPersons);
     }
   }
 

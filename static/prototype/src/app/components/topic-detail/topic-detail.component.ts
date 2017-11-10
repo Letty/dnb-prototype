@@ -246,8 +246,6 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     const packsB = packs.filter((d, i) => i % 2 === 1);
     packs = packsA.concat(packsB);
 
-    console.log(packs);
-
     let xOffset = 0;
     packs.forEach(p => {
       let yOffset = 0;
