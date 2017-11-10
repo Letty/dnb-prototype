@@ -24,6 +24,7 @@
       @include flex-default();
       align-items: center;
       color: $color-person-default;
+      height: 32px;
 
       .label {
         position: absolute;

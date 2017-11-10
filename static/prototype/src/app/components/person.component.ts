@@ -47,17 +47,21 @@ export class PersonComponent implements OnInit {
   ngOnInit(): void {
     this.persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
+
       _.each(value, person => {
-        // person['date_of_birth'] = _.random(1100, 1900);
-        // person['date_of_death'] = person['date_of_birth'] + _.random(10, 100);
+        person.year_of_birth = person.date_of_birth ? +person.date_of_birth.match(/[0-9]{4}/)[0] : null;
+        person.year_of_death = person.date_of_death ? +person.date_of_death.match(/[0-9]{4}/)[0] : null;
       });
 
-      // const years_birth: Array<number> = value.map(p => p['date_of_birth']);
-      // const years_death: Array<number> = value.map(p => p['date_of_death']);
+      const max = value.find(p => (p as any).year_of_birth !== null && (p as any).year_of_death === null) ?
+        new Date().getFullYear() :
+        Math.max(...value.map(d => (d as any).year_of_death));
 
-      // const years = years_birth.concat(years_death);
+      const min = value.filter(d => (d as any).year_of_birth !== null) ?
+        Math.min(...value.filter(d => (d as any).year_of_birth !== null).map(d => (d as any).year_of_birth)) :
+        0;
 
-      // this.yearScale.domain([_.min(years), _.max(years)]);
+      this.yearScale.domain([min, max]);
 
       this.loadingData = false;
       const counts: Array<number> = value.map(p => p.count);
@@ -88,8 +92,11 @@ export class PersonComponent implements OnInit {
   }
 
   setLifeWidth(birth: number, death: number): string {
+    if (birth !== null && death === null) {
+      death = new Date().getFullYear();
+    }
     let style: any;
-    style = this.sanitizer.bypassSecurityTrustStyle('width: ' + (this.yearScale(birth) - this.yearScale(death)) + '%');
+    style = this.sanitizer.bypassSecurityTrustStyle('width: ' + (this.yearScale(death) - this.yearScale(birth)) + '%');
     return style;
   }
 }

@@ -19,11 +19,11 @@
         <li *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
           <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span>
           <div class="life">
-            <span class="birth" [style]="setBirthWidth(p['date_of_birth'])">{{ p['date_of_birth'] }}</span>
-            <svg [style]="setLifeWidth(p['date_of_death'], p['date_of_birth'])" height="10px" viewBox="0 0 20 10" preserveAspectRatio="none">
+            <span class="birth" [style]="setBirthWidth(p['year_of_birth'])">{{ p['year_of_birth'] }}</span>
+            <svg [style]="setLifeWidth(p['year_of_birth'], p['year_of_death'])" height="10px" viewBox="0 0 20 10" preserveAspectRatio="none">
               <line x1="0" y1="5" x2="20" y2="5" class="lifespan" />
             </svg>
-            <span class="death">{{ p['date_of_death'] }}</span>
+            <span class="death">{{ p['year_of_death'] }}</span>
           </div>
         </li>
       </ul>
