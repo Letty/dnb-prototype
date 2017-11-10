@@ -141,38 +141,35 @@ export class DataService {
   setFilter(): void {
     const filter = this.selection.getSelection();
 
-    if (filter['person_id'] === null && filter['topic_id'] === null &&
-      (filter['min_year'] !== null && filter['max_year'] !== null)) {
+    const hasPerson = filter['person_id'] !== null;
+    const hasTopic = filter['topic_id'] !== null;
+    const hasYear = filter['min_year'] !== null && filter['max_year'] !== null;
+
+    if (!hasPerson && !hasTopic && hasYear) {
       // z: true  -  a: false  -  t: false
       this.filterDataByYear(filter['min_year'], filter['max_year']);
 
-    } else if (filter['person_id'] !== null && filter['topic_id'] === null &&
-      (filter['min_year'] === null && filter['max_year'] === null)) {
+    } else if (hasPerson && !hasTopic && !hasYear) {
       // z: false  -  a: true  -  t: false
       this.filterDataByPerson(String(filter['person_id']));
 
-    } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
-      (filter['min_year'] === null && filter['max_year'] === null)) {
+    } else if (!hasPerson && hasTopic && !hasYear) {
       // z: false  -  a: false  -  t: true
       this.filterDataByTopic(String(filter['topic_id']));
 
-    } else if (filter['person_id'] !== null && filter['topic_id'] === null &&
-      (filter['min_year'] !== null && filter['max_year'] !== null)) {
+    } else if (hasPerson && !hasTopic && hasYear) {
       // z: true  -  a: true  -  t: false
       this.filterDataByYearAndPerson(filter['min_year'], filter['max_year'], String(filter['person_id']));
 
-    } else if (filter['person_id'] === null && filter['topic_id'] !== null &&
-      (filter['min_year'] !== null && filter['max_year'] !== null)) {
+    } else if (!hasPerson && hasTopic && hasYear) {
       // z: true  -  a: false  -  t: true
       this.filterDataByYearAndTopic(filter['min_year'], filter['max_year'], filter['topic_id']);
 
-    } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
-      (filter['min_year'] === null && filter['max_year'] === null)) {
+    } else if (hasPerson && hasTopic && !hasYear) {
       // z: false  -  a: true  -  t: true
       this.filterDataByPersonAndTopic(filter['person_id'], filter['topic_id']);
 
-    } else if (filter['person_id'] !== null && filter['topic_id'] !== null &&
-      (filter['min_year'] !== null && filter['max_year'] !== null)) {
+    } else if (hasPerson && hasTopic && hasYear) {
       // z: true  -  a: true  -  t: true
       this.filterDataByYearAndPersonAndTopic(filter['min_year'], filter['max_year'],
         filter['person_id'], filter['topic_id']);
