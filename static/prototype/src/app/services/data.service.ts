@@ -36,41 +36,6 @@ export class DataService {
     defaultItems: IItem[]
   };
 
-  private fakeData = [{
-    id: '1',
-    name: 'Sven',
-    lastname: 'Ellmers (Hg.)',
-    title: 'Korporation und Sittlichkeit',
-    publisher: [{
-      name: 'Wilhelm Fink',
-      ort: ''
-    }],
-    year: 2017,
-    height: 45
-  }, {
-    id: '1',
-    name: 'Bernd',
-    lastname: 'Sommer',
-    title: 'Transformationsdesign',
-    publisher: [{
-      name: 'Wilhelm Fink',
-      ort: ''
-    }],
-    year: 2016,
-    height: 58
-  }, {
-    id: '1',
-    name: 'Wolfram',
-    lastname: 'Pyta)',
-    title: 'Bürgerlichkeit',
-    publisher: [{
-      name: 'Wilhelm Fink',
-      ort: ''
-    }],
-    year: 2015,
-    height: 70
-  }];
-
   constructor(private api: ApiService, private selection: SelectionService) {
     this.dataStore = {
       persons: [], defaultPersons: [],
