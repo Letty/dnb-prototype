@@ -151,14 +151,10 @@ export class DataService {
 
   filterDataByPerson(personID: string): void {
     this.api.filterDataByPersonResultTopic(personID)
-      .subscribe(data => {
-        this.setTopic(data);
-      });
+      .subscribe(data => this.setTopic(data));
 
     this.api.filterDataByPersonResultYear(personID)
-      .subscribe(data => {
-        this.setYear(data);
-      });
+      .subscribe(data => this.setYear(data));
 
     this.api.filterDataByPersonResultItems(personID)
       .subscribe(data => this.setItems(data));
@@ -166,13 +162,10 @@ export class DataService {
 
   filterDataByTopic(topicID: string): void {
     this.api.filterDataByTopicResultPerson(topicID)
-      .subscribe(data => {
-        this.setPerson(data);
-      });
+      .subscribe(data => this.setPerson(data));
+
     this.api.filterDataByTopicResultYear(topicID)
-      .subscribe(data => {
-        this.setYear(data);
-      });
+      .subscribe(data => this.setYear(data));
 
     this.api.filterDataByTopicResultItems(topicID)
       .subscribe(data => this.setItems(data));
@@ -180,13 +173,11 @@ export class DataService {
 
   filterDataByYear(minYear: number, maxYear: number): void {
     this.api.filterDataByYearResultPerson(minYear, maxYear)
-      .subscribe(data => {
-        this.setPerson(data);
-      });
+      .subscribe(data => this.setPerson(data));
+
     this.api.filterDataByYearResultTopic(minYear, maxYear)
-      .subscribe(data => {
-        this.setTopic(data);
-      });
+      .subscribe(data => this.setTopic(data));
+
     this.api.filterDataByYearResultItems(minYear, maxYear)
       .subscribe(data => this.setItems(data));
   }
@@ -194,19 +185,13 @@ export class DataService {
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
 
     this.api.filterDataForYearPersonResultYear(minYear, maxYear, personID)
-      .subscribe(data => {
-        this.setYear(data);
-      });
+      .subscribe(data => this.setYear(data));
 
     this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personID)
-      .subscribe(data => {
-        this.setTopic(data);
-      });
+      .subscribe(data => this.setTopic(data));
 
     this.api.filterDataForYearPersonResultItems(minYear, maxYear, personID)
-      .subscribe(data => {
-        this.setItems(data);
-      });
+      .subscribe(data => this.setItems(data));
   }
 
   filterDataByPersonAndTopic(personID: string, topicID: string): void {
