@@ -170,4 +170,11 @@ export class ApiService {
   getItem(itemID: string): Observable<any>{
     return this.http.put(`${this.server}/getItem`, itemID, this.headers).map(res => res.json().data);
   }
+
+  searchForPerson(query: string): Observable<IPerson[]>{
+    return this.http.put(`${this.server}/searchForPerson`, query, this.headers).map(res => res.json().data)
+  }
+  searchForTopic(query: string): Observable<ITopic[]>{
+    return this.http.put(`${this.server}/searchForTopic`, query, this.headers).map(res => res.json().data)
+  }
 }

@@ -614,8 +614,41 @@ def get_item():
         else:
             item_result['data']['keyword'] = cursor.fetchall()
 
-    print(item_result)
     return jsonify(item_result)
+
+
+@app.route('/searchForPerson', methods=['PUT'])
+def search_for_person():
+    query = request.data.decode('utf-8')
+    query_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select id, lastname, name from dnb_author_count where lastname like %s limit 3'
+        try:
+            cursor.execute(sql, ('%' + query + '%'))
+        except:
+            query_result['error'] = str(sys.exc_info()[0])
+        else:
+            query_result['data'] = cursor.fetchall()
+
+    return jsonify(query_result)
+
+
+@app.route('/searchForTopic', methods=['PUT'])
+def search_for_topic():
+    query = request.data.decode('utf-8')
+    query_result = {'data': {}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select id, keyword from dnb_topic_count where keyword like %s limit 3'
+        try:
+            cursor.execute(sql, ('%' + query + '%'))
+        except:
+            query_result['error'] = str(sys.exc_info()[0])
+        else:
+            query_result['data'] = cursor.fetchall()
+
+    return jsonify(query_result)
 
 
 def seq_iter(obj):
