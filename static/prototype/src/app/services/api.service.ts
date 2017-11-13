@@ -166,4 +166,8 @@ export class ApiService {
       , this.headers)
       .map(res => <IItem[]>res.json().data);
   }
+
+  getItem(itemID: string): Observable<any>{
+    return this.http.put(`${this.server}/getItem`, itemID, this.headers).map(res => res.json().data);
+  }
 }

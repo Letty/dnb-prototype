@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../services/api.service';
+import {Component, OnInit} from '@angular/core';
+import {ApiService} from '../../services/api.service';
 
-import { IYear, IItem } from '../../app.interfaces';
-import { DataService } from '../../services/data.service';
-import { Observable } from 'rxjs/Observable';
+import {IYear, IItem} from '../../app.interfaces';
+import {DataService} from '../../services/data.service';
+import {Observable} from 'rxjs/Observable';
 
 import _ from 'lodash';
 
@@ -17,13 +17,14 @@ export class ResultsListComponent implements OnInit {
   private items: Observable<IItem[]>;
   public loadingData = true;
 
-  constructor(
-    private api: ApiService,
-    private dataService: DataService) {
-      api.loadingData$.subscribe((e) => {
-        if (e === 'item') { this.loadingData = true; }
-      });
-    }
+  constructor(private api: ApiService,
+              private dataService: DataService) {
+    api.loadingData$.subscribe((e) => {
+      if (e === 'item') {
+        this.loadingData = true;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.items = this.dataService.items;
@@ -32,5 +33,9 @@ export class ResultsListComponent implements OnInit {
       this.items = _.chunk(value, _.ceil(_.size(value) / 5));
     })
 
+  }
+
+  getItem(item: IItem): void {
+    this.api.getItem(item.id).subscribe(data => console.log(data));
   }
 }

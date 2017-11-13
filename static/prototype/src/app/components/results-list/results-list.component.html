@@ -3,7 +3,7 @@
   <ul>
     <li *ngFor="let bin of items" class="result-bin">
       <ul>
-        <li *ngFor="let result of bin" class="result">
+        <li *ngFor="let result of bin" class="result" (click)="getItem(result)">
           <header>
             <span class="author">
               <span>{{ result.name }}</span>
