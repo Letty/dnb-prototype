@@ -416,6 +416,14 @@ def filter_by_year_person_result_person():
     params = json.loads(request.data.decode('utf-8'))
     person_result = {'data': {}, 'error': None}
 
+    #
+    #
+    ##
+    #
+    #
+    #
+    #
+
 
 @app.route('/setFilterForYearPersonResultItems', methods=['PUT'])
 def filter_by_year_person_result_items():
@@ -495,6 +503,24 @@ def filter_by_year_topic_result_year():
     return jsonify(year_result)
 
 
+@app.route('/setFilterForYearTopicResultPerson', methods=['PUT'])
+def filter_by_year_topic_result_person():
+    params = json.loads(request.data.decode('utf-8'))
+    person_result = {'data': {}, 'error': None}
+
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+
+    return jsonify(person_result)
+
+
 @app.route('/setFilterForYearTopicResultItems', methods=['PUT'])
 def filter_by_year_topic_result_items():
     params = json.loads(request.data.decode('utf-8'))
@@ -555,6 +581,41 @@ def filter_by_year_person_topic_result_items():
             items_result['data'] = cursor.fetchall()
 
     return jsonify(items_result)
+
+
+@app.route('/getItem', methods=['PUT'])
+def get_item():
+    item_id = request.data.decode('utf-8')
+    item_result = {'data': {'item': {},
+                            'person': [], 'keyword': []}, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select * from dnb_item where id = %s'
+        try:
+            cursor.execute(sql, (item_id))
+        except:
+            item_result['error'] = str(sys.exc_info()[0])
+        else:
+            item_result['data']['item'] = cursor.fetchone()
+
+        sql = 'select ac.lastname, ac.name from dnb_author_item ai, dnb_author_count ac where ai.i_id = %s and ai.a_id = ac.id'
+        try:
+            cursor.execute(sql, (item_id))
+        except:
+            item_result['error'] = str(sys.exc_info()[0])
+        else:
+            item_result['data']['person'] = cursor.fetchall()
+
+        sql = 'select tc.keyword from dnb_item_topic it, dnb_topic_count tc where it.i_id=%s and it.t_id = tc.id'
+        try:
+            cursor.execute(sql, (item_id))
+        except:
+            item_result['error'] = str(sys.exc_info()[0])
+        else:
+            item_result['data']['keyword'] = cursor.fetchall()
+
+    print(item_result)
+    return jsonify(item_result)
 
 
 def seq_iter(obj):
