@@ -1,9 +1,30 @@
 <div class="results-list">
   <loading-data *ngIf="loadingData" class="color-year"></loading-data>
-  <ul>
+
+  <masonry>
+    <masonry-brick class="brick" *ngFor="let item of items | async">
+      <div class="result" (click)="getItem(item)">
+        <header>
+          <span class="author">
+            <span>{{ item.name }}</span>
+            <span>&nbsp;{{ item.lastname }}</span>
+          </span>
+          <span class="title">{{ item.title }}</span>
+        </header>
+        <footer>
+          <span class="publisher">{{ item.publisher }}</span>
+          <span class="year">{{ item.year }}</span>
+        </footer>
+      </div>
+    </masonry-brick>
+  </masonry>
+  <results-detail *ngIf="item || loadingDetailData" (closeDetail)='close()'
+    [item]="item" [itemTitle]="itemTitle"
+    [loadingData]="loadingDetailData"></results-detail>
+  <!-- <ul>
     <li *ngFor="let bin of items" class="result-bin">
       <ul>
-        <li *ngFor="let result of bin" class="result" (click)="getItem(result)">
+        <li *ngFor="let result of bin" class="result">
           <header>
             <span class="author">
               <span>{{ result.name }}</span>
@@ -18,5 +39,5 @@
         </li>
       </ul>
     </li>
-  </ul>
+  </ul> -->
 </div>
