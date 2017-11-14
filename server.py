@@ -3,6 +3,7 @@ from flask_cors import CORS  # remove for production
 import json
 from datetime import datetime, date
 import pymysql.cursors
+import itertools
 
 app = Flask(__name__, static_url_path='')
 CORS(app)  # remove for production
@@ -649,6 +650,42 @@ def search_for_topic():
             query_result['data'] = cursor.fetchall()
 
     return jsonify(query_result)
+
+
+@app.route('/getTopTopicConnections')
+def get_top_topic_connections():
+    network_result = {'data': []}
+    with connection.cursor() as cursor:
+        sql = 'select keyword, id from dnb_topic_count order by count DESC limit 20'
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        network_result['data'] = combine_topics(result)
+
+    return jsonify(network_result)
+
+
+def combine_topics(topics):
+    result = []
+    topic_comb = list(itertools.combinations(topics, 2))
+
+    with connection.cursor() as cursor:
+        for t in topic_comb:
+            r = {'source': t[0]['id'], 'target': t[1]['id'], 'strength': 0}
+
+            sql = 'select count from dnb_topic_topic where t_id1=%s and t_id2=%s'
+            cursor.execute(sql, (t[0]['id'], t[1]['id']))
+            f = cursor.fetchone()
+            if f != None:
+                r['strength'] += f['count']
+
+            cursor.execute(sql, (t[1]['id'], t[0]['id']))
+            f = cursor.fetchone()
+            if f != None:
+                r['strength'] += f['count']
+
+            result.append(r)
+    return result
 
 
 def seq_iter(obj):
