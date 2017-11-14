@@ -1,5 +1,5 @@
-<div class="chart-timeline year-area-svg">
-  <svg #svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetYear()">
+<div class="chart-timeline year-area-svg" #svgWrapper>
+  <svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetYear()">
     <g *ngIf="init">
       <g>
         <path [attr.d]="path" class="area-path"></path>

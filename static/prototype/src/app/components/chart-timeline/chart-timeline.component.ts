@@ -27,7 +27,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() logXScale = false;
   @Input() height = 160;
 
-  @ViewChild('svg') svg;
+  @ViewChild('svgWrapper') svg;
   @ViewChild('brush') brushContainer;
   @ViewChild('rulerLabel') rulerLabel;
 

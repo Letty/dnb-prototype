@@ -23,7 +23,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   @Input() topics: Observable<ITopic[]>;
   @Input() forces = false;
 
-  @ViewChild('svg') svg;
+  @ViewChild('svgWrapper') svg;
 
   public nodes;
   public links;
