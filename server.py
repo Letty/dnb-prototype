@@ -112,11 +112,8 @@ def root():
 
 @app.route('/getTopTopics')
 def get_top_topics():
-    with connection.cursor() as cursor:
-        sql = 'select * from dnb_topic_count order by count DESC limit 20'
-        cursor.execute(sql)
-        result = cursor.fetchall()
-        return jsonify(getTopicsPercentage(result))
+    result = get_default_topics()
+    return jsonify(getTopicsPercentage(result))
 
 
 @app.route('/getTopPeople')
@@ -655,14 +652,19 @@ def search_for_topic():
 @app.route('/getTopTopicConnections')
 def get_top_topic_connections():
     network_result = {'data': []}
-    with connection.cursor() as cursor:
-        sql = 'select keyword, id from dnb_topic_count order by count DESC limit 20'
-        cursor.execute(sql)
-        result = cursor.fetchall()
-
-        network_result['data'] = combine_topics(result)
+    result = get_default_topics()
+    network_result['data'] = combine_topics(result)
 
     return jsonify(network_result)
+
+
+def get_default_topics():
+    result = []
+    with connection.cursor() as cursor:
+        sql = 'select * from dnb_topic_count order by count DESC limit 20'
+        cursor.execute(sql)
+        result = cursor.fetchall()
+    return result
 
 
 def combine_topics(topics):
