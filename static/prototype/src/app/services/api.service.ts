@@ -40,86 +40,86 @@ export class ApiService {
 
   filterDataByPersonResultYear(personID: string): Observable<IYear[]> {
     this.loadingData$.emit('year');
-    return this.http.put(`${this.server}/setFilterForPersonResultYear`, personID, this.headers)
+    return this.http.post(`${this.server}/setFilterForPersonResultYear`, personID, this.headers)
       .map(res => <IYear[]>res.json().data);
 
   }
 
   filterDataByPersonResultTopic(personID: string): Observable<ITopic[]> {
     this.loadingData$.emit('topic');
-    return this.http.put(`${this.server}/setFilterForPersonResultTopic`, personID, this.headers).map(
+    return this.http.post(`${this.server}/setFilterForPersonResultTopic`, personID, this.headers).map(
       res => <ITopic[]>res.json().data);
   }
 
   filterDataByPersonResultItems(personID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForPersonResultItems`, personID, this.headers)
+    return this.http.post(`${this.server}/setFilterForPersonResultItems`, personID, this.headers)
       .map(res => <IItem[]>res.json().data)
   }
 
   filterDataByTopicResultYear(topicID: string): Observable<IYear[]> {
     this.loadingData$.emit('year');
-    return this.http.put(`${this.server}/setFilterForTopicResultYear`, topicID, this.headers).map(
+    return this.http.post(`${this.server}/setFilterForTopicResultYear`, topicID, this.headers).map(
       res => <IYear[]>res.json().data);
   }
 
   filterDataByTopicResultPerson(topicID: string): Observable<IPerson[]> {
     this.loadingData$.emit('person');
-    return this.http.put(`${this.server}/setFilterForTopicResultPerson`, topicID, this.headers).map(
+    return this.http.post(`${this.server}/setFilterForTopicResultPerson`, topicID, this.headers).map(
       res => <IPerson[]>res.json().data);
   }
 
   filterDataByTopicResultItems(topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForTopicResultItems`, topicID, this.headers)
+    return this.http.post(`${this.server}/setFilterForTopicResultItems`, topicID, this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
   filterDataByYearResultPerson(yearMin: number, yearMax: number): Observable<IPerson[]> {
     this.loadingData$.emit('person');
-    return this.http.put(`${this.server}/setFilterForYearResultPerson`,
+    return this.http.post(`${this.server}/setFilterForYearResultPerson`,
       JSON.stringify([yearMin, yearMax]), this.headers)
       .map(res => <IPerson[]>res.json().data);
   }
 
   filterDataByYearResultTopic(yearMin: number, yearMax: number): Observable<ITopic[]> {
     this.loadingData$.emit('topic');
-    return this.http.put(`${this.server}/setFilterForYearResultTopic`,
+    return this.http.post(`${this.server}/setFilterForYearResultTopic`,
       JSON.stringify([yearMin, yearMax]), this.headers)
       .map(res => <ITopic[]>res.json().data);
   }
 
   filterDataByYearResultItems(yearMin: number, yearMax: number): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForYearResultItems`,
+    return this.http.post(`${this.server}/setFilterForYearResultItems`,
       JSON.stringify([yearMin, yearMax]), this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
   filterDataForYearPersonResultYear(yearMin: number, yearMax: number, personID: string): Observable<IYear[]> {
     this.loadingData$.emit('year');
-    return this.http.put(`${this.server}/setFilterForYearPersonResultYear`,
+    return this.http.post(`${this.server}/setFilterForYearPersonResultYear`,
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
       .map(res => <IYear[]>res.json().data);
   }
 
   filterDataForYearPersonResultTopic(yearMin: number, yearMax: number, personID: string): Observable<ITopic[]> {
     this.loadingData$.emit('topic');
-    return this.http.put(`${this.server}/setFilterForYearPersonResultTopic`,
+    return this.http.post(`${this.server}/setFilterForYearPersonResultTopic`,
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
       .map(res => <ITopic[]>res.json().data);
   }
 
   filterDataForYearPersonResultItems(yearMin: number, yearMax: number, personID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForYearPersonResultItems`,
+    return this.http.post(`${this.server}/setFilterForYearPersonResultItems`,
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
   filterDataForPersonTopicResultYear(personID: string, topicID: string): Observable<IYear[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForPersonTopicResultYear`,
+    return this.http.post(`${this.server}/setFilterForPersonTopicResultYear`,
       JSON.stringify({'person_id': personID, 'topic_id': topicID})
       , this.headers)
       .map(res => <IYear[]>res.json().data);
@@ -127,7 +127,7 @@ export class ApiService {
 
   filterDataForPersonTopicResultItems(personID: string, topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForPersonTopicResultItems`,
+    return this.http.post(`${this.server}/setFilterForPersonTopicResultItems`,
       JSON.stringify({'person_id': personID, 'topic_id': topicID})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
@@ -135,7 +135,7 @@ export class ApiService {
 
   filterDataForYearTopicResultYear(yearMin: number, yearMax: number, topicID: string): Observable<IYear[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForYearTopicResultYear`,
+    return this.http.post(`${this.server}/setFilterForYearTopicResultYear`,
       JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
       , this.headers)
       .map(res => <IYear[]>res.json().data);
@@ -143,16 +143,16 @@ export class ApiService {
 
   filterDataForYearTopicResultItems(yearMin: number, yearMax: number, topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForYearTopicResultItems`,
+    return this.http.post(`${this.server}/setFilterForYearTopicResultItems`,
       JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
   filterDataForYearPersonTopicResultYear(yearMin: number, yearMax: number, personID: string,
-                                          topicID: string): Observable<IYear[]> {
+                                         topicID: string): Observable<IYear[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForYearPersonTopicResultYear`,
+    return this.http.post(`${this.server}/setFilterForYearPersonTopicResultYear`,
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
       , this.headers)
       .map(res => <IYear[]>res.json().data);
@@ -161,20 +161,36 @@ export class ApiService {
   filterDataForYearPersonTopicResultItems(yearMin: number, yearMax: number, personID: string,
                                           topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
-    return this.http.put(`${this.server}/setFilterForYearPersonTopicResultItems`,
+    return this.http.post(`${this.server}/setFilterForYearPersonTopicResultItems`,
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
-  getItem(itemID: string): Observable<any>{
-    return this.http.put(`${this.server}/getItem`, itemID, this.headers).map(res => res.json().data);
+  getItem(itemID: string): Observable<any> {
+    return this.http.post(`${this.server}/getItem`, itemID, this.headers).map(res => res.json().data);
   }
 
-  searchForPerson(query: string): Observable<IPerson[]>{
-    return this.http.put(`${this.server}/searchForPerson`, query, this.headers).map(res => res.json().data)
+  searchForPerson(query: string): Observable<IPerson[]> {
+    return this.http.post(`${this.server}/searchForPerson`, query, this.headers).map(res => res.json().data)
   }
-  searchForTopic(query: string): Observable<ITopic[]>{
-    return this.http.put(`${this.server}/searchForTopic`, query, this.headers).map(res => res.json().data)
+
+  searchForTopic(query: string): Observable<ITopic[]> {
+    return this.http.post(`${this.server}/searchForTopic`, query, this.headers).map(res => res.json().data)
+  }
+
+  getTopTopicConnections(): Observable<any> {
+    return this.http.get(`${this.server}/getTopTopicNetwork`).map(res => res.json().data)
+  }
+
+  getTopicNetworkFilterPerson(personID: string): Observable<any> {
+    return this.http.post(`${this.server}/getTopicNetworkFilterPerson`, personID, this.headers)
+      .map(res => res.json().data)
+  }
+
+  getTopicNetworkFilterYear(yearMin: number, yearMax: number): Observable<any> {
+    return this.http.post(`${this.server}/getTopicNetworkFilterYear`,
+      JSON.stringify([yearMin,yearMax]), this.headers)
+      .map(res => res.json().data)
   }
 }

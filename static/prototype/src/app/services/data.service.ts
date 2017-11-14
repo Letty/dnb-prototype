@@ -158,6 +158,9 @@ export class DataService {
 
     this.api.filterDataByPersonResultItems(personID)
       .subscribe(data => this.setItems(data));
+
+    this.api.getTopicNetworkFilterPerson(personID)
+      .subscribe(data => console.log(data))
   }
 
   filterDataByTopic(topicID: string): void {
@@ -180,6 +183,9 @@ export class DataService {
 
     this.api.filterDataByYearResultItems(minYear, maxYear)
       .subscribe(data => this.setItems(data));
+
+    this.api.getTopicNetworkFilterYear(minYear, maxYear)
+      .subscribe(data => console.log(data))
   }
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
