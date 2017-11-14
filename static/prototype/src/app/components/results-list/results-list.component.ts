@@ -40,8 +40,6 @@ export class ResultsListComponent implements OnInit {
     this.items = this.dataService.items;
     this.dataService.items.subscribe(value => {
       this.loadingData = false;
-      // this.items = _.chunk(value, _.ceil(_.size(value) / 5));
-      console.log(value);
     });
 
   }
@@ -50,13 +48,14 @@ export class ResultsListComponent implements OnInit {
     this.loadingDetailData = true;
     this.itemTitle = `${item.name} ${item.lastname}: ${item.title}`;
     this.api.getItem(item.id).subscribe(data => {
+      if (this.loadingDetailData === false) { return; }
       this.loadingDetailData = false;
       this.item = data;
     });
   }
 
   close() {
-    this.loadingData = false;
+    this.loadingDetailData = false;
     this.item = null;
   }
 }
