@@ -62,7 +62,6 @@ def get_timeline():
 
 @app.route('/setFilterForPersonResultYear', methods=['POST'])
 def filter_by_person_result_year():
-    print(request.data)
     person_id = request.data.decode('utf-8')
     year_result = {'data': None, 'error': None}
 
@@ -79,22 +78,11 @@ def filter_by_person_result_year():
 
 @app.route('/setFilterForPersonResultTopic', methods=['POST'])
 def filter_by_person_result_topic():
-    startTime = datetime.now()
     person_id = request.data.decode('utf-8')
-    topic_result = {'data': None, 'error': None}
 
-    with connection.cursor() as cursor:
-        sql = 'select a.t_id id, tc.keyword, a.count from dnb_author_topic a '\
-            'inner join dnb2.dnb_topic_count tc on a.t_id= tc.id '\
-            'where a.a_id=%s order by count desc limit 20'
-        try:
-            cursor.execute(sql, (person_id))
-        except:
-            topic_result['error'] = str(sys.exc_info()[0])
-        else:
-            topic_result['data'] = utils.getTopicsPercentage(cursor.fetchall())
-    uptime = str(datetime.now() - startTime)
-    print('uptime: %s', (uptime))
+    topic_result = qh.get_topics_for_person(person_id, connection)
+    topic_result['data'] = utils.getTopicsPercentage(topic_result['data'])
+
     return jsonify(topic_result)
 
 
@@ -567,7 +555,17 @@ def get_top_topic_network():
 def get_top_topic_network_filter_year():
     years = json.loads(request.data.decode('utf-8'))
     network_result = {'data': []}
-    result = qh.get_topics_for_year(connection, years)
+    result = qh.get_topics_for_year(years, connection)
+    network_result['data'] = qh.combine_topics(result, connection)
+
+    return jsonify(network_result)
+
+
+@app.route('/getTopicNetworkFilterPerson', methods=['POST'])
+def get_top_topic_network_filter_person():
+    person_id = request.data.decode('utf-8')
+    network_result = {'data': []}
+    result = qh.get_topics_for_person(person_id, connection)
     network_result['data'] = qh.combine_topics(result, connection)
 
     return jsonify(network_result)

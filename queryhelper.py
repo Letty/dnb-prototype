@@ -28,6 +28,22 @@ def get_topics_for_year(years, connection):
     return topic_result
 
 
+def get_topics_for_person(person_id, connection):
+    topic_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select a.t_id id, tc.keyword, a.count from dnb_author_topic a '\
+            'inner join dnb2.dnb_topic_count tc on a.t_id= tc.id '\
+            'where a.a_id=%s order by count desc limit 20'
+        try:
+            cursor.execute(sql, (person_id))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            topic_result['data'] = cursor.fetchall()
+    return topic_result
+
+
 def combine_topics(topics, connection):
     result = []
     topic_comb = list(itertools.combinations(topics, 2))
