@@ -14,7 +14,7 @@ import _ from 'lodash';
 })
 
 export class ResultsListComponent implements OnInit {
-  private items: Observable<IItem[]>;
+  public items: Observable<IItem[]>;
   public loadingData = true;
 
   constructor(private api: ApiService,
@@ -31,7 +31,7 @@ export class ResultsListComponent implements OnInit {
     this.dataService.items.subscribe(value => {
       this.loadingData = false;
       this.items = _.chunk(value, _.ceil(_.size(value) / 5));
-    })
+    });
 
   }
 
