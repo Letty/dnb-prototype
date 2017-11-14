@@ -561,8 +561,8 @@ def search_for_topic():
     return jsonify(query_result)
 
 
-@app.route('/getTopTopicConnections')
-def get_top_topic_connections():
+@app.route('/getTopTopicNetwork')
+def get_top_topic_network():
     network_result = {'data': []}
     result = utils.get_default_topics(connection)
     network_result['data'] = utils.combine_topics(result, connection)

@@ -179,6 +179,6 @@ export class ApiService {
   }
 
   getTopTopicConnections(): Observable<any> {
-    return this.http.get(`${this.server}/getTopTopicConnections`).map(res => res.json().data)
+    return this.http.get(`${this.server}/getTopTopicNetwork`).map(res => res.json().data)
   }
 }
