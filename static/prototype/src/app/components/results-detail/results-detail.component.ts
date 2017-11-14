@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 
 import {IItem} from '../../app.interfaces';
@@ -11,7 +11,7 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./results-detail.component.scss']
 })
 
-export class ResultsDetailComponent implements OnInit {
+export class ResultsDetailComponent implements OnInit, OnChanges {
 
   @Output() closeDetail: EventEmitter<any> = new EventEmitter();
   @Input() loadingData = false;
@@ -24,6 +24,12 @@ export class ResultsDetailComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes.item) {
+      console.log(this.item);
+    }
   }
 
   close () {

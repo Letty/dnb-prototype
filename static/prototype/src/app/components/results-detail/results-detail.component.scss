@@ -1,4 +1,5 @@
 @import "../../../style/variables";
+@import "../../../style/mixins";
 
 .results-detail {
   background: $color-overlay-background;
@@ -42,6 +43,65 @@
 
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+    }
+
+    .details {
+      padding: 32px;
+      box-sizing: border-box;
+
+      .meta-data {
+        box-sizing: border-box;
+        @include flex-default();
+
+        .wrapper {
+          padding-right: 16px;
+
+          .datum {
+            font-size: 14px;
+            vertical-align: top;
+            @include flex-default();
+            justify-content: flex-start;
+
+            .prop {
+              color: #B2B2B2;
+              width: 88px;
+              min-width: 88px;
+            }
+
+            .value {
+              .tag {
+                height: 32px;
+                display: inline-block;
+                box-sizing: border-box;
+                padding: 8px;
+                border-radius: 5px;
+                background: $color-person-background;
+                color: $color-person-default;
+                font-weight: bold;
+                line-height: 16px;
+                margin: 0 8px 8px 0;
+
+                &.topic {
+                  background: $color-topic-background;
+                  color: $color-topic-default;
+                }
+              }
+            }
+          }
+        }
+
+        .cover {
+          min-width: 128px;
+          height: 200px;
+          background: #000;
+        }
+
+      }
+
+      .content {
+        width: 100%;
+        height: 200px;
       }
     }
   }

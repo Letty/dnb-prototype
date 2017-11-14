@@ -6,6 +6,57 @@
     </svg>
     <div>{{itemTitle}}</div>
     </header>
-    <loading-data *ngIf="loadingData" class="color-year"></loading-data>
+    <div class="details">
+      <loading-data *ngIf="loadingData" class="color-year"></loading-data>
+      <div class="meta-data" *ngIf="item">
+        <div class="wrapper">
+          <div class="datum">
+            <div class="prop">
+              Titel
+            </div>
+            <div class="value">
+              {{item.item.title}}
+            </div>
+          </div>
+          <div class="datum">
+            <div class="prop">
+              Person
+            </div>
+            <div class="value">
+              <span *ngFor="let person of item.person" class="tag person">{{person.name}} {{person.lastname}}</span>
+            </div>
+          </div>
+          <div class="datum">
+            <div class="prop">
+              Thema
+            </div>
+            <div class="value">
+              <span *ngFor="let topic of item.keyword" class="tag topic">{{topic.keyword}}</span>
+            </div>
+          </div>
+          <div class="datum">
+            <div class="prop">
+              Verlag
+            </div>
+            <div class="value">
+              {{item.item.publisher}}
+            </div>
+          </div>
+          <div class="datum">
+            <div class="prop">
+              Erschienen
+            </div>
+            <div class="value">
+              {{item.item.year}}
+            </div>
+          </div>
+        </div>
+        <div class="cover">
+        </div>
+      </div>
+      <div class="content">
+
+      </div>
+    </div>
   </div>
 </div>
