@@ -566,7 +566,7 @@ def get_top_topic_network_filter_person():
     person_id = request.data.decode('utf-8')
     network_result = {'data': []}
     result = qh.get_topics_for_person(person_id, connection)
-    network_result['data'] = qh.combine_topics(result, connection)
+    network_result['data'] = qh.combine_topics(result['data'], connection)
 
     return jsonify(network_result)
 
