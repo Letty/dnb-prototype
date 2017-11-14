@@ -177,4 +177,8 @@ export class ApiService {
   searchForTopic(query: string): Observable<ITopic[]>{
     return this.http.put(`${this.server}/searchForTopic`, query, this.headers).map(res => res.json().data)
   }
+
+  getTopTopicConnections(): Observable<any> {
+    return this.http.get(`${this.server}/getTopTopicConnections`).map(res => res.json().data)
+  }
 }
