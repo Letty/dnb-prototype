@@ -489,7 +489,7 @@ def get_item():
         else:
             item_result['data']['item'] = cursor.fetchone()
 
-        sql = 'select ac.lastname, ac.name from dnb_author_item ai, dnb_author_count ac where ai.i_id = %s and ai.a_id = ac.id'
+        sql = 'select ac.id, ac.lastname, ac.name from dnb_author_item ai, dnb_author_count ac where ai.i_id = %s and ai.a_id = ac.id'
         try:
             cursor.execute(sql, (item_id))
         except:
@@ -497,7 +497,7 @@ def get_item():
         else:
             item_result['data']['person'] = cursor.fetchall()
 
-        sql = 'select tc.keyword from dnb_item_topic it, dnb_topic_count tc where it.i_id=%s and it.t_id = tc.id'
+        sql = 'select tc.id, tc.keyword from dnb_item_topic it, dnb_topic_count tc where it.i_id=%s and it.t_id = tc.id'
         try:
             cursor.execute(sql, (item_id))
         except:
