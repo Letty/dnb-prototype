@@ -16,16 +16,6 @@
     padding: 0;
   }
 
-  .searchbar {
-    background-color: #eee;
-    @include border-radius($border-radius-default);
-    border: 0;
-    color: #aaa;
-    font-size: 0.8em;
-    padding: 0.5em 0.5em;
-    width: 10vw;
-  }
-
   .nav-selection {
     display: flex;
     flex-grow: 2;

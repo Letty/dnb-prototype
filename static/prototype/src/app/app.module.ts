@@ -21,6 +21,7 @@ import {DataService} from './services/data.service';
 import {RouterService} from './services/router.service';
 
 import { MasonryModule } from 'angular2-masonry';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { MasonryModule } from 'angular2-masonry';
   imports: [
     BrowserModule,
     HttpModule,
-    MasonryModule
+    MasonryModule,
+    FormsModule
   ],
   providers: [
     ApiService,

@@ -14,7 +14,7 @@ $color-topic-background: #D2F0F0;
 $color-topic-background--hover: #e8f7f7;
 
 /* Misc */
-$border-radius-default: 2px;
+$border-radius-default: 5px;
 
 $distance-outer-default: 1rem;
 $distance-inner-default: 0.5rem;
@@ -27,6 +27,9 @@ $color-body-font: #222;
 
 /* Header */
 $color-header-background: #fff;
+
+// more colors
 $color-overlay-background: rgba(26,26,26,.65);
+$color-text-grey: #B2B2B2;
 
 $effect-header-shadow: 0px 0px 12px 2px rgba(0,0,0,0.05);

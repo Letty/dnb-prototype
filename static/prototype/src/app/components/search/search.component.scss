@@ -2,4 +2,66 @@
 @import "../../../style/mixins";
 
 .search-suggestion {
+  position: relative;
+
+  .search-field, {
+    @include border-radius($border-radius-default);
+    border: 0;
+    color: $color-text-grey;
+    font-size: 0.8em;
+    padding: 0.5em 0.5em 0.5em 32px;
+    width: 244px;
+    height: 32px;
+    box-sizing: border-box;
+
+    background: $color-body-background url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32px' height='32px'><path d='M19.7,19.3 C20.6,18.1 21.1,16.7 21.1,15.1 C21.1,11.2 18,8 14.1,8 C10.2,8 7,11.2 7,15.1 C7,19 10.2,22.2 14.1,22.2 C15.7,22.2 17.2,21.7 18.3,20.8 L21.3,23.8 C21.5,24 21.8,24.1 22,24.1 C22.2,24.1 22.5,24 22.7,23.8 C23.1,23.4 23.1,22.8 22.7,22.4 L19.7,19.3 Z M14.1,20.1 C11.3,20.1 9,17.9 9,15.1 C9,12.3 11.3,10 14.1,10 C16.9,10 19.2,12.3 19.2,15.1 C19.2,17.9 16.9,20.1 14.1,20.1 Z' fill='%23#{str-slice(#{$color-text-grey}, 2)}'></path></svg>") left center no-repeat;
+
+    &:focus {
+      outline: none;
+      color: $color-body-font;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32px' height='32px'><path d='M18.7,19.3 C19.6,18.1 20.1,16.7 20.1,15.1 C20.1,11.2 17,8 13.1,8 C9.2,8 6,11.2 6,15.1 C6,19 9.2,22.2 13.1,22.2 C14.7,22.2 16.2,21.7 17.3,20.8 L20.3,23.8 C20.5,24 20.8,24.1 21,24.1 C21.2,24.1 21.5,24 21.7,23.8 C22.1,23.4 22.1,22.8 21.7,22.4 L18.7,19.3 Z M13.1,20.1 C10.3,20.1 8,17.9 8,15.1 C8,12.3 10.3,10 13.1,10 C15.9,10 18.2,12.3 18.2,15.1 C18.2,17.9 15.9,20.1 13.1,20.1 Z' fill='%23#{str-slice(#{$color-body-font}, 2)}'></path></svg>") left center no-repeat;
+
+      border: 1px solid #EEEEEE;
+
+      @include box-shadow($effect-header-shadow);
+
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+
+    &::placeholder {
+      color: $color-text-grey;
+    }
+  }
+
+  .suggestions {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+
+    .suggestion {
+      font-size: 0.8em;
+      height: 32px;
+      padding: 0.5em;
+      box-sizing: border-box;
+      border-top: 1px solid #000;
+
+      &.year {
+        color: $color-year-default;
+        border-color: $color-year-default;
+        background: $color-year-background;
+      }
+      &.topic {
+        color: $color-topic-default;
+        border-color: $color-topic-default;
+        background: $color-topic-background;
+      }
+      &.person {
+        color: $color-person-default;
+        border-color: $color-person-default;
+        background: $color-person-background;
+      }
+    }
+  }
 }

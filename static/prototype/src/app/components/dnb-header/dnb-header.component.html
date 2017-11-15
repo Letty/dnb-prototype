@@ -1,6 +1,6 @@
 <header class="header">
   <h1 class="dnb-logo">DNB &mdash; Prototype</h1>
-  <input class="searchbar" type="text" name="search" value="Suche">
+  <search></search>
   <nav class="nav-selection" *ngIf="selectedMinYear || selectedPerson || selectedTopic">
     <span>Auswahl</span>
     <div class="selected-year facet" *ngIf="selectedMinYear" (click)="resetYear()">
