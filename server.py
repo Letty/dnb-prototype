@@ -489,7 +489,7 @@ def get_item():
         else:
             item_result['data']['item'] = cursor.fetchone()
 
-        sql = 'select ac.lastname, ac.name from dnb_author_item ai, dnb_author_count ac where ai.i_id = %s and ai.a_id = ac.id'
+        sql = 'select ac.id, ac.lastname, ac.name from dnb_author_item ai, dnb_author_count ac where ai.i_id = %s and ai.a_id = ac.id'
         try:
             cursor.execute(sql, (item_id))
         except:
@@ -497,7 +497,7 @@ def get_item():
         else:
             item_result['data']['person'] = cursor.fetchall()
 
-        sql = 'select tc.keyword from dnb_item_topic it, dnb_topic_count tc where it.i_id=%s and it.t_id = tc.id'
+        sql = 'select tc.id, tc.keyword from dnb_item_topic it, dnb_topic_count tc where it.i_id=%s and it.t_id = tc.id'
         try:
             cursor.execute(sql, (item_id))
         except:
@@ -516,7 +516,7 @@ def search_for_person():
     with connection.cursor() as cursor:
         sql = 'select id, lastname, name from dnb_author_count where lastname like %s limit 3'
         try:
-            cursor.execute(sql, ('%' + query + '%'))
+            cursor.execute(sql, (query + '%'))
         except:
             query_result['error'] = str(sys.exc_info()[0])
         else:
@@ -533,7 +533,7 @@ def search_for_topic():
     with connection.cursor() as cursor:
         sql = 'select id, keyword from dnb_topic_count where keyword like %s limit 3'
         try:
-            cursor.execute(sql, ('%' + query + '%'))
+            cursor.execute(sql, (query + '%'))
         except:
             query_result['error'] = str(sys.exc_info()[0])
         else:
