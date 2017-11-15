@@ -516,7 +516,7 @@ def search_for_person():
     with connection.cursor() as cursor:
         sql = 'select id, lastname, name from dnb_author_count where lastname like %s limit 3'
         try:
-            cursor.execute(sql, ('%' + query + '%'))
+            cursor.execute(sql, (query + '%'))
         except:
             query_result['error'] = str(sys.exc_info()[0])
         else:
@@ -533,7 +533,7 @@ def search_for_topic():
     with connection.cursor() as cursor:
         sql = 'select id, keyword from dnb_topic_count where keyword like %s limit 3'
         try:
-            cursor.execute(sql, ('%' + query + '%'))
+            cursor.execute(sql, (query + '%'))
         except:
             query_result['error'] = str(sys.exc_info()[0])
         else:
