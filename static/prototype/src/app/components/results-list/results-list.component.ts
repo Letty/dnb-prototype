@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, NgModule} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 
 import {IYear, IItem} from '../../app.interfaces';
@@ -6,6 +6,13 @@ import {DataService} from '../../services/data.service';
 import {Observable} from 'rxjs/Observable';
 
 import _ from 'lodash';
+import { MasonryModule } from 'angular2-masonry';
+
+@NgModule({
+  imports: [
+    MasonryModule
+  ]
+})
 
 @Component({
   selector: 'results-list',
@@ -15,7 +22,10 @@ import _ from 'lodash';
 
 export class ResultsListComponent implements OnInit {
   public items: Observable<IItem[]>;
+  public item: any = null;
+  public itemTitle: string = null;
   public loadingData = true;
+  public loadingDetailData = false;
 
   constructor(private api: ApiService,
               private dataService: DataService) {
@@ -30,12 +40,22 @@ export class ResultsListComponent implements OnInit {
     this.items = this.dataService.items;
     this.dataService.items.subscribe(value => {
       this.loadingData = false;
-      this.items = _.chunk(value, _.ceil(_.size(value) / 5));
     });
 
   }
 
   getItem(item: IItem): void {
-    this.api.getItem(item.id).subscribe(data => console.log(data));
+    this.loadingDetailData = true;
+    this.itemTitle = `${item.name} ${item.lastname}: ${item.title}`;
+    this.api.getItem(item.id).subscribe(data => {
+      if (this.loadingDetailData === false) { return; }
+      this.loadingDetailData = false;
+      this.item = data;
+    });
+  }
+
+  close() {
+    this.loadingDetailData = false;
+    this.item = null;
   }
 }

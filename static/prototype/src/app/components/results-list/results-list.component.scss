@@ -1,48 +1,76 @@
 @import "../../../style/variables";
 @import "../../../style/mixins";
 
-$gutter-results-default: 10px;
+$gutter-results-default: 8px;
 
 .results-list {
   background: $color-header-background;
+  padding: $gutter-results-default;
 
-  & > ul {
-  	@include flex-default();
-	  margin: 0 $distance-outer-default;
-	  box-sizing: border-box;
+  .brick {
+    width: 100%;
+    box-sizing: border-box;
+    padding: $gutter-results-default;
 
-	  .result-bin {
-	  	flex: 1;
-	  }
+    @media screen and (min-width: 480px) {
+      width: 50%;
+    }
+    @media screen and (min-width: 720px) {
+      width: 33.33%;
+    }
+    @media screen and (min-width: 960px) {
+      width: 25%;
+    }
+    @media screen and (min-width: 1200px) {
+      width: 20%;
+    }
+    @media screen and (min-width: 1440px) {
+      width: 16.66%;
+    }
+    @media screen and (min-width: 1680px) {
+      width: 14.28%;
+    }
+    @media screen and (min-width: 1920px) {
+      width: 12.5%;
+    }
+  }
 
-	  .result {
-	  	background-color: $color-year-default;
-	  	display: inline-block;
-	  	height: calc(100% - #{$gutter-results-default});
-      width: calc(100% - #{$gutter-results-default});
-      margin: $gutter-results-default $gutter-results-default 0;
+  .result {
+    cursor: pointer;
+  	background-color: $color-year-default;
+  	display: inline-block;
+  	width: 100%;
+    min-height: 360px;
 
-	  	span {
-	  		display: block;
-	  		color: #fff;
-	  		margin: 0 0 0.5em;
-	  	}
+    box-sizing: border-box;
 
-	  	header {
-	  		padding: $distance-outer-default;
-	  		font-weight: bold;
-	  		line-height: 1.2em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
-        .author{
-          display: flex;
-        }
-	  	}
+  	span {
+  		display: block;
+  		color: #fff;
+  		margin: 0 0 0.5em;
+  	}
 
-	  	footer {
-	  		padding: $distance-outer-default;
-	  		font-size: 0.8em;
-	  	}
+  	header {
+  		padding: $distance-outer-default;
+  		font-weight: bold;
+  		line-height: 1.2em;
 
-	  }
+      .author{
+        display: flex;
+        font-weight: normal;
+      }
+
+      margin-bottom: 200px;
+  	}
+
+  	footer {
+  		padding: $distance-outer-default;
+  		font-size: 0.8em;
+      position: absolute;
+      bottom: 0px;
+  	}
   }
 }
