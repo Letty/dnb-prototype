@@ -6,12 +6,12 @@ import {DataService} from '../../services/data.service';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
-  selector: 'search-suggestion',
-  templateUrl: './search-suggestion.component.html',
-  styleUrls: ['./search-suggestion.component.scss']
+  selector: 'search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
 
-export class SearchSuggestion implements OnInit, OnChanges {
+export class SearchComponent implements OnInit, OnChanges {
 
   @Output() close: EventEmitter<any> = new EventEmitter();
   @Input() term: string = null;

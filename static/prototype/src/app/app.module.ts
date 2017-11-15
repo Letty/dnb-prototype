@@ -13,7 +13,7 @@ import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline
 import {BtnLinkComponent} from './components/btn-link/btn-link.component';
 import {LoadingDataComponent} from './components/loading-data/loading-data.component';
 import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
-import {SearchSuggestion} from './components/search-suggestion/search-suggestion.component';
+import {SearchComponent} from './components/search/search.component';
 
 import {ApiService} from './services/api.service';
 import {SelectionService} from './services/selection.service';
@@ -36,7 +36,7 @@ import { MasonryModule } from 'angular2-masonry';
     LoadingDataComponent,
     TopicDetailComponent,
     ResultsDetailComponent,
-    SearchSuggestion
+    SearchComponent
   ],
   imports: [
     BrowserModule,
