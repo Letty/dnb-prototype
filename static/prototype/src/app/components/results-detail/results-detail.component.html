@@ -1,4 +1,5 @@
-<div class="results-detail" (click)="close()">
+<div class="results-detail">
+  <div class="close" (click)="close()"></div>
   <div class="panel">
     <header class="header">
     <svg class="arrow" width="48px" height="64px" (click)="close()">
@@ -6,31 +7,31 @@
     </svg>
     <div>{{itemTitle}}</div>
     </header>
-    <div class="details">
-      <loading-data *ngIf="loadingData" class="color-year"></loading-data>
-      <div class="meta-data" *ngIf="item">
+    <loading-data *ngIf="loadingData" class="color-year"></loading-data>
+    <div class="details" *ngIf="item">
+      <div class="meta-data">
         <div class="wrapper">
           <div class="datum">
             <div class="prop">
               Titel
             </div>
             <div class="value">
-              {{item.item.title}}
+              {{item.item.title}} {{item.item.title_add}}
             </div>
           </div>
           <div class="datum">
             <div class="prop">
-              Person
+              {{item.person.length > 1 ? 'Personen' : 'Person'}}
             </div>
-            <div class="value">
+            <div class="value tags">
               <span *ngFor="let person of item.person" class="tag person">{{person.name}} {{person.lastname}}</span>
             </div>
           </div>
           <div class="datum">
             <div class="prop">
-              Thema
+              {{item.keyword.length > 1 ? 'Themen' : 'Thema'}}
             </div>
-            <div class="value">
+            <div class="value tags">
               <span *ngFor="let topic of item.keyword" class="tag topic">{{topic.keyword}}</span>
             </div>
           </div>
@@ -55,7 +56,14 @@
         </div>
       </div>
       <div class="content">
-
+        <div class="datum">
+          <div class="prop">
+            Inhaltstext
+          </div>
+          <div class="value">
+            {{item.item.content}}
+          </div>
+        </div>
       </div>
     </div>
   </div>

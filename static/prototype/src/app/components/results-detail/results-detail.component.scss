@@ -9,6 +9,13 @@
   top: 0px;
   left: 0px;
 
+  .close {
+    position: absolute;
+    right: 640px;
+    left: 0px;
+    height: 100%;
+  }
+
   .panel {
     background: $color-header-background;
     width: 100%;
@@ -50,41 +57,62 @@
       padding: 32px;
       box-sizing: border-box;
 
-      .meta-data {
+      .meta-data, .content {
+        $cover-width:128px;
+
         box-sizing: border-box;
         @include flex-default();
 
-        .wrapper {
+        .wrapper, &.content {
           padding-right: 16px;
+          max-width: calc(100% - #{$cover-width});
+          box-sizing: border-box;
 
           .datum {
+            $prop-width: 88px;
+
             font-size: 14px;
             vertical-align: top;
             @include flex-default();
             justify-content: flex-start;
+            margin-bottom: 24px;
 
             .prop {
               color: #B2B2B2;
-              width: 88px;
-              min-width: 88px;
+              width: $prop-width;
+              min-width: $prop-width;
             }
 
             .value {
-              .tag {
-                height: 32px;
-                display: inline-block;
-                box-sizing: border-box;
-                padding: 8px;
-                border-radius: 5px;
-                background: $color-person-background;
-                color: $color-person-default;
-                font-weight: bold;
-                line-height: 16px;
-                margin: 0 8px 8px 0;
+              max-width: calc(100% - #{$prop-width});
 
-                &.topic {
-                  background: $color-topic-background;
-                  color: $color-topic-default;
+              &.tags {
+                margin: -4px 0 -8px 0;
+
+                .tag {
+                  height: 32px;
+                  display: inline-block;
+                  box-sizing: border-box;
+                  padding: 8px;
+                  border-radius: 5px;
+                  background: $color-person-background;
+                  color: $color-person-default;
+                  font-weight: bold;
+                  line-height: 16px;
+                  margin: 0 8px 8px 0;
+
+                  max-width: 100%;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  vertical-align: top;
+                  cursor: pointer;
+
+
+                  &.topic {
+                    background: $color-topic-background;
+                    color: $color-topic-default;
+                  }
                 }
               }
             }
@@ -92,7 +120,7 @@
         }
 
         .cover {
-          min-width: 128px;
+          min-width: $cover-width;
           height: 200px;
           background: #000;
         }
