@@ -48,8 +48,6 @@ export class PersonComponent implements OnInit {
     this.persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
 
-      console.log(value);
-
       _.each(value, person => {
         person.year_of_birth = person.date_of_birth ? +person.date_of_birth.match(/[0-9]{4}/)[0] : null;
         person.year_of_death = person.date_of_death ? +person.date_of_death.match(/[0-9]{4}/)[0] : null;

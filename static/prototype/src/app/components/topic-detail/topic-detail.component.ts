@@ -135,8 +135,6 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           value: scale(d.strength)
         };
       });
-
-      console.log(this.links);
     });
   }
 
