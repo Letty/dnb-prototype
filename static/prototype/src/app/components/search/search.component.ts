@@ -45,7 +45,6 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(term => {
-        console.log('triggered');
         term = term.trim();
         if (term.length >= 3) {
           this.api.searchForTopic(term).subscribe(data => {
@@ -92,12 +91,6 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
           };
         });
       });
-
-      // console.log(this.input);
-
-      // this.input.key.subscribe(e => {
-      //   console.log(e);
-      // });
   }
 
   ngOnChanges (changes: SimpleChanges) {
