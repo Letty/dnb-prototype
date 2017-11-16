@@ -98,7 +98,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   // Methods
   updatePath(): void {
-    const selection = this.selection.getSelection();
+    // const selection = this.selection.getSelection();
     const maxY = _.maxBy(this.years, 'count');
 
     this.xScale = this.logXScale ?
@@ -155,7 +155,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   setYear(e): void {
     if (!this.interactiveRuler) { return; }
-    this.updateRuler(Math.round(this.xScale.invert(e.offsetX)));
+    this.updateRuler(Math.round(this.xScale.invert(e.clientX)));
   }
 
   resetYear() {
