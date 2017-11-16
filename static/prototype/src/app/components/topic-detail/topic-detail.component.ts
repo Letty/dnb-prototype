@@ -7,7 +7,7 @@ import { DataService } from '../../services/data.service';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-import {ITopic} from '../../app.interfaces';
+import {ITopic, INetworkLink} from '../../app.interfaces';
 
 import {debounce} from '../../decorators';
 
@@ -34,6 +34,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   public p1Corner = [0, 0];
   public p2Corner = [0, 0];
+
+  public networkLinks: Observable<INetworkLink[]>;
 
   constructor(private sanitizer: DomSanitizer,
               private selection: SelectionService,
@@ -116,6 +118,26 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
       this.simulate(values);
     });
+
+    this.networkLinks = this.dataService.networkLinks;
+    this.networkLinks.subscribe(value => {
+      const max = Math.max(...value.map(l => l.strength));
+      // const links = _.sortBy(value, d => -d.strength);
+      const links = value.filter(d => d.strength >= max / 16);
+      const min = Math.min(...links.map(l => l.strength));
+      // console.log(domain);
+
+      const scale = d3.scaleLinear().domain([min, max]).range([0.25, 4]);
+      this.links = links.map(d => {
+        return {
+          source: d.source,
+          target: d.target,
+          value: scale(d.strength)
+        };
+      });
+
+      console.log(this.links);
+    });
   }
 
   onSelect(topic: ITopic): void {
@@ -165,7 +187,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       n.fy = this.height * n.multiplyer;
     });
 
-    this.links = this.randomLinks();
+    // this.links = this.randomLinks();
 
     const collisionForce = rectCollide();
 

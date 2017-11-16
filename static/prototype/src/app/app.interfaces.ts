@@ -30,3 +30,9 @@ export interface IItem {
   year: number;
   height: number;
 }
+
+export interface INetworkLink {
+  source: string;
+  target: string;
+  strength: number;
+}

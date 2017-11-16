@@ -3,7 +3,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import {ApiService} from '../services/api.service';
 import {SelectionService} from './selection.service';
-import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
+import {IPerson, ITopic, IYear, IItem, INetworkLink} from '../app.interfaces';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
@@ -14,11 +14,13 @@ export class DataService {
   persons: Observable<IPerson[]>;
   years: Observable<IYear[]>;
   items: Observable<IItem[]>;
+  networkLinks: Observable<INetworkLink[]>;
 
   private _topics: BehaviorSubject<ITopic[]>;
   private _persons: BehaviorSubject<IPerson[]>;
   private _years: BehaviorSubject<IYear[]>;
   private _items: BehaviorSubject<IItem[]>;
+  private _networkLinks: BehaviorSubject<INetworkLink[]>;
 
   private year: Array<IYear>;
 
@@ -34,6 +36,9 @@ export class DataService {
 
     items: IItem[],
     defaultItems: IItem[]
+
+    networkLinks: INetworkLink[],
+    defaultNetworkLinks: INetworkLink[]
   };
 
   constructor(private api: ApiService, private selection: SelectionService) {
@@ -41,17 +46,20 @@ export class DataService {
       persons: [], defaultPersons: [],
       topics: [], defaultTopics: [],
       years: [], defaultYears: [],
-      items: [], defaultItems: []
+      items: [], defaultItems: [],
+      networkLinks: [], defaultNetworkLinks: []
     };
     this._topics = <BehaviorSubject<ITopic[]>>new BehaviorSubject([]);
     this._persons = <BehaviorSubject<IPerson[]>>new BehaviorSubject([]);
     this._years = <BehaviorSubject<IYear[]>>new BehaviorSubject([]);
     this._items = <BehaviorSubject<IItem[]>>new BehaviorSubject([]);
+    this._networkLinks = <BehaviorSubject<INetworkLink[]>>new BehaviorSubject([]);
 
     this.topics = this._topics.asObservable();
     this.persons = this._persons.asObservable();
     this.years = this._years.asObservable();
     this.items = this._items.asObservable();
+    this.networkLinks = this._networkLinks.asObservable();
 
     this.api.getYears()
       .subscribe(data => {
@@ -80,6 +88,13 @@ export class DataService {
         this.dataStore.defaultItems = data;
         this._items.next(Object.assign({}, this.dataStore).items);
       }, err => console.log('error while loading start results'));
+
+    this.api.getTopTopicConnections()
+      .subscribe(data => {
+        this.dataStore.networkLinks = data;
+        this.dataStore.defaultNetworkLinks = data;
+        this._networkLinks.next(Object.assign({}, this.dataStore).networkLinks);
+      }, err => console.log('error while loading default topics'));
 
   }
 
