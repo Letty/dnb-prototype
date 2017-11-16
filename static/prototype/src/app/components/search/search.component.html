@@ -1,9 +1,9 @@
 <div class="search-suggestion">
   <input #input="ngModel" class="search-field" type="text" [(ngModel)]="term"
-  placeholder="Jahr, Themen, Personen">
+  placeholder="Jahr, Themen, Personen" (keydown)="keydown($event)">
   <div class="suggestions">
     <ng-container *ngIf="years">
-      <div class="suggestion year" *ngFor="let s of years" [innerHTML]="s.formatted" (click)="selectYear(s.start, s.end)">
+      <div class="suggestion year" *ngFor="let s of years" [innerHTML]="s.formatted" (click)="selectYear(s)">
       </div>
     </ng-container>
     <ng-container *ngIf="topics">

@@ -45,13 +45,15 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(term => {
+        console.log('triggered');
         term = term.trim();
         if (term.length >= 3) {
           this.api.searchForTopic(term).subscribe(data => {
             this.topics = data.map(d => {
               return {
                 id: d.id,
-                formatted: this.format(d.keyword)
+                formatted: this.format(d.keyword),
+                keyword: d.keyword
               };
             });
           });
@@ -59,10 +61,14 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
             this.persons = data.map(d => {
               return {
                 id: d.id,
-                formatted: this.format(`${d.name} ${d.lastname}`)
+                formatted: this.format(`${d.name} ${d.lastname}`),
+                name: d.name,
+                lastname: d.lastname
               };
             });
           });
+        } else {
+          this.persons = this.topics = [];
         }
         const start = term.match(/^(\d{4})(?:[^0-9]|$)/) ? +term.match(/^(\d{4})(?:[^0-9]|$)/)[1] : null;
         const end = term.match(/[^0-9](\d{4})$/) ? +term.match(/[^0-9](\d{4})$/)[1] : null;
@@ -86,6 +92,12 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
           };
         });
       });
+
+      // console.log(this.input);
+
+      // this.input.key.subscribe(e => {
+      //   console.log(e);
+      // });
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -96,16 +108,38 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
       value.replace(new RegExp(this.term, 'gi'), inner => `<b>${inner}</b>`));
   }
 
-  selectYear(start, end) {
-    this.selection.setYear(start, end);
+  selectYear(year) {
+    this.selection.setYear(year.start, year.end);
     this.dataService.setFilter();
+    this.reset();
   }
   selectTopic(topic) {
     this.selection.setTopic(topic);
     this.dataService.setFilter();
+    this.reset();
   }
   selectPerson(person) {
     this.selection.setPerson(person);
     this.dataService.setFilter();
+    this.reset();
+  }
+
+  reset () {
+    this.term = null;
+    this.years = [];
+    this.topics = [];
+    this.persons = [];
+  }
+
+  keydown (e) {
+    if (e.keyCode === 13) {
+      if (this.years != null && this.years.length) {
+        this.selectYear(this.years[0]);
+      } else if (this.topics != null && this.topics.length) {
+        this.selectTopic(this.topics[0]);
+      } else if (this.persons != null && this.persons.length) {
+        this.selectPerson(this.persons[0]);
+      }
+     }
   }
 }
