@@ -58,7 +58,7 @@
       box-sizing: border-box;
 
       .meta-data, .content {
-        $cover-width:128px;
+        $cover-width: 0px;
 
         box-sizing: border-box;
         @include flex-default();
@@ -115,6 +115,25 @@
                   }
                 }
               }
+            }
+          }
+
+          .buttons {
+            margin-top: 32px;
+
+            .button {
+              background: $color-results-default;
+              border-radius: $border-radius-default;
+              box-sizing: border-box;
+              height: 40px;
+              padding: 8px 12px;
+              font-size: 14px;
+              display: inline-block;
+
+              color: $color-header-background;
+              text-decoration: none;
+
+
             }
           }
         }

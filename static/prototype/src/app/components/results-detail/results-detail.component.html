@@ -19,7 +19,7 @@
               {{item.item.title}} {{item.item.title_add}}
             </div>
           </div>
-          <div class="datum">
+          <div class="datum" *ngIf="item.person.length">
             <div class="prop">
               {{item.person.length > 1 ? 'Personen' : 'Person'}}
             </div>
@@ -27,7 +27,7 @@
               <span *ngFor="let person of item.person" class="tag person">{{person.name}} {{person.lastname}}</span>
             </div>
           </div>
-          <div class="datum">
+          <div class="datum" *ngIf="item.keyword.length">
             <div class="prop">
               {{item.keyword.length > 1 ? 'Themen' : 'Thema'}}
             </div>
@@ -35,7 +35,7 @@
               <span *ngFor="let topic of item.keyword" class="tag topic">{{topic.keyword}}</span>
             </div>
           </div>
-          <div class="datum">
+          <div class="datum" *ngIf="item.item.publisher">
             <div class="prop">
               Verlag
             </div>
@@ -43,7 +43,7 @@
               {{item.item.publisher}}
             </div>
           </div>
-          <div class="datum">
+          <div class="datum" *ngIf="item.item.year">
             <div class="prop">
               Erschienen
             </div>
@@ -51,17 +51,17 @@
               {{item.item.year}}
             </div>
           </div>
-        </div>
-        <div class="cover">
-        </div>
-      </div>
-      <div class="content">
-        <div class="datum">
-          <div class="prop">
-            Inhaltstext
+          <div class="datum" *ngIf="item.item.content">
+            <div class="prop">
+              Inhaltstext
+            </div>
+            <div class="value">
+              {{item.item.content}}
+            </div>
           </div>
-          <div class="value">
-            {{item.item.content}}
+          <div class="buttons">
+            <a class="button" *ngIf="item.item.toc" [attr.href]="item.item.toc" target="_blank" rel="no-referrer">Inhaltsverzeichnis anzeigen</a>
+            <a class="button" [attr.href]="'http://d-nb.info/' + item.item.id" target="_blank" rel="no-referrer">Datensatz auf der Seite der DNB anzeigen</a>
           </div>
         </div>
       </div>
