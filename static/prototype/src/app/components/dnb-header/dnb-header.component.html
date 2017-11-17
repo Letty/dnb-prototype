@@ -4,7 +4,7 @@
   <nav class="nav-selection" *ngIf="selectedMinYear || selectedPerson || selectedTopic">
     <span>Auswahl</span>
     <div class="selected-year facet" *ngIf="selectedMinYear" (click)="resetYear()">
-      <span>{{selectedMinYear}}</span><span *ngIf="selectedMaxYear">&thinsp;&ndash;&thinsp;{{selectedMaxYear}}</span><strong class="close-button">&times;</strong>
+      <span>{{selectedMinYear}}</span><span *ngIf="selectedMaxYear && selectedMaxYear !== selectedMinYear">&thinsp;&ndash;&thinsp;{{selectedMaxYear}}</span><strong class="close-button">&times;</strong>
     </div>
     <div class="selected-person facet" *ngIf="selectedPerson" (click)="resetPerson()">
       {{selectedPerson.name}} {{selectedPerson.lastname}}<strong class="close-button">&times;</strong>
