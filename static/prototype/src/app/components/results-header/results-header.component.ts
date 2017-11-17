@@ -37,5 +37,9 @@ export class ResultsHeaderComponent implements OnInit {
       this.loadingData = false;
       this.results = format(',')(this.years.length ? this.years.map(y => y.count).reduce((a, b) => a + b) : 0);
     });
+
+    // this.selection.yearMin.subscribe(value => {
+    //   console.log(value);
+    // });
   }
 }
