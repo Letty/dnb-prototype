@@ -59,6 +59,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.simulation = this.getSimulation();
 
     this.topics.subscribe(values => {
+      console.log('subscribe topics');
       if (this.nodes == null) { this.nodes = []; }
 
       const _values = _.cloneDeep(values);
@@ -121,6 +122,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     this.networkLinks = this.dataService.networkLinks;
     this.networkLinks.subscribe(value => {
+      console.log('subscribe links');
       const max = Math.max(...value.map(l => l.strength));
       // const links = _.sortBy(value, d => -d.strength);
       const links = value.filter(d => d.strength >= max / 16);
@@ -135,6 +137,10 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           value: scale(d.strength)
         };
       });
+
+      if (this.nodes.length !== 0 && this.forces === true) {
+        this.simulation.force('link').links(this.links);
+      }
     });
   }
 
