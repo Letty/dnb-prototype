@@ -47,6 +47,9 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   private xScale;
   private yScale;
 
+  private selMin: number = null;
+  private selMax: number = null;
+
   constructor(
     private selection: SelectionService,
     private dataService: DataService) {}
@@ -58,6 +61,9 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     this.width = this.svg.nativeElement.clientWidth;
     this.brush.extent([[0, 0], [this.width, this.height]]);
     this.updatePath();
+    if (this.selMin != null && this.selMax != null) {
+      this.brush.move(d3.select(this.brushContainer.nativeElement), [this.xScale(this.selMin), this.xScale(this.selMax)]);
+    }
   }
 
   // Life-cycle hooks
@@ -70,6 +76,8 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
         .on('brush end', () => {
           const sel = d3.event.selection;
           if (d3.event.type === 'end' && sel) {
+            this.selMin = Math.round(this.xScale.invert(sel[0]));
+            this.selMax = Math.round(this.xScale.invert(sel[1]));
             this.selection.setYear(
               Math.round(this.xScale.invert(sel[0])),
               Math.round(this.xScale.invert(sel[1]))
