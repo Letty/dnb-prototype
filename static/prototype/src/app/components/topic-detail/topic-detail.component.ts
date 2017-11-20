@@ -1,8 +1,9 @@
 import {Component, Input, OnInit, OnChanges, ViewChild, SimpleChanges, HostListener} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { DomSanitizer } from '@angular/platform-browser';
-import { SelectionService } from '../../services/selection.service';
-import { DataService } from '../../services/data.service';
+import {Observable} from 'rxjs/Observable';
+import {DomSanitizer} from '@angular/platform-browser';
+import {SelectionService} from '../../services/selection.service';
+import {DataService} from '../../services/data.service';
+import {ApiService} from '../../services/api.service';
 
 import * as d3 from 'd3';
 import _ from 'lodash';
@@ -27,6 +28,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   public nodes;
   public links;
+  private upcomingTopics = [];
+  private upcomingLinks = [];
   private simulation;
   public width = 0;
   public height = 0;
@@ -35,11 +38,22 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public p1Corner = [0, 0];
   public p2Corner = [0, 0];
 
+  private loadingTopic = false;
+  private loadingLinks = false;
+
   public networkLinks: Observable<INetworkLink[]>;
 
   constructor(private sanitizer: DomSanitizer,
               private selection: SelectionService,
-              private dataService: DataService) {}
+              private dataService: DataService,
+              private api: ApiService
+  ) {
+    api.loadingData$.subscribe((e) => {
+      console.log(e);
+      if (e === 'topic') { this.loadingTopic = true; }
+      if (e === 'links') { this.loadingLinks = true; }
+    });
+  }
 
   // Listeners
   @HostListener('window:resize', ['$event'])
@@ -47,8 +61,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
     this.height = this.svg.nativeElement.clientHeight;
-    this.pack(this.nodes.filter(n => n.type !== 'gravity'));
-    this.simulate(this.nodes);
+    this.update();
   }
 
   // Life-cycle hooks
@@ -57,96 +70,89 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.height = this.svg.nativeElement.clientHeight;
 
     this.simulation = this.getSimulation();
+    this.nodes = [];
+    this.links = [];
 
     this.topics.subscribe(values => {
-      console.log('subscribe topics');
-      if (this.nodes == null) { this.nodes = []; }
-
-      const _values = _.cloneDeep(values);
-
-      const nodes = _values.reduce(function(a, b) {
-        return a.concat(b);
-      }, []);
-
-      if (nodes.length === 0) { return; }
-
-      this.pack(nodes);
-
-      this.nodes = this.nodes.filter(oldNode =>
-        nodes.find(newNode => {
-          if (newNode.id === oldNode.id) {
-            oldNode.width = newNode.width;
-            oldNode.height = newNode.height;
-
-            if (this.forces === false) {
-              oldNode.x = newNode.x;
-              oldNode.y = newNode.y;
-            }
-
-            return true;
-          }
-          return false;
-        })
-      );
-
-      this.nodes = this.nodes.concat(nodes.filter(newNode =>
-        this.nodes.find(oldNode => newNode.id === oldNode.id) == null
-      ));
-
-      for (let i = 0; i <= 1; i += 0.25) {
-        this.nodes.push({
-          type: 'gravity',
-          x: this.width,
-          y: this.height * i,
-          fx: this.width,
-          fy: this.height * i,
-          multiplyer: i,
-          width: 0,
-          height: 0
-        });
-
-        this.nodes.push({
-          type: 'gravity',
-          x: 0,
-          y: this.height * i,
-          fx: 0,
-          fy: this.height * i,
-          multiplyer: i,
-          width: 0,
-          height: 0
-        });
-      }
-
-      this.simulate(values);
+        this.loadingTopic = false;
+        this.upcomingTopics = values;
+        this.update();
     });
 
     this.networkLinks = this.dataService.networkLinks;
-    this.networkLinks.subscribe(value => {
-      console.log('subscribe links');
-      const max = Math.max(...value.map(l => l.strength));
-      // const links = _.sortBy(value, d => -d.strength);
-      const links = value.filter(d => d.strength >= max / 16);
-      const min = Math.min(...links.map(l => l.strength));
-      // console.log(domain);
-
-      const scale = d3.scaleLinear().domain([min, max]).range([0.25, 4]);
-      this.links = links.map(d => {
-        return {
-          source: d.source,
-          target: d.target,
-          value: scale(d.strength)
-        };
-      });
-
-      if (this.nodes.length !== 0 && this.forces === true) {
-        this.simulation.force('link').links(this.links);
-      }
+    this.networkLinks.subscribe(values => {
+      this.loadingLinks = false;
+      this.upcomingLinks = values;
+      this.update();
     });
   }
 
-  onSelect(topic: ITopic): void {
-    this.selection.setTopic(topic);
-    this.dataService.setFilter();
+  update(): void {
+    if (this.loadingTopic || this.loadingLinks) return;
+
+    const _nodes = _.cloneDeep(this.upcomingTopics);
+
+    const nodes = _nodes.reduce(function(a, b) {
+      return a.concat(b);
+    }, []);
+
+    if (nodes.length === 0) {
+      this.nodes = [];
+      return;
+    }
+
+    // calc layout
+    this.pack(nodes);
+
+    // keep exsiting nodes
+    this.nodes = this.nodes.filter(oldNode =>
+      nodes.find(newNode => {
+        if (newNode.id === oldNode.id) {
+          oldNode.width = newNode.width;
+          oldNode.height = newNode.height;
+
+          if (this.forces === false) {
+            oldNode.x = newNode.x;
+            oldNode.y = newNode.y;
+          }
+          return true;
+        }
+        return false;
+      })
+    );
+
+    // concat new nodes
+    this.nodes = this.nodes.concat(nodes.filter(newNode =>
+      this.nodes.find(oldNode => newNode.id === oldNode.id) == null
+    ));
+
+    // add helpers for improved force-layout
+    for (let i = 0; i <= 1; i += 0.25) {
+      this.nodes.push({
+        type: 'gravity',
+        x: this.width,
+        y: this.height * i,
+        fx: this.width,
+        fy: this.height * i,
+        multiplyer: i,
+        width: 0,
+        height: 0
+      });
+
+      this.nodes.push({
+        type: 'gravity',
+        x: 0,
+        y: this.height * i,
+        fx: 0,
+        fy: this.height * i,
+        multiplyer: i,
+        width: 0,
+        height: 0
+      });
+    }
+
+    // start simulation
+    this.simulate(this.nodes);
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -157,19 +163,19 @@ export class TopicDetailComponent implements OnInit, OnChanges {
             n.y += ((this.svg.nativeElement.clientHeight + 56) / 2);
           });
           this.height = this.svg.nativeElement.clientHeight;
-          this.simulate(this.nodes);
+          if (!this.loadingLinks) {
+            this.simulate(this.nodes);
+          } else {
+            this.links = [];
+          }
         } else {
           this.simulation.alpha(0);
           this.pack(this.nodes.filter(n => n.type !== 'gravity'));
         }
-      }, 0);
+      }, 10);
     }
-    //   if (!changes.years.firstChange) {
-    //     this.init = true;
-    //   }
-    //   this.updatePath();
-    // }
   }
+
   // Methods
   getSimulation() {
     return d3.forceSimulation()
@@ -178,7 +184,14 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         .strength(0)
       )
       .force('charge', d3.forceManyBody()
-        .strength(d => (d as any).type === 'gravity' ? -200 - Math.random() * 400 : -200));
+        .strength(d => (d as any).type === 'gravity' ? -200 - Math.random() * 400 : -200))
+      .force('collision', rectCollide()
+        .size((d) => {
+          return [d.width + 20, d.height + 20];
+        })
+        .iterations(1)
+        .strength(1))
+      .on('tick', () => {this.ticked(); });
   }
 
   simulate(values): void {
@@ -187,28 +200,31 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       return;
     }
 
+    // make links from upcomingLinks
+    const _links = _.cloneDeep(this.upcomingLinks);
+    const max = Math.max(..._links.map(l => l.strength));
+    const links = _links.filter(d => d.strength >= max / 16);
+    const min = Math.min(...links.map(l => l.strength));
+
+    const scale = d3.scaleLinear().domain([min, max]).range([0.25, 4]);
+    this.links = links.map(d => {
+      return {
+        source: d.source,
+        target: d.target,
+        value: scale(d.strength)
+      };
+    });
+
+    // update y-position from gravity helpers
     this.nodes.filter(n => n.type === 'gravity').forEach(n => {
       n.fy = this.height * n.multiplyer;
     });
 
-    // this.links = this.randomLinks();
-
-    const collisionForce = rectCollide();
-
-    collisionForce.size((d) => {
-      return [d.width + 20, d.height + 20];
-    });
-
-    collisionForce.iterations(1);
-
-    collisionForce.strength(1);
-
-    this.simulation
-      .nodes(this.nodes)
-      .on('tick', () => {this.ticked(); })
-      .force('collision', collisionForce);
-
+    // update nodes
+    this.simulation.nodes(this.nodes);
+    // update links
     this.simulation.force('link').links(this.links);
+    // restart simulation
     this.simulation.alpha(1).restart();
   }
 
@@ -312,44 +328,25 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       const p2 = [link.target.x, link.target.y];
 
       const dist = [p2[0] - p1[0], p2[1] - p1[1]];
-
       const dir = [dist[0] > 0 ? 1 : -1, dist[1] > 0 ? 1 : -1];
 
       const p1Corner = [link.source.x + (link.source.width / 2) * dir[0],
         link.source.y + (link.source.height / 2) * dir[1]];
-
       const p2Corner = [link.target.x + (link.target.width / 2) * -dir[0],
         link.target.y + (link.target.height / 2) * -dir[1]];
 
       const cDist = [p2Corner[0] - p1Corner[0], p2Corner[1] - p1Corner[1]];
 
-
       let anchor = [];
 
       if (dir[0] === -1 && dir[1] === -1) {
-        if (cDist[0] > cDist[1]) {
-          anchor = [0, -1];
-        } else {
-          anchor = [-1, 0];
-        }
+        anchor = (cDist[0] > cDist[1]) ? anchor = [0, -1] : anchor = [-1, 0];
       } else if (dir[0] === 1 && dir[1] === -1) {
-        if (cDist[0] > -cDist[1]) {
-          anchor = [1, 0];
-        } else {
-          anchor = [0, -1];
-        }
+        anchor = (cDist[0] > -cDist[1]) ? [1, 0] : [0, -1];
       } else if (dir[0] === 1 && dir[1] === 1) {
-        if (cDist[0] > cDist[1]) {
-          anchor = [1, 0];
-        } else {
-          anchor = [0, 1];
-        }
+        anchor = (cDist[0] > cDist[1]) ? [1, 0] : [0, 1];
       } else {
-        if (cDist[0] > -cDist[1]) {
-          anchor = [0, 1];
-        } else {
-          anchor = [-1, 0];
-        }
+        anchor = (cDist[0] > -cDist[1]) ? anchor = [0, 1] : [-1, 0];
       }
 
       const s = {
@@ -378,18 +375,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     return this.sanitizer.bypassSecurityTrustStyle(transform);
   }
 
-  randomLinks() {
-    if (this.nodes == null) { return; }
-    const topics = this.nodes.filter(n => n.type !== 'gravity');
-    return _.uniqBy(
-      '.'.repeat(20).split('').map(d => {
-        return {
-          source: topics[Math.floor(Math.random() * (topics.length))].id,
-          target: topics[Math.floor(Math.random() * (topics.length))].id,
-          value: Math.ceil(Math.random() * 4)
-        };
-      }).filter(d => d.source !== d.target),
-      d => d.source + d.target
-    );
+  onSelect(topic: ITopic): void {
+    this.selection.setTopic(topic);
+    this.dataService.setFilter();
   }
 }
