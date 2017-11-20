@@ -90,12 +90,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   update(): void {
     if (this.loadingTopic || this.loadingLinks) return;
 
-    const _nodes = _.cloneDeep(this.upcomingTopics);
-
-    const nodes = _nodes.reduce(function(a, b) {
-      return a.concat(b);
-    }, []);
-
+    const nodes = _.cloneDeep(this.upcomingTopics);
+    
     if (nodes.length === 0) {
       this.nodes = [];
       return;

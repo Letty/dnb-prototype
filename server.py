@@ -26,7 +26,7 @@ def root():
 @app.route('/getTopTopics')
 def get_top_topics():
     result = qh.get_default_topics(connection)
-    return jsonify(utils.getTopicsPercentage(result))
+    return jsonify(result)
 
 
 @app.route('/getTopPeople')
@@ -81,7 +81,6 @@ def filter_by_person_result_topic():
     person_id = request.data.decode('utf-8')
 
     topic_result = qh.get_topics_for_person(person_id, connection)
-    topic_result['data'] = utils.getTopicsPercentage(topic_result['data'])
 
     return jsonify(topic_result)
 
@@ -218,7 +217,6 @@ def filter_by_year_result_topic():
     years = json.loads(request.data.decode('utf-8'))
 
     topic_result = qh.get_topics_for_year(years, connection)
-    topic_result['data'] = utils.getTopicsPercentage(topic_result['data'])
 
     return jsonify(topic_result)
 
@@ -298,7 +296,7 @@ def filter_by_year_person_result_topic():
                 t.append({'id': key, 'keyword': topics[key][
                          'keyword'], 'count': topics[key]['count']})
 
-        topic_result['data'] = utils.getTopicsPercentage(t)
+        topic_result['data'] = t
     return jsonify(topic_result)
 
 
