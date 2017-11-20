@@ -91,7 +91,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     if (this.loadingTopic || this.loadingLinks) return;
 
     const nodes = _.cloneDeep(this.upcomingTopics);
-    
+
     if (nodes.length === 0) {
       this.nodes = [];
       return;

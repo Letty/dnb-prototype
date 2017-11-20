@@ -49,8 +49,8 @@ export class PersonComponent implements OnInit {
     this.dataService.persons.subscribe(value => {
 
       _.each(value, person => {
-        person.year_of_birth = person.date_of_birth ? +person.date_of_birth.match(/[0-9]{4}/)[0] : null;
-        person.year_of_death = person.date_of_death ? +person.date_of_death.match(/[0-9]{4}/)[0] : null;
+        person.year_of_birth = person.date_of_birth && person.date_of_birth.match(/[0-9]{4}/) ? +person.date_of_birth.match(/[0-9]{4}/)[0] : null;
+        person.year_of_death = person.date_of_death && person.date_of_death.match(/[0-9]{4}/) ? +person.date_of_death.match(/[0-9]{4}/)[0] : null;
       });
 
       const max = value.find(p => (p as any).year_of_birth !== null && (p as any).year_of_death === null) ?
