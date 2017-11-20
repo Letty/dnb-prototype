@@ -1,6 +1,7 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/fromPromise';
 import {Observable} from 'rxjs/Observable';
 
 import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
@@ -42,7 +43,6 @@ export class ApiService {
     this.loadingData$.emit('year');
     return this.http.post(`${this.server}/setFilterForPersonResultYear`, personID, this.headers)
       .map(res => <IYear[]>res.json().data);
-
   }
 
   filterDataByPersonResultTopic(personID: string): Observable<ITopic[]> {
@@ -194,5 +194,14 @@ export class ApiService {
     return this.http.post(`${this.server}/getTopicNetworkFilterYear`,
       JSON.stringify([yearMin, yearMax]), this.headers)
       .map(res => res.json().data);
+  }
+
+  getYearsForMultiplePersons(personIDs: string[]): Observable<IYear[][]> {
+    // this.loadingData$.emit('year');
+    const promises = personIDs.map(personID => this.http.post(`${this.server}/setFilterForPersonResultYear`, personID, this.headers)
+      .toPromise()
+      .then(res => res.json().data as IYear[]));
+
+    return Observable.fromPromise(Promise.all(promises));
   }
 }

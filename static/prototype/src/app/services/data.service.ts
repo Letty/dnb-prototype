@@ -15,12 +15,14 @@ export class DataService {
   years: Observable<IYear[]>;
   items: Observable<IItem[]>;
   networkLinks: Observable<INetworkLink[]>;
+  personYears: Observable<IYear[][]>;
 
   private _topics: BehaviorSubject<ITopic[]>;
   private _persons: BehaviorSubject<IPerson[]>;
   private _years: BehaviorSubject<IYear[]>;
   private _items: BehaviorSubject<IItem[]>;
   private _networkLinks: BehaviorSubject<INetworkLink[]>;
+  private _personYears: BehaviorSubject<IYear[][]>;
 
   private load: any = {};
 
@@ -51,6 +53,11 @@ export class DataService {
     defaultNetworkLinks: INetworkLink[],
     networkLinksAvailable: boolean,
     networkLinksRequired: boolean
+
+    personYears: IYear[][],
+    defaultPersonYears: IYear[][],
+    personYearsAvailable: boolean,
+    personYearsRequired: boolean
   };
 
   constructor(
@@ -62,7 +69,8 @@ export class DataService {
       topics: [], defaultTopics: [], topicsAvailable: false, topicsRequired: false,
       years: [], defaultYears: [], yearsAvailable: false, yearsRequired: false,
       items: [], defaultItems: [], itemsAvailable: false, itemsRequired: false,
-      networkLinks: [], defaultNetworkLinks: [], networkLinksAvailable: false, networkLinksRequired: false
+      networkLinks: [], defaultNetworkLinks: [], networkLinksAvailable: false, networkLinksRequired: false,
+      personYears: [], defaultPersonYears: [], personYearsAvailable: false, personYearsRequired: false
     };
 
     this._topics = <BehaviorSubject<ITopic[]>>new BehaviorSubject([]);
@@ -70,12 +78,14 @@ export class DataService {
     this._years = <BehaviorSubject<IYear[]>>new BehaviorSubject([]);
     this._items = <BehaviorSubject<IItem[]>>new BehaviorSubject([]);
     this._networkLinks = <BehaviorSubject<INetworkLink[]>>new BehaviorSubject([]);
+    this._personYears = <BehaviorSubject<IYear[][]>>new BehaviorSubject([]);
 
     this.topics = this._topics.asObservable();
     this.persons = this._persons.asObservable();
     this.years = this._years.asObservable();
     this.items = this._items.asObservable();
     this.networkLinks = this._networkLinks.asObservable();
+    this.personYears = this._personYears.asObservable();
 
     this.api.getYears()
       .subscribe(data => {
@@ -89,6 +99,13 @@ export class DataService {
         this.dataStore.persons = data;
         this.dataStore.defaultPersons = data;
         this._persons.next(Object.assign({}, this.dataStore).persons);
+
+        this.api.getYearsForMultiplePersons(data.map(d => d.id))
+          .subscribe(years => {
+            this.dataStore.personYears = years;
+            this.dataStore.defaultPersonYears = years;
+            this._personYears.next(Object.assign({}, this.dataStore).personYears);
+          }, err => console.log('error while loading default personYears'));
       }, err => console.log('error while loading default persons'));
 
     this.api.getTopics()
@@ -110,7 +127,7 @@ export class DataService {
         this.dataStore.networkLinks = data;
         this.dataStore.defaultNetworkLinks = data;
         this._networkLinks.next(Object.assign({}, this.dataStore).networkLinks);
-      }, err => console.log('error while loading default topics'));
+      }, err => console.log('error while loading default networkLinks'));
   }
 
   setYear(years_: IYear[]): void {
@@ -134,9 +151,13 @@ export class DataService {
   }
 
   setNetworkLinks(networkLinks_: INetworkLink[]): void {
-    console.log(networkLinks_);
     this.dataStore.networkLinks = networkLinks_;
     this._networkLinks.next(Object.assign({}, this.dataStore).networkLinks);
+  }
+
+  setPersonYears(years_: IYear[][]): void {
+    this.dataStore.personYears = years_;
+    this._personYears.next(Object.assign({}, this.dataStore).personYears);
   }
 
   setFilter(): void {
@@ -144,7 +165,8 @@ export class DataService {
     this.dataStore.topicsAvailable =
     this.dataStore.yearsAvailable =
     this.dataStore.itemsAvailable =
-    this.dataStore.networkLinksAvailable = false;
+    this.dataStore.networkLinksAvailable =
+    this.dataStore.personYearsAvailable = false;
 
     this.filterData();
   }
@@ -157,6 +179,7 @@ export class DataService {
         this.dataStore.yearsRequired = true;
         this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = false;
+        this.dataStore.personYearsRequired = false;
         break;
       case 'topic':
         this.dataStore.personsRequired = false;
@@ -164,6 +187,7 @@ export class DataService {
         this.dataStore.yearsRequired = true;
         this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = true;
+        this.dataStore.personYearsRequired = false;
         break;
       case 'person':
         this.dataStore.personsRequired = true;
@@ -171,6 +195,7 @@ export class DataService {
         this.dataStore.yearsRequired = true;
         this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = false;
+        this.dataStore.personYearsRequired = true;
         break;
     }
     this.filterData();
@@ -188,7 +213,8 @@ export class DataService {
       topic: !this.dataStore.topicsAvailable && this.dataStore.topicsRequired,
       year: !this.dataStore.yearsAvailable && this.dataStore.yearsRequired,
       items: !this.dataStore.itemsAvailable && this.dataStore.itemsRequired,
-      network: !this.dataStore.networkLinksAvailable && this.dataStore.networkLinksRequired
+      network: !this.dataStore.networkLinksAvailable && this.dataStore.networkLinksRequired,
+      personYears: !this.dataStore.personYearsAvailable && this.dataStore.personYearsRequired
     };
 
     if (!hasPerson && !hasTopic && hasYear) {
@@ -212,6 +238,7 @@ export class DataService {
       this.setYear(this.dataStore.defaultYears);
       this.setPerson(this.dataStore.defaultPersons);
       this.setNetworkLinks(this.dataStore.defaultNetworkLinks);
+      this.setPersonYears(this.dataStore.defaultPersonYears);
     }
 
     if (this.dataStore.personsRequired) this.dataStore.personsAvailable = true;
@@ -219,6 +246,7 @@ export class DataService {
     if (this.dataStore.yearsRequired) this.dataStore.yearsAvailable = true;
     if (this.dataStore.itemsRequired) this.dataStore.itemsAvailable = true;
     if (this.dataStore.networkLinksRequired) this.dataStore.networkLinksAvailable = true;
+    if (this.dataStore.personYearsRequired) this.dataStore.personYearsAvailable = true;
   }
 
   filterDataByPerson(personID: string): void {

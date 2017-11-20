@@ -27,6 +27,9 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() logXScale = false;
   @Input() height = 160;
 
+  @Input() minYear = 1000;
+  @Input() maxYear = new Date().getFullYear();
+
   @ViewChild('svgWrapper') svg;
   @ViewChild('brush') brushContainer;
   @ViewChild('rulerLabel') rulerLabel;
@@ -37,10 +40,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   public width = 0;
   public ruler;
   public rulerOffset = 'translate(0 -8)';
-  public init = false;
-
-  private minYear = 1000;
-  private maxYear = new Date().getFullYear();
+  public init = true;
   private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
   private yTickValues = [100000, 200000, 300000, 400000];
   private brush = d3.brushX();
@@ -110,6 +110,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       d3.select('.brush .handle')
         .style('display', 'none');
     }
+    this.updatePath();
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -145,6 +146,8 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       .y1(d => this.yScale(d.count));
 
     this.path = area(this.addMissingYears(this.years));
+
+    console.log(this.path);
 
     this.xTicks = this.showXTicks ? this.xTickValues.map(d => {
       return {

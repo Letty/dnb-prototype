@@ -24,8 +24,9 @@ export class PersonComponent implements OnInit {
   public persons: Observable<IPerson[]>;
   public loadingData = true;
   public offResults = '0';
-  private min = Number.POSITIVE_INFINITY;
-  private max = Number.NEGATIVE_INFINITY;
+  public personYears = [];
+  public min = 1000;
+  public max = 2018;
 
   private fontScale = scaleLinear()
     .range([0.8, 2.5]);
@@ -53,15 +54,16 @@ export class PersonComponent implements OnInit {
         person.year_of_death = person.date_of_death && person.date_of_death.match(/[0-9]{4}/) ? +person.date_of_death.match(/[0-9]{4}/)[0] : null;
       });
 
-      const max = value.find(p => (p as any).year_of_birth !== null && (p as any).year_of_death === null) ?
+      this.max = value.find(p => (p as any).year_of_birth !== null && (p as any).year_of_death === null) ?
         new Date().getFullYear() :
         Math.max(...value.map(d => (d as any).year_of_death));
 
-      const min = value.filter(d => (d as any).year_of_birth !== null) ?
+      this.min = value.filter(d => (d as any).year_of_birth !== null) ?
         Math.min(...value.filter(d => (d as any).year_of_birth !== null).map(d => (d as any).year_of_birth)) :
         0;
 
-      this.yearScale.domain([min, max]);
+
+      this.yearScale.domain([this.min, this.max]);
 
       this.loadingData = false;
       const counts: Array<number> = value.map(p => p.count);
@@ -71,6 +73,10 @@ export class PersonComponent implements OnInit {
 
     this.routerService.view.subscribe(view => {
       this.detail = view === 'person';
+    });
+
+    this.dataService.personYears.subscribe(value => {
+      this.personYears = value;
     });
   }
 
