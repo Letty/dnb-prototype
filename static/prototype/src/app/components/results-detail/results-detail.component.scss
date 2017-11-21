@@ -2,7 +2,7 @@
 @import "../../../style/mixins";
 
 .results-detail {
-  background: $color-overlay-background;
+  // background: $color-overlay-background;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -11,9 +11,10 @@
 
   .close {
     position: absolute;
-    right: 640px;
+    right: 0px;
     left: 0px;
     height: 100%;
+    background: $color-overlay-background;
   }
 
   .panel {

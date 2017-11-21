@@ -1,5 +1,5 @@
-<div class="results-detail" [@fadeInOut]="inOut" (@fadeInOut.done)="animationDone($event)">
-  <div class="close" (click)="close()"></div>
+<div class="results-detail">
+  <div class="close" (click)="close()" [@fadeInOut]="inOut" (@fadeInOut.done)="animationDone($event)"></div>
   <div class="panel" [@slideInOut]="inOut">
     <header class="header">
     <svg class="arrow" width="48px" height="64px" (click)="close()">
