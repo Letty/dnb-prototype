@@ -537,7 +537,7 @@ def search_for_topic():
 def get_top_topic_network():
     network_result = {'data': []}
     result = qh.get_default_topics(connection)
-    network_result['data'] = qh.combine_topics(result, connection)
+    network_result['data'] = qh.combine_topics_with_queries(result, connection)
 
     return jsonify(network_result)
 
@@ -547,7 +547,8 @@ def get_top_topic_network_filter_year():
     years = json.loads(request.data.decode('utf-8'))
     network_result = {'data': []}
     result = qh.get_topics_for_year(years, connection)
-    network_result['data'] = qh.combine_topics(result['data'], connection)
+    network_result['data'] = qh.combine_topics_with_queries(
+        result['data'], connection)
 
     return jsonify(network_result)
 
@@ -557,7 +558,18 @@ def get_top_topic_network_filter_person():
     person_id = request.data.decode('utf-8')
     network_result = {'data': []}
     result = qh.get_topics_for_person(person_id, connection)
-    network_result['data'] = qh.combine_topics(result['data'], connection)
+    network_result['data'] = qh.combine_topics_with_queries(
+        result['data'], connection)
+    print(network_result)
+    return jsonify(network_result)
+
+
+@app.route('/getTopicNetworkFilterTopic', methods=['POST'])
+def get_top_topic_network_filter_topic():
+    topic_id = request.data.decode('utf-8')
+    network_result = {'data': []}
+    result = qh.get_topics_for_topics(topic_id, connection)
+    network_result['data'] = qh.combine_topics(result['data'], topic_id)
 
     return jsonify(network_result)
 

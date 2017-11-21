@@ -62,14 +62,14 @@ def get_topics_for_topics(topic_id, connection):
             sorted(res, key=lambda topic: topic['count'])
             topic_result['data'] = []
             i = 0
-            while i <= 20:
+            while i < 20:
                 topic_result['data'].append(res[i])
                 i += 1
 
     return topic_result
 
 
-def combine_topics(topics, connection):
+def combine_topics_with_queries(topics, connection):
     result = []
     topic_comb = list(itertools.combinations(topics, 2))
 
@@ -89,4 +89,14 @@ def combine_topics(topics, connection):
                 r['strength'] += f['count']
 
             result.append(r)
+    return result
+
+
+def combine_topics(topics, selected_topic_id):
+    result = []
+
+    for t in topics:
+        result.append(
+            {'source': int(selected_topic_id), 'target': t['id'], 'strength': t['count']})
+
     return result
