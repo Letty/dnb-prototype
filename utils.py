@@ -2,30 +2,28 @@ def seq_iter(obj):
     return obj if isinstance(obj, dict) else range(len(obj))
 
 
-def avoidSmallPercentage(values, threshold):
-    missing_percentage = 0
-    percentage_above_threshold = 0
+def createTopicList(topics_result, topic_id):
+    result_dict = {}
+    result = []
+    topic_id = int(topic_id)
 
-    # Find out how much percentage is missing and how much is above the
-    # threshold
-    for value in values:
-        if (value['percentage'] < (threshold)):
-            missing_percentage += threshold - value['percentage']
+    for t in topics_result:
+        selector = ''
+        if t['t_id1'] == topic_id:
+            selector = 't_id2'
         else:
-            percentage_above_threshold += value['percentage']
+            selector = 't_id1'
 
-    # This method is not completly clean. The sum of the resulting percentages
-    # are above 100 if items are higher than the threshold but would fall
-    # below if subtracted.
-    if (missing_percentage > 0):
-        for value in values:
-            # Calculate the needed subtraction
-            value_subtraction = value['percentage'] / \
-                percentage_above_threshold * missing_percentage
-            # Check if item would be below threshold after subtraction
-            if (value['percentage'] - value_subtraction < (threshold)):
-                value['percentage'] = (threshold)
-            else:
-                value['percentage'] = value['percentage'] - value_subtraction
+        if t[selector] in result_dict:
+            result_dict[t[selector]]
+        else:
+            result_dict[t[selector]] = {'count': 0, 'keyword': t['keyword']}
 
-    return values
+        result_dict[t[selector]]['count'] += t['count']
+
+    for key in result_dict:
+        result.append({'id': key, 'keyword': result_dict[key][
+                      'keyword'], 'count': result_dict[key]['count']})
+
+    # todo order result by count and limit to 20 entries
+    return result
