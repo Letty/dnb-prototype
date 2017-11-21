@@ -26,9 +26,11 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild('input') input;
 
-  public years: any = null;
-  public topics: any = null;
-  public persons: any = null;
+  public years: any = [];
+  public topics: any = [];
+  public persons: any = [];
+
+  public showSuggestions = false;
 
   constructor(
     private api: ApiService,
