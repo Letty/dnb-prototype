@@ -22,11 +22,11 @@ import {Observable} from 'rxjs/Observable';
   ]),
   trigger('slideInOut', [
     transition(':enter', [   // :enter is alias to 'void => *'
-      style({opacity: 1, transform: 'translateX(100%)'}),
-      animate(200, style({opacity: 1, transform: 'translateX(0)'}))
+      style({transform: 'translateX(100%)'}),
+      animate(200, style({transform: 'translateX(0)'}))
     ]),
     transition('in => out', [
-      animate(200, style({opacity: 1, transform: 'translateX(300px)'}))
+      animate(200, style({transform: 'translateX(100%)'}))
     ])
   ])
 ]
