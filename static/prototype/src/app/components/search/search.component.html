@@ -1,16 +1,20 @@
 <div class="search-suggestion">
   <input #input="ngModel" class="search-field" type="text" [(ngModel)]="term"
-  placeholder="Jahr, Themen, Personen" (keydown)="keydown($event)">
-  <div class="suggestions">
-    <ng-container *ngIf="years">
+  placeholder="Jahr, Themen, Personen" (keydown)="keydown($event)" (focus)="showSuggestions = true" (blur)="showSuggestions = false"
+  [ngClass]="{'has-results': showSuggestions && (years.length || topics.length || persons.length) }">
+  <div class="suggestions" *ngIf="showSuggestions">
+    <ng-container *ngIf="years.length">
+      <div class="section-title year">Erscheinungsjahre</div>
       <div class="suggestion year" *ngFor="let s of years" [innerHTML]="s.formatted" (click)="selectYear(s)">
       </div>
     </ng-container>
-    <ng-container *ngIf="topics">
+    <ng-container *ngIf="topics.length">
+      <div class="section-title topic">Themen</div>
       <div class="suggestion topic" *ngFor="let s of topics" [innerHTML]="s.formatted" (click)="selectTopic(s)">
       </div>
     </ng-container>
-    <ng-container *ngIf="persons">
+    <ng-container *ngIf="persons.length">
+      <div class="section-title person">Personen</div>
       <div class="suggestion person" *ngFor="let s of persons" [innerHTML]="s.formatted" (click)="selectPerson(s)">
       </div>
     </ng-container>

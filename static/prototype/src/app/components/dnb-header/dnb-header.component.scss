@@ -2,18 +2,26 @@
 @import '../../../style/mixins';
 
 .header {
+  height: 64px;
+  box-sizing: border-box;
+
   @include flex-default();
   justify-content: flex-start;
   align-items: center;
   background-color: $color-header-background;
   padding: $distance-outer-default;
   @include box-shadow($effect-header-shadow);
-  height: calc(8vh - 2 * #{$distance-outer-default});
+
+  font-size: 0.8em;
 
   .dnb-logo {
     font-size: 1em;
-    margin: 0;
+    margin: 0 $distance-outer-default 0 0;
     padding: 0;
+  }
+
+  .search {
+    flex: 1;
   }
 
   .nav-selection {
@@ -30,7 +38,6 @@
       margin-left: 0.5vw;
       padding: 0.2em 0.5em;
       font-weight: bold;
-      font-size: 0.8em;
       cursor: pointer;
 
       .close-button {
@@ -54,16 +61,21 @@
     }
   }
 
-  .help {
-    @include border-radius($border-radius-default);
-    margin-left: auto;
+  .more {
+    color: $color-lighter-body-font;
+    font-weight: 600;
+    margin-left: $distance-outer-default;
     display: inline-block;
-    padding: 0.2em 0.5em;
-    background-color: #eee;
-    color: #aaa;
-  }
-}
+    span {
+      padding: 0.2em 0.5em;
 
-.header > * {
-  margin-right: $distance-outer-default !important;
+      &:first-of-type {
+        padding-left: 0;
+      }
+
+      &:last-of-type {
+        padding-right: 0;
+      }
+    }
+  }
 }
