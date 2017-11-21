@@ -18,4 +18,9 @@
   }
 
   background: $color-header-background;
+
+  .chart-timeline {
+    box-sizing: border-box;
+    padding: 8px $distance-outer-default;
+  }
 }

@@ -182,7 +182,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   setYear(e): void {
     if (!this.interactiveRuler) { return; }
-    this.updateRuler(Math.round(this.xScale.invert(e.clientX)));
+    this.updateRuler(Math.round(this.xScale.invert(e.clientX - e.target.getBoundingClientRect().left)));
   }
 
   resetYear() {

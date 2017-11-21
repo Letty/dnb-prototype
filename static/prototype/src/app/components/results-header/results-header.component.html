@@ -3,13 +3,10 @@
   <btn-link class="color-year" [icon]="'arrow-down'"
     [fullWidth]="true" [invert]="true"
     [value]="results" [sectionTitle]="'Ergebnisse'"></btn-link>
-  <!-- <div class="section-title">
-    <span class="icon"></span>
-    <span class="number">{{results}} </span>
-    <span class="title">Ergebnisse</span>
-  </div> -->
-  <chart-timeline class="color-year" [years]="years"
-    [height]="96" [showXTicks]="true"
-    [enableBrush]="true" [logXScale]="true"
-    [showRuler]="true" [interactiveRuler]="true"></chart-timeline>
+  <div class="chart-timeline">
+    <chart-timeline class="color-year" [years]="years"
+      [height]="96" [showXTicks]="true"
+      [enableBrush]="true" [logXScale]="true"
+      [showRuler]="true" [interactiveRuler]="true"></chart-timeline>
+  </div>
 </div>
