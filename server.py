@@ -572,6 +572,3 @@ def get_top_topic_network_filter_topic():
     network_result['data'] = qh.combine_topics(result['data'], topic_id)
 
     return jsonify(network_result)
-
-# for aws foo
-# app.run(host='0.0.0.0', port=80)
