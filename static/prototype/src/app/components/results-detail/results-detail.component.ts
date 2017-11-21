@@ -1,4 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {trigger, state, style, animate, transition} from '@angular/animations';
 import {ApiService} from '../../services/api.service';
 
 import {IItem} from '../../app.interfaces';
@@ -8,7 +9,27 @@ import {Observable} from 'rxjs/Observable';
 @Component({
   selector: 'results-detail',
   templateUrl: './results-detail.component.html',
-  styleUrls: ['./results-detail.component.scss']
+  styleUrls: ['./results-detail.component.scss'],
+  animations: [
+  trigger('fadeInOut', [
+    transition(':enter', [   // :enter is alias to 'void => *'
+      style({opacity: 0}),
+      animate(200, style({opacity: 1}))
+    ]),
+    transition('in => out', [
+      animate(200, style({opacity: 0}))
+    ])
+  ]),
+  trigger('slideInOut', [
+    transition(':enter', [   // :enter is alias to 'void => *'
+      style({opacity: 0, transform: 'translateX(300px)'}),
+      animate(200, style({opacity: 1, transform: 'translateX(0)'}))
+    ]),
+    transition('in => out', [
+      animate(200, style({opacity: 0, transform: 'translateX(300px)'}))
+    ])
+  ])
+]
 })
 
 export class ResultsDetailComponent implements OnInit, OnChanges {
@@ -20,6 +41,7 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
 
   public items: Observable<IItem[]>;
 
+  public inOut = 'in';
 
   constructor() {}
 
@@ -27,12 +49,13 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges (changes: SimpleChanges) {
-    if (changes.item) {
-      console.log(this.item);
-    }
   }
 
   close () {
-    this.closeDetail.emit();
+    this.inOut = 'out';
+  }
+
+  animationDone (e) {
+    if (e.toState === 'out') this.closeDetail.emit();
   }
 }
