@@ -50,7 +50,7 @@ def get_topics_for_topics(topic_id, connection):
     with connection.cursor() as cursor:
         sql = 'select tt.t_id1, tc.keyword as keyword, tt.t_id2, tt.count '\
             'from dnb_topic_topic tt, dnb_topic_count tc '\
-            'where (tt.t_id1=%s  and tt.t_id2=tc.id) or(tt.t_id2=%s and tt.t_id1=tc.id) '\
+            'where (tt.t_id1=%s  and tt.t_id2=tc.id) or (tt.t_id2=%s and tt.t_id1=tc.id) '\
             'order by count desc limit 40'
         try:
             cursor.execute(sql, (topic_id, topic_id))

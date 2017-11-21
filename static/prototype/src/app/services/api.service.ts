@@ -69,6 +69,12 @@ export class ApiService {
       res => <IPerson[]>res.json().data);
   }
 
+  filterDataByTopicResultTopic(topicID: string): Observable<ITopic[]> {
+    this.loadingData$.emit('topic');
+    return this.http.post(`${this.server}/setFilterForTopicResultTopic`, topicID, this.headers).map(
+      res => <ITopic[]>res.json().data);
+  }
+
   filterDataByTopicResultItems(topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForTopicResultItems`, topicID, this.headers)

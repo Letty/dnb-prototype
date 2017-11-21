@@ -263,6 +263,7 @@ export class DataService {
         return this.setPerson(data);
       });
     }
+    if (this.load.topic) this.api.filterDataByTopicResultTopic(topicID).subscribe(data => this.setTopic(data));
     if (this.load.year) this.api.filterDataByTopicResultYear(topicID).subscribe(data => this.setYear(data));
     if (this.load.items) this.api.filterDataByTopicResultItems(topicID).subscribe(data => this.setItems(data));
   }
