@@ -257,13 +257,23 @@ export class DataService {
   }
 
   filterDataByTopic(topicID: string): void {
-    if (this.load.person) this.api.filterDataByTopicResultPerson(topicID).subscribe(data => this.setPerson(data));
+    if (this.load.person) {
+      this.api.filterDataByTopicResultPerson(topicID).subscribe(data => {
+        if (this.load.personYears) this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
+        return this.setPerson(data);
+      });
+    }
     if (this.load.year) this.api.filterDataByTopicResultYear(topicID).subscribe(data => this.setYear(data));
     if (this.load.items) this.api.filterDataByTopicResultItems(topicID).subscribe(data => this.setItems(data));
   }
 
   filterDataByYear(minYear: number, maxYear: number): void {
-    if (this.load.person) this.api.filterDataByYearResultPerson(minYear, maxYear).subscribe(data => this.setPerson(data));
+    if (this.load.person) {
+      this.api.filterDataByYearResultPerson(minYear, maxYear).subscribe(data => {
+        if (this.load.personYears) this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
+        return this.setPerson(data);
+      });
+    }
     if (this.load.topic) this.api.filterDataByYearResultTopic(minYear, maxYear).subscribe(data => this.setTopic(data));
     if (this.load.items) this.api.filterDataByYearResultItems(minYear, maxYear).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterYear(minYear, maxYear).subscribe(data => this.setNetworkLinks(data));

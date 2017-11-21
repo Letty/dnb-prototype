@@ -71,11 +71,12 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   // Listeners
   @HostListener('window:resize', ['$event'])
-  @debounce(250)
+  // @debounce(250)
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
     this.brush.extent([[0, 0], [this.width, this.height]]);
     this.updatePath();
+    console.log(this.width);
     this.updateBrush();
   }
 
@@ -146,8 +147,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       .y1(d => this.yScale(d.count));
 
     this.path = area(this.addMissingYears(this.years));
-
-    console.log(this.path);
 
     this.xTicks = this.showXTicks ? this.xTickValues.map(d => {
       return {
@@ -224,7 +223,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   }
 
   updateBrush (): void {
-    if (this.selMin != null && this.selMax != null) {
+    if (this.enableBrush && this.selMin != null && this.selMax != null) {
       this.breakRecursion = true;
       this.brush.move(d3.select(this.brushContainer.nativeElement), [this.xScale(this.selMin), this.xScale(this.selMax)]);
     }

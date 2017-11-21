@@ -197,8 +197,17 @@ export class ApiService {
   }
 
   getYearsForMultiplePersons(personIDs: string[]): Observable<IYear[][]> {
-    // this.loadingData$.emit('year');
     const promises = personIDs.map(personID => this.http.post(`${this.server}/setFilterForPersonResultYear`, personID, this.headers)
+      .toPromise()
+      .then(res => res.json().data as IYear[]));
+
+    return Observable.fromPromise(Promise.all(promises));
+  }
+  getYearsForMultiplePersonsFilterTopics(personIDs: string[], topicID: string): Observable<IYear[][]> {
+    const promises = personIDs.map(personID => this.http.post(
+      `${this.server}/setFilterForPersonTopicResultYear`,
+      JSON.stringify({'person_id': personID, 'topic_id': topicID}),
+      this.headers)
       .toPromise()
       .then(res => res.json().data as IYear[]));
 

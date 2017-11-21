@@ -18,7 +18,7 @@
       <ul>
         <li *ngFor="let p of persons | async; let i = index" class="person" (click)="onSelect(p)">
           <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span>
-          <chart-timeline class="color-year" [years]="personYears[i]"
+          <chart-timeline *ngIf="personYears[i]" class="color-year" [years]="personYears[i]"
             [height]="32" [minYear]="min" [maxYear]="max"></chart-timeline>
           <div class="life">
             <span class="birth" [style]="setBirthWidth(p['year_of_birth'])">{{ p['year_of_birth'] }}</span>
