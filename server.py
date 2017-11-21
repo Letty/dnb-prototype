@@ -31,15 +31,17 @@ def get_top_topics():
 
 @app.route('/getTopPeople')
 def get_top_people():
+    result = []
     with connection.cursor() as cursor:
         sql = 'select * from dnb_author_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
-        return jsonify(result)
+    return jsonify(result)
 
 
 @app.route('/getStartResults')
 def get_start_results():
+    result = []
     year = date.today().year
 
     with connection.cursor() as cursor:
@@ -48,16 +50,17 @@ def get_start_results():
             'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 50'
         cursor.execute(sql, (year))
         result = cursor.fetchall()
-        return jsonify(result)
+    return jsonify(result)
 
 
 @app.route('/getTimeline')
 def get_timeline():
+    result = []
     with connection.cursor() as cursor:
         sql = 'select * from dnb_year_count where year > 1000 and year < 2021'
         cursor.execute(sql)
         result = cursor.fetchall()
-        return jsonify(result)
+    return jsonify(result)
 
 
 @app.route('/setFilterForPersonResultYear', methods=['POST'])
