@@ -58,8 +58,13 @@ def get_topics_for_topics(topic_id, connection):
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             r = cursor.fetchall()
-            # utils.createTopicList(r, topic_id)
-            topic_result['data'] = utils.createTopicList(r, topic_id)
+            res = utils.createTopicList(r, topic_id)
+            sorted(res, key=lambda topic: topic['count'])
+            topic_result['data'] = []
+            i = 0
+            while i <= 20:
+                topic_result['data'].append(res[i])
+                i += 1
 
     return topic_result
 
