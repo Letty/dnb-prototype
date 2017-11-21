@@ -1,5 +1,6 @@
 import itertools
 import pymysql.cursors
+import utils
 
 
 def get_default_topics(connection):
@@ -41,6 +42,30 @@ def get_topics_for_person(person_id, connection):
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             topic_result['data'] = cursor.fetchall()
+    return topic_result
+
+
+def get_topics_for_topics(topic_id, connection):
+    topic_result = {'data': None, 'error': None}
+    with connection.cursor() as cursor:
+        sql = 'select tt.t_id1, tc.keyword as keyword, tt.t_id2, tt.count '\
+            'from dnb_topic_topic tt, dnb_topic_count tc '\
+            'where (tt.t_id1=%s  and tt.t_id2=tc.id) or (tt.t_id2=%s and tt.t_id1=tc.id) '\
+            'order by count desc limit 40'
+        try:
+            cursor.execute(sql, (topic_id, topic_id))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            r = cursor.fetchall()
+            res = utils.createTopicList(r, topic_id)
+            sorted(res, key=lambda topic: topic['count'])
+            topic_result['data'] = []
+            i = 0
+            while i <= 20:
+                topic_result['data'].append(res[i])
+                i += 1
+
     return topic_result
 
 

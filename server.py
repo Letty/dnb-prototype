@@ -3,8 +3,6 @@ from flask_cors import CORS  # remove for production
 import json
 from datetime import datetime, date
 import pymysql.cursors
-import itertools
-import utils
 import queryhelper as qh
 
 app = Flask(__name__, static_url_path='')
@@ -162,17 +160,9 @@ def filter_by_topic_result_person():
 @app.route('/setFilterForTopicResultTopic', methods=['POST'])
 def filter_by_topic_result_topic():
     topic_id = request.data.decode('utf-8')
-    topic_result = {'data': None, 'error': None}
+    topic_result = qh.get_topics_for_topics(topic_id, connection)
 
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    return jsonify(person_result)
+    return jsonify(topic_result)
 
 
 @app.route('/setFilterForTopicResultItems', methods=['POST'])
