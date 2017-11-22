@@ -263,14 +263,15 @@ export class DataService {
         return this.setPerson(data);
       });
     }
-    if (this.load.topic) this.api.filterDataByTopicResultTopic(topicID).subscribe(data => this.setTopic(data));
+    if (this.load.topic) {
+      this.api.filterDataByTopicResultTopic(topicID).subscribe(data => {
+        data.push({id: +topicID, keyword: '', count: 1});
+        this.setTopic(data);
+      });
+    }
     if (this.load.year) this.api.filterDataByTopicResultYear(topicID).subscribe(data => this.setYear(data));
     if (this.load.items) this.api.filterDataByTopicResultItems(topicID).subscribe(data => this.setItems(data));
-    if (this.load.network) this.api.getTopicNetworkFilterTopic(topicID).subscribe(data =>{
-      //todo hier müsste noch das ausgewählte topic mit in das array, die links werden auch noch nicht angezeigt
-      data.push({id: topicID, keyword: '', count: 0});
-      this.setNetworkLinks(data);
-    } );
+    if (this.load.network) this.api.getTopicNetworkFilterTopic(topicID).subscribe(data => this.setNetworkLinks(data));
   }
 
   filterDataByYear(minYear: number, maxYear: number): void {

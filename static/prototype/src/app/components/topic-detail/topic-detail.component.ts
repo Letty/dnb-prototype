@@ -106,6 +106,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         if (newNode.id === oldNode.id) {
           oldNode.width = newNode.width;
           oldNode.height = newNode.height;
+          oldNode.count = newNode.count;
 
           if (this.forces === false) {
             oldNode.x = newNode.x;
