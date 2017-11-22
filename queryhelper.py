@@ -9,6 +9,8 @@ def get_default_topics(connection):
         sql = 'select * from dnb_topic_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
+        cursor.close()
+
     return result
 
 
@@ -26,6 +28,7 @@ def get_topics_for_year(years, connection):
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             topic_result['data'] = cursor.fetchall()
+        cursor.close()
     return topic_result
 
 
@@ -42,6 +45,7 @@ def get_topics_for_person(person_id, connection):
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             topic_result['data'] = cursor.fetchall()
+        cursor.close()
     return topic_result
 
 
@@ -65,7 +69,7 @@ def get_topics_for_topics(topic_id, connection):
             while i < 20:
                 topic_result['data'].append(res[i])
                 i += 1
-
+        cursor.close()
     return topic_result
 
 
@@ -89,6 +93,7 @@ def combine_topics_with_queries(topics, connection):
                 r['strength'] += f['count']
 
             result.append(r)
+        cursor.close()
     return result
 
 
