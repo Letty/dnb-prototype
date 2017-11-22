@@ -2,7 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges
   ViewChild, AfterViewInit, SecurityContext} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 
-import {IItem} from '../../app.interfaces';
+import {IItem, IPerson, ITopic} from '../../app.interfaces';
 import {DataService} from '../../services/data.service';
 import {SelectionService} from '../../services/selection.service';
 import {Observable} from 'rxjs/Observable';
@@ -20,6 +20,10 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 
 export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
+  public selectedMinYear: number;
+  public selectedMaxYear: number;
+  public selectedPerson: IPerson;
+  public selectedTopic: ITopic;
 
   @Output() close: EventEmitter<any> = new EventEmitter();
   @Input() term: string = null;
@@ -37,7 +41,30 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
     private selection: SelectionService,
     private dataService: DataService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) {
+    selection.selPerson$.subscribe(
+      person => {
+        this.selectedPerson = person;
+      }
+    );
+
+    selection.selTopic$.subscribe(
+      topic => {
+        this.selectedTopic = topic;
+      }
+    );
+
+    selection.selMinYear$.subscribe(
+      year => {
+        this.selectedMinYear = year;
+      }
+    );
+    selection.selMaxYear$.subscribe(
+      year => {
+        this.selectedMaxYear = year;
+      }
+    );
+  }
 
   ngOnInit(): void {
   }
@@ -105,18 +132,22 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   selectYear(year) {
+    console.log('y', new Date().getTime());
     this.selection.setYear(year.start, year.end);
     this.dataService.setFilter();
+    this.showSuggestions = false;
     this.reset();
   }
   selectTopic(topic) {
     this.selection.setTopic(topic);
     this.dataService.setFilter();
+    this.showSuggestions = false;
     this.reset();
   }
   selectPerson(person) {
     this.selection.setPerson(person);
     this.dataService.setFilter();
+    this.showSuggestions = false;
     this.reset();
   }
 
@@ -137,5 +168,18 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
         this.selectPerson(this.persons[0]);
       }
      }
+  }
+
+  resetYear(): void {
+    this.selection.setYear(null, null);
+    this.dataService.setFilter();
+  }
+  resetTopic(): void {
+    this.selection.setTopic(null);
+    this.dataService.setFilter();
+  }
+  resetPerson(): void {
+    this.selection.setPerson(null);
+    this.dataService.setFilter();
   }
 }
