@@ -34,6 +34,7 @@ def get_top_people():
         sql = 'select * from dnb_author_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
+        cursor.close()
     return jsonify(result)
 
 
@@ -48,6 +49,7 @@ def get_start_results():
             'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 50'
         cursor.execute(sql, (year))
         result = cursor.fetchall()
+        cursor.close()
     return jsonify(result)
 
 
@@ -58,6 +60,7 @@ def get_timeline():
         sql = 'select * from dnb_year_count where year > 1000 and year < 2021'
         cursor.execute(sql)
         result = cursor.fetchall()
+        cursor.close()
     return jsonify(result)
 
 
@@ -74,6 +77,7 @@ def filter_by_person_result_year():
             year_result['error'] = str(sys.exc_info()[0])
         else:
             year_result['data'] = cursor.fetchall()
+        cursor.close()
     return jsonify(year_result)
 
 
@@ -119,7 +123,7 @@ def filter_by_person_result_items():
             person_result['error'] = str(sys.exc_info()[0])
         else:
             person_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(person_result)
 
 
@@ -136,6 +140,7 @@ def filter_by_topic_result_year():
             year_result['error'] = str(sys.exc_info()[0])
         else:
             year_result['data'] = cursor.fetchall()
+        cursor.close()
     return jsonify(year_result)
 
 
@@ -154,6 +159,7 @@ def filter_by_topic_result_person():
             person_result['error'] = str(sys.exc_info()[0])
         else:
             person_result['data'] = cursor.fetchall()
+        cursor.close()
     return jsonify(person_result)
 
 
@@ -180,6 +186,7 @@ def filter_by_topic_result_items():
             items_result['error'] = str(sys.exc_info()[0])
         else:
             items_result['data'] = cursor.fetchall()
+        cursor.close()
     return jsonify(items_result)
 
 
@@ -200,6 +207,7 @@ def filter_by_year_result_person():
             person_result['error'] = str(sys.exc_info()[0])
         else:
             person_result['data'] = cursor.fetchall()
+        cursor.close()
     uptime = str(datetime.now() - startTime)
     print('uptime: %s', (uptime))
     return jsonify(person_result)
@@ -233,7 +241,7 @@ def filter_by_year_result_items():
             items_result['error'] = str(sys.exc_info()[0])
         else:
             items_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(items_result)
 
 
@@ -252,6 +260,7 @@ def filter_by_year_person_result_year():
             year_result['error'] = str(sys.exc_info()[0])
         else:
             year_result['data'] = cursor.fetchall()
+        cursor.close()
     return jsonify(year_result)
 
 
@@ -290,6 +299,8 @@ def filter_by_year_person_result_topic():
                          'keyword'], 'count': topics[key]['count']})
 
         topic_result['data'] = t
+        cursor.close()
+
     return jsonify(topic_result)
 
 
@@ -323,7 +334,7 @@ def filter_by_year_person_result_items():
             items_result['error'] = str(sys.exc_info()[0])
         else:
             items_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(items_result)
 
 
@@ -341,7 +352,7 @@ def filter_by_person_topic_result_year():
             year_result['error'] = str(sys.exc_info()[0])
         else:
             year_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(year_result)
 
 
@@ -361,7 +372,7 @@ def filter_by_person_topic_result_items():
             items_result['error'] = str(sys.exc_info()[0])
         else:
             items_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(items_result)
 
 
@@ -381,7 +392,7 @@ def filter_by_year_topic_result_year():
             year_result['error'] = str(sys.exc_info()[0])
         else:
             year_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(year_result)
 
 
@@ -420,7 +431,7 @@ def filter_by_year_topic_result_items():
             items_result['error'] = str(sys.exc_info()[0])
         else:
             items_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(items_result)
 
 
@@ -440,7 +451,7 @@ def filter_by_year_person_topic_result_year():
             year_result['error'] = str(sys.exc_info()[0])
         else:
             year_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(year_result)
 
 
@@ -461,7 +472,7 @@ def filter_by_year_person_topic_result_items():
             items_result['error'] = str(sys.exc_info()[0])
         else:
             items_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(items_result)
 
 
@@ -495,7 +506,7 @@ def get_item():
             item_result['error'] = str(sys.exc_info()[0])
         else:
             item_result['data']['keyword'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(item_result)
 
 
@@ -512,7 +523,7 @@ def search_for_person():
             query_result['error'] = str(sys.exc_info()[0])
         else:
             query_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(query_result)
 
 
@@ -529,7 +540,7 @@ def search_for_topic():
             query_result['error'] = str(sys.exc_info()[0])
         else:
             query_result['data'] = cursor.fetchall()
-
+        cursor.close()
     return jsonify(query_result)
 
 
@@ -537,7 +548,7 @@ def search_for_topic():
 def get_top_topic_network():
     network_result = {'data': []}
     result = qh.get_default_topics(connection)
-    network_result['data'] = qh.combine_topics(result, connection)
+    network_result['data'] = qh.combine_topics_with_queries(result, connection)
 
     return jsonify(network_result)
 
@@ -547,7 +558,8 @@ def get_top_topic_network_filter_year():
     years = json.loads(request.data.decode('utf-8'))
     network_result = {'data': []}
     result = qh.get_topics_for_year(years, connection)
-    network_result['data'] = qh.combine_topics(result['data'], connection)
+    network_result['data'] = qh.combine_topics_with_queries(
+        result['data'], connection)
 
     return jsonify(network_result)
 
@@ -557,9 +569,17 @@ def get_top_topic_network_filter_person():
     person_id = request.data.decode('utf-8')
     network_result = {'data': []}
     result = qh.get_topics_for_person(person_id, connection)
-    network_result['data'] = qh.combine_topics(result['data'], connection)
-
+    network_result['data'] = qh.combine_topics_with_queries(
+        result['data'], connection)
+    print(network_result)
     return jsonify(network_result)
 
-# for aws foo
-# app.run(host='0.0.0.0', port=80)
+
+@app.route('/getTopicNetworkFilterTopic', methods=['POST'])
+def get_top_topic_network_filter_topic():
+    topic_id = request.data.decode('utf-8')
+    network_result = {'data': []}
+    result = qh.get_topics_for_topics(topic_id, connection)
+    network_result['data'] = qh.combine_topics(result['data'], topic_id)
+
+    return jsonify(network_result)

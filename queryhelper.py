@@ -9,6 +9,8 @@ def get_default_topics(connection):
         sql = 'select * from dnb_topic_count order by count DESC limit 20'
         cursor.execute(sql)
         result = cursor.fetchall()
+        cursor.close()
+
     return result
 
 
@@ -26,6 +28,7 @@ def get_topics_for_year(years, connection):
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             topic_result['data'] = cursor.fetchall()
+        cursor.close()
     return topic_result
 
 
@@ -42,6 +45,7 @@ def get_topics_for_person(person_id, connection):
             topic_result['error'] = str(sys.exc_info()[0])
         else:
             topic_result['data'] = cursor.fetchall()
+        cursor.close()
     return topic_result
 
 
@@ -62,14 +66,14 @@ def get_topics_for_topics(topic_id, connection):
             sorted(res, key=lambda topic: topic['count'])
             topic_result['data'] = []
             i = 0
-            while i <= 20:
+            while i < 20:
                 topic_result['data'].append(res[i])
                 i += 1
-
+        cursor.close()
     return topic_result
 
 
-def combine_topics(topics, connection):
+def combine_topics_with_queries(topics, connection):
     result = []
     topic_comb = list(itertools.combinations(topics, 2))
 
@@ -89,4 +93,15 @@ def combine_topics(topics, connection):
                 r['strength'] += f['count']
 
             result.append(r)
+        cursor.close()
+    return result
+
+
+def combine_topics(topics, selected_topic_id):
+    result = []
+
+    for t in topics:
+        result.append(
+            {'source': int(selected_topic_id), 'target': t['id'], 'strength': t['count']})
+
     return result
