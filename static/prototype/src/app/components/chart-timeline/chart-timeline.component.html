@@ -5,7 +5,7 @@
         <path [attr.d]="path" class="area-path"></path>
       </g>
       <text *ngFor="let t of xTicks" class="x-axis"
-        [attr.y]="height" [attr.x]="t.x">{{t.year}}</text>
+        [attr.y]="height - 4" [attr.x]="t.x">{{t.year}}</text>
 
       <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
         <text class="y-axis" y="4" x="0">{{t.value}}</text>

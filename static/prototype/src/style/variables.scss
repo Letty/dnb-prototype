@@ -1,13 +1,13 @@
 /* GOBLAL */
 /* Color */
-$color-results-default: #9AB001;
-$color-results-background: #EBEFCC;
+$color-result-default: #9AB001;
+$color-result-background: #EBEFCC;
 
 $color-year-default: #EA5858;
 $color-year-background: #FCEEEE;
 
-$color-person-default: #3564BA;
-$color-person-background: #E1EAFA;
+$color-person-default: #0073EC;
+$color-person-background: #E5F1FD;
 
 $color-topic-default: #1A9C76;
 $color-topic-background: #E8F5F1;
@@ -16,13 +16,14 @@ $color-topic-background--hover: #e8f7f7;
 /* Misc */
 $border-radius-default: 5px;
 
-$distance-outer-default: 1rem;
-$distance-inner-default: 0.5rem;
+$distance-outer-default: 1.5rem;
+$distance-inner-default: 0.75rem;
+$distance-inner-small: 0.5rem;
 
 /* SPECIFIC */
 
 /* Body */
-$color-body-background: #f7f7f7;
+$color-body-background: #fff;
 $color-body-font: #4C4C4B;
 $color-lighter-body-font: #6C6C6B;
 
@@ -32,5 +33,6 @@ $color-header-background: #fff;
 // more colors
 $color-overlay-background: rgba(26,26,26,.65);
 $color-text-grey: #B2B2B2;
+$color-grey: #EAEAEA;
 
 $effect-header-shadow: 0px 0px 12px 2px rgba(0,0,0,0.05);

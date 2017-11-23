@@ -1,12 +1,4 @@
 <div class="person-div main-viz">
-  <header>
-    <btn-link
-      class="color-person"
-      [sectionTitle]="'Personen'"
-      [invert]="detail"
-      [route]="detail ? 'index' : 'person'"></btn-link>
-    <span class="off-counter">Ohne Person: {{ this.offResults }}</span>
-  </header>
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
     <div class="person-list-overview" *ngIf="!detail">

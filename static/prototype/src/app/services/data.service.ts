@@ -182,7 +182,7 @@ export class DataService {
         this.dataStore.personYearsRequired = false;
         break;
       case 'topic':
-        this.dataStore.personsRequired = false;
+        this.dataStore.personsRequired = true;
         this.dataStore.topicsRequired = true;
         this.dataStore.yearsRequired = true;
         this.dataStore.itemsRequired = true;
@@ -191,11 +191,19 @@ export class DataService {
         break;
       case 'person':
         this.dataStore.personsRequired = true;
-        this.dataStore.topicsRequired = false;
+        this.dataStore.topicsRequired = true;
         this.dataStore.yearsRequired = true;
         this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = false;
         this.dataStore.personYearsRequired = true;
+        break;
+      case 'results':
+        this.dataStore.personsRequired = true;
+        this.dataStore.topicsRequired = true;
+        this.dataStore.yearsRequired = true;
+        this.dataStore.itemsRequired = true;
+        this.dataStore.networkLinksRequired = false;
+        this.dataStore.personYearsRequired = false;
         break;
     }
     this.filterData();

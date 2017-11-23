@@ -5,7 +5,7 @@
   margin-top: auto;
 
   .section-title {
-    background: $color-results-default;
+    background: $color-result-default;
     height: 40px;
     box-sizing: border-box;
     padding: 8px 24px;
@@ -21,6 +21,6 @@
 
   .chart-timeline {
     box-sizing: border-box;
-    padding: 8px $distance-outer-default;
+    padding: 4px $distance-outer-default;
   }
 }

@@ -6,13 +6,11 @@ $gutter-topics-default: 4px;
 
   header .off-counter {
     color: $color-topic-default;
-    font-size: 0.8em;
   }
 
   .topic-list {
     @include flex-default();
     height: 20vh;
-    font-size: 0.8em;
 
     .topic-bins {
       flex: 1;

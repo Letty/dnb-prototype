@@ -1,0 +1,87 @@
+@import "../../../style/variables";
+@import "../../../style/mixins";
+
+.accordion-section {
+  border-top: 1px solid #EAEAEA;
+  margin-top: -1px;
+
+  height: 40px;
+  overflow: hidden;
+
+  header {
+    height: 40px;
+    box-sizing: border-box;
+    border-bottom: 1px solid $color-grey;
+    padding: 0 $distance-outer-default;
+
+    @include flex-default();
+    align-items: center;
+
+    h2 {
+      font-size: 1em;
+      margin: 0;
+      padding: 0;
+    }
+
+    .toggle {
+      border-radius: $border-radius-default;
+      box-sizing: border-box;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      border-width: 1px;
+      border-style: solid;
+      cursor: pointer;
+      padding: 0 $distance-inner-small;
+
+      font-size: 0.85em;
+
+      .icon {
+        padding-right: $distance-inner-small;
+      }
+    }
+  }
+}
+
+:host(.topic) {
+  .accordion-section {
+    height: calc(50% - 20px);
+    color: $color-topic-default;
+    fill: $color-topic-default;
+
+    .toggle {
+      border-color: $color-topic-background;
+      &:hover {
+        background: $color-topic-background;
+      }
+    }
+  }
+}
+
+:host(.person) {
+  .accordion-section {
+    height: calc(50% - 20px);
+    color: $color-person-default;
+    fill: $color-person-default;
+
+    .toggle {
+      border-color: $color-person-background;
+      &:hover {
+        background: $color-person-background;
+      }
+    }
+  }
+}
+
+:host(.result) {
+  .accordion-section {
+    color: $color-result-default;
+    fill: $color-result-default;
+    .toggle {
+      border-color: $color-result-background;
+      &:hover {
+        background: $color-result-background;
+      }
+    }
+  }
+}

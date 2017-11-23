@@ -56,15 +56,15 @@
   }
 }
 
-:host(.color-results) {
-  color: $color-results-default;
-  fill: $color-results-default;
+:host(.color-result) {
+  color: $color-result-default;
+  fill: $color-result-default;
 
   .btn-link .wrapper {
-    border-color: $color-results-default;
+    border-color: $color-result-default;
 
     &.invert {
-      background: $color-results-default;
+      background: $color-result-default;
     }
   }
 }

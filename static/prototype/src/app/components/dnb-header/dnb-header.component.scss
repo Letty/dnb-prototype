@@ -1,21 +1,26 @@
 @import '../../../style/variables';
 @import '../../../style/mixins';
 
+.dnb-header {
+  height: 128px;
+  @include box-shadow($effect-header-shadow);
+  border-bottom: 1px solid $color-grey;
+}
+
 .header {
   height: 64px;
   box-sizing: border-box;
+  border-bottom: 1px solid $color-grey;
 
   @include flex-default();
   justify-content: flex-start;
   align-items: center;
   background-color: $color-header-background;
   padding: $distance-outer-default;
-  @include box-shadow($effect-header-shadow);
-
-  font-size: 0.8em;
 
   .dnb-logo {
     font-size: 1em;
+    letter-spacing: 1px;
     margin: 0 $distance-outer-default 0 0;
     padding: 0;
   }
@@ -63,7 +68,7 @@
 
   .more {
     color: $color-lighter-body-font;
-    font-weight: 600;
+    font-weight: 500;
     margin-left: $distance-outer-default;
     display: inline-block;
     span {

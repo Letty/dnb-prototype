@@ -9,7 +9,7 @@
 // green #BFC91C
 
 html {
-  font: normal normal 110%/1.7 "Roboto", "Open Sans", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", Helvetica, sans-serif;
+  font: normal normal 87%/1.7 "Roboto", "Open Sans", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", Helvetica, sans-serif;
   color: $color-body-font;
   background-color: $color-body-background;
 }
@@ -19,49 +19,11 @@ html, body {
   width: 100%;
 }
 
-.filter {
-  @include flex-default();
-  align-items: center;
-  justify-content: center;
-  height: 92vh;
-  flex-direction: column;
-  align-content: space-between;
-
-  & > * {
-    width: 100%;
-    flex: 1;
-  }
-
-  .timeline {
-    height: auto;
-    flex: 0;
-  }
-
-  .main-viz {
-    margin: 0 $distance-outer-default;
-    position: relative;
-
-    header {
-      @include flex-default();
-      align-items: center;
-    }
-  }
-}
-
-.node {
-  box-sizing: border-box;
+.accordion {
   position: absolute;
+  left: 0px;
+  top: 128px;
+  width: 100%;
+  height: calc(100% - 128px);
   overflow: hidden;
-}
-
-.node-label {
-  padding: 4px;
-  line-height: 1em;
-  white-space: pre;
-}
-
-.node-value {
-  color: rgba(0, 0, 0, 0.8);
-  font-size: 9px;
-  margin-top: 1px;
 }

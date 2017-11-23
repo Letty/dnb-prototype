@@ -1,7 +1,6 @@
 .person-div {
   header .off-counter {
     color: $color-person-default;
-    font-size: 0.8em;
   }
 
   .person-list-overview {
@@ -35,7 +34,6 @@
         justify-content: flex-start;
         align-items: center;
         width: 100%;
-        font-size: 0.8em;
 
         .birth {
           text-align: right;

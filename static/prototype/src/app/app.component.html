@@ -1,9 +1,14 @@
 <div>
   <dnb-header></dnb-header>
-  <div class="filter">
-    <chart-person *ngIf="showPerson"></chart-person>
-    <topic *ngIf="showTopic"></topic>
-    <results-header class="timeline"></results-header>
+  <div class="accordion">
+    <accordion-section class="topic" title="Themen" route="topic">
+      <topic></topic>
+    </accordion-section>
+    <accordion-section class="person" title="Personen" route="person">
+      <chart-person></chart-person>
+    </accordion-section>
+    <accordion-section class="result" title="Ergebnisse" route="result">
+      <results-list></results-list>
+    </accordion-section>
   </div>
-  <results-list></results-list>
 </div>

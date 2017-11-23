@@ -1,11 +1,8 @@
 <div class="results-header">
   <loading-data *ngIf="loadingData" class="color-year"></loading-data>
-  <btn-link class="color-results" [icon]="'arrow-down'"
-    [fullWidth]="true" [invert]="true"
-    [value]="results" [sectionTitle]="'Ergebnisse'"></btn-link>
   <div class="chart-timeline">
     <chart-timeline class="color-year" [years]="years"
-      [height]="96" [showXTicks]="true"
+      [height]="56" [showXTicks]="true"
       [enableBrush]="true" [logXScale]="true"
       [showRuler]="true" [interactiveRuler]="true"></chart-timeline>
   </div>

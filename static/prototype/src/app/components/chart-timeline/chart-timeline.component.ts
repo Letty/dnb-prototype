@@ -39,7 +39,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   public yTicks = [];
   public width = 0;
   public ruler;
-  public rulerOffset = 'translate(0 -8)';
+  public rulerOffset = 'translate(0 3)';
   public init = true;
   private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
   private yTickValues = [100000, 200000, 300000, 400000];
@@ -138,7 +138,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
     this.yScale = d3.scalePow()
       .exponent(0.3)
-      .rangeRound([areaHeight, 16])
+      .rangeRound([areaHeight, 8])
       .domain([0, maxY ? maxY.count : 0]);
 
     const area = d3.area<IYear>()
@@ -218,7 +218,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       } else if (x - elWidth / 2 < 2) {
         offset = 2 - (x - elWidth / 2);
       }
-      this.rulerOffset = `translate(${offset}, -8)`;
+      this.rulerOffset = `translate(${offset}, 3)`;
     }, 0);
   }
 
