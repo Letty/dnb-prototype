@@ -4,6 +4,15 @@
 .search-suggestion {
   position: relative;
 
+  .exit {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+  }
+
   .search-field, {
     @include border-radius($border-radius-default);
     border: 0;
@@ -22,6 +31,7 @@
     &:focus {
       outline: none;
       color: $color-body-font;
+      @include box-shadow($effect-header-shadow);
 
       &::placeholder {
         opacity: 0;
@@ -35,6 +45,10 @@
 
     &.has-results {
       @include border-radius($border-radius-default $border-radius-default 0 0);
+
+      &:focus {
+        @include box-shadow(none);
+      }
     }
   }
 
@@ -78,5 +92,59 @@
     .section-title {
       font-weight: 700;
     }
+  }
+  .tags {
+    position: absolute;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 0.5em 0.5em 0.5em 1px;
+    border-left: 1px solid #D0D0D0;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+    color: $color-header-background;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    display: flex;
+    align-items: center;
+
+    .nav-selection {
+      display: flex;
+      flex-grow: 2;
+      align-items: baseline;
+
+      & > span {
+        color: #aaa;
+      }
+
+      .facet {
+        @include border-radius($border-radius-default);
+        margin-left: 0.5vw;
+        padding: 0 0.5em;
+        font-weight: bold;
+        cursor: pointer;
+        height: 24px;
+        box-sizing: border-box;
+
+        .close-button {
+          margin-left: $distance-inner-default;
+        }
+      }
+
+      .selected-year {
+        background: $color-year-default;
+      }
+
+      .selected-person {
+        background: $color-person-default;
+      }
+
+      .selected-topic {
+        background: $color-topic-default;
+      }
+    }
+
   }
 }

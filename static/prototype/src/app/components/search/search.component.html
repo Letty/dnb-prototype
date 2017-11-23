@@ -1,8 +1,9 @@
 <div class="search-suggestion">
+  <div class="exit" *ngIf="showSuggestions && (years.length || topics.length || persons.length)" (click)="showSuggestions = false"></div>
   <input #input="ngModel" class="search-field" type="text" [(ngModel)]="term"
-  placeholder="Jahr, Themen, Personen" (keydown)="keydown($event)" (focus)="showSuggestions = true" (blur)="showSuggestions = false"
+  placeholder="Jahr, Themen, Personen" (keydown)="keydown($event)" (focus)="showSuggestions = true"
   [ngClass]="{'has-results': showSuggestions && (years.length || topics.length || persons.length) }">
-  <div class="suggestions" *ngIf="showSuggestions">
+  <div class="suggestions" *ngIf="showSuggestions && (years.length || topics.length || persons.length)">
     <ng-container *ngIf="years.length">
       <div class="section-title year">Erscheinungsjahre</div>
       <div class="suggestion year" *ngFor="let s of years" [innerHTML]="s.formatted" (click)="selectYear(s)">
@@ -18,5 +19,17 @@
       <div class="suggestion person" *ngFor="let s of persons" [innerHTML]="s.formatted" (click)="selectPerson(s)">
       </div>
     </ng-container>
+  </div>
+  <div class="tags" *ngIf="selectedMinYear || selectedPerson || selectedTopic">
+    <nav class="nav-selection">
+      <div class="selected-year facet" *ngIf="selectedMinYear" (click)="resetYear()">
+        <span>{{selectedMinYear}}</span><span *ngIf="selectedMaxYear && selectedMaxYear !== selectedMinYear">&thinsp;&ndash;&thinsp;{{selectedMaxYear}}</span><strong class="close-button">&times;</strong>
+      </div>
+      <div class="selected-person facet" *ngIf="selectedPerson" (click)="resetPerson()">
+        {{selectedPerson.name}} {{selectedPerson.lastname}}<strong class="close-button">&times;</strong>
+      </div>
+      <div class="selected-topic facet" *ngIf="selectedTopic" (click)="resetTopic()">
+        {{selectedTopic.keyword}}<strong class="close-button">&times;</strong></div>
+    </nav>
   </div>
 </div>
