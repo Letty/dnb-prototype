@@ -6,6 +6,8 @@ import {Observable} from 'rxjs/Observable';
 
 import {IPerson, ITopic, IYear, IItem} from '../app.interfaces';
 
+import {trackPiwik} from './piwikTracking';
+
 @Injectable()
 export class ApiService {
   private headers = new Headers();
@@ -174,6 +176,7 @@ export class ApiService {
   }
 
   getItem(itemID: string): Observable<any> {
+    trackPiwik('ViewResultDetail', itemID);
     return this.http.post(`${this.server}/getItem`, itemID, this.headers).map(res => res.json().data);
   }
 
