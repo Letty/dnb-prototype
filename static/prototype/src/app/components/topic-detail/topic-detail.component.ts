@@ -88,8 +88,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   }
 
   update(): void {
-    if (this.loadingTopic || this.loadingLinks ||
-      this.upcomingLinks.find(l => this.upcomingTopics.find(t => t.id === l.source) == null || this.upcomingTopics.find(t => t.id === l.target) == null)) {
+    if (this.loadingTopic || this.loadingLinks || (this.forces && this.upcomingLinks.find(l => {
+      return this.upcomingTopics.find(t => t.id === l.source) == null || this.upcomingTopics.find(t => t.id === l.target) == null;
+    }))) {
       return;
     }
 
