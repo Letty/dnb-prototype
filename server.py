@@ -545,7 +545,7 @@ def search_for_person():
     query_result = {'data': {}, 'error': None}
 
     with con.cursor() as cursor:
-        sql = 'select id, lastname, name from dnb_author_count where lastname like %s limit 3'
+        sql = 'select id, lastname, name from dnb_author_count where lastname like %s  order by count desc limit 3'
         try:
             cursor.execute(sql, (query + '%'))
         except:
@@ -563,7 +563,7 @@ def search_for_topic():
     query_result = {'data': {}, 'error': None}
 
     with con.cursor() as cursor:
-        sql = 'select id, keyword from dnb_topic_count where keyword like %s limit 3'
+        sql = 'select id, keyword from dnb_topic_count where keyword like %s order by count desc limit 3'
         try:
             cursor.execute(sql, (query + '%'))
         except:
