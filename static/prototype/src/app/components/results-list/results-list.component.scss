@@ -1,11 +1,14 @@
 @import "../../../style/variables";
 @import "../../../style/mixins";
 
-$gutter-results-default: 8px;
+$gutter-results-default: $distance-outer-default / 2;
 
 .results-list {
   background: $color-header-background;
-  padding: $gutter-results-default;
+  padding: $gutter-results-default $gutter-results-default $distance-outer-default $gutter-results-default;
+  height: calc(100% - 40px);
+  box-sizing: border-box;
+  overflow-y: auto;
 
   .brick {
     width: 100%;
