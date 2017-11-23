@@ -44,8 +44,8 @@ $gutter-topics-default: 4px;
   }
 
   .viz-container {
-    height: calc(100% - 56px);
+    height: 100%;
     box-sizing: border-box;
-    padding: 0 0 8px 0;
+    padding: 0 $distance-outer-default;
   }
 }

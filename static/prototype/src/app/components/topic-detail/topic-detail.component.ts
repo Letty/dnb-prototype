@@ -49,7 +49,6 @@ export class TopicDetailComponent implements OnInit, OnChanges {
               private api: ApiService
   ) {
     api.loadingData$.subscribe((e) => {
-      console.log(e);
       if (e === 'topic') { this.loadingTopic = true; }
       if (e === 'links') { this.loadingLinks = true; }
     });
@@ -60,14 +59,14 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   @debounce(250)
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = this.svg.nativeElement.clientHeight;
+    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5);
     this.update();
   }
 
   // Life-cycle hooks
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = this.svg.nativeElement.clientHeight;
+    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5);
 
     this.simulation = this.getSimulation();
     this.nodes = [];
@@ -158,12 +157,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   ngOnChanges (changes: SimpleChanges) {
     if (changes.forces && !changes.forces.firstChange) {
-      window.setTimeout(() => {
+      // window.setTimeout(() => {
+        this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5);
         if (changes.forces.currentValue) {
-          this.nodes.forEach(n => {
-            n.y += ((this.svg.nativeElement.clientHeight + 56) / 2);
-          });
-          this.height = this.svg.nativeElement.clientHeight;
           if (!this.loadingLinks) {
             this.simulate(this.nodes);
           } else {
@@ -173,7 +169,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           this.simulation.alpha(0);
           this.pack(this.nodes.filter(n => n.type !== 'gravity'));
         }
-      }, 10);
+      // }, 10);
     }
   }
 
@@ -234,7 +230,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     nodes = _.sortBy(nodes, 'count');
 
-    const height = this.forces ? (this.svg.nativeElement.clientHeight - 56) / 2 : this.svg.nativeElement.clientHeight;
+    const height = (window.innerHeight - 248) * 0.5;
     let remainingWidth = this.width;
     let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + b);
     let packs = [{
@@ -302,7 +298,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           n.width >= 200 && n.height >= 64 ? 18 :
           n.width >= 128 && n.height >= 48 ? 14 : 12;
 
-        yOffset += n.height;
+        yOffset += (n.count / p.count * this.height);
       });
       xOffset += p.width;
     });
