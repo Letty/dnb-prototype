@@ -2,14 +2,20 @@
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
     <div #svgWrapper>
+      <div class="persons">
+        <div class="person" *ngFor="let p of persons" [attr.test]="'translate(' + p.x + 'px, ' + p.y + 'px) scale(' + p.scale + ')'" [style.transform]="detail ? p.transformDetail : p.transform" [style.max-width]="(100 / p.scale) + '%'">
+          <span>{{p.name}} {{p.lastname}}</span>
+          <!-- <path [attr.d]="p.path"></path> -->
+        </div>
+      </div>
       <svg #svg width="100%" height="100%">
         <g #temp></g>
-        <g class="persons">
+        <!-- <g class="persons">
           <g class="person" *ngFor="let p of persons" [attr.transform]="'translate(' + p.x + ' ' + p.y + ') scale(' + p.scale + ')'">
             <text>{{p.name}} {{p.lastname}}</text>
-            <!-- <path [attr.d]="p.path"></path> -->
+            <path [attr.d]="p.path"></path>
           </g>
-        </g>
+        </g> -->
       </svg>
     </div>
     <!-- <div class="person-list-overview" *ngIf="!detail">

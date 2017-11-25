@@ -59,10 +59,12 @@ export class PersonComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log('init');
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
 
+      console.log('update');
       this.layout();
 
       this.max = 2018;
@@ -138,10 +140,10 @@ export class PersonComponent implements OnInit {
     let row = 0;
     let y = height * scales[0];
 
-    this.persons.forEach(p => {
+    this.persons.forEach((p, i) => {
       let scale = scales[Math.min(row, 3)];
       console.log(this.svg.nativeElement.clientWidth);
-      if (remainingWidth - p.width * scale < 0) {
+      if (i > 0 && remainingWidth - p.width * scale < 0) {
         remainingWidth = width;
         row += 1;
         y += 16.5 * scales[Math.min(row, 3)] + 8 + 4 * Math.min(row, 3);
@@ -152,6 +154,12 @@ export class PersonComponent implements OnInit {
       p.row = row;
       p.y = y;
       remainingWidth -= p.width * p.scale + 24;
+
+      const transform = `translate(${p.x}px, ${p.y}px) scale(${p.scale})`;
+      p.transform = this.sanitizer.bypassSecurityTrustStyle(transform);
+
+      const transformDetail = `translate(0, ${i * 32}px) scale(1)`;
+      p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
 
       // const h = height * p.scale;
       // const w = p.width * p.scale;

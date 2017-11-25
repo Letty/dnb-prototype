@@ -143,6 +143,7 @@ export class DataService {
   }
 
   setPerson(persons_: IPerson[]): void {
+    console.log('updateperson');
     this.dataStore.persons = persons_;
     this._persons.next(Object.assign({}, this.dataStore).persons);
   }
@@ -275,12 +276,13 @@ export class DataService {
     } else {
       trackPiwik('filterData', 'Start Filter');
       const { defaultItems, defaultTopics, defaultYears, defaultPersons, defaultNetworkLinks, defaultPersonYears } = this.dataStore;
-      this.setItems(defaultItems);
-      this.setTopic(defaultTopics);
-      this.setYear(defaultYears);
-      this.setPerson(defaultPersons);
-      this.setNetworkLinks(defaultNetworkLinks);
-      this.setPersonYears(defaultPersonYears);
+
+      if (this.load.persons) this.setPerson(defaultPersons);
+      if (this.load.topics) this.setTopic(defaultTopics);
+      if (this.load.years) this.setYear(defaultYears);
+      if (this.load.items) this.setItems(defaultItems);
+      if (this.load.networkLinks) this.setNetworkLinks(defaultNetworkLinks);
+      if (this.load.personYears) this.setPersonYears(defaultPersonYears);
     }
 
     if (personsRequired) this.dataStore.personsAvailable = true;

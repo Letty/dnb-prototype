@@ -8,9 +8,18 @@
 
     svg {
       overflow: visible;
+    }
 
-      path {
-        fill: #f00;
+    .persons {
+      position: relative;
+      .person {
+        position: absolute;
+        transform-origin: bottom left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        transition: transform .4s;
       }
     }
   }
