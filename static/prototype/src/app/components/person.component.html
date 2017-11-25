@@ -1,12 +1,23 @@
 <div class="person-div main-viz">
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
-    <div class="person-list-overview" *ngIf="!detail">
+    <div #svgWrapper>
+      <svg #svg width="100%" height="100%">
+        <g #temp></g>
+        <g class="persons">
+          <g class="person" *ngFor="let p of persons" [attr.transform]="'translate(' + p.x + ' ' + p.y + ') scale(' + p.scale + ')'">
+            <text>{{p.name}} {{p.lastname}}</text>
+            <!-- <path [attr.d]="p.path"></path> -->
+          </g>
+        </g>
+      </svg>
+    </div>
+    <!-- <div class="person-list-overview" *ngIf="!detail">
       <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
         <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
       </div>
-    </div>
-    <div class="person-list-detail" *ngIf="detail">
+    </div> -->
+    <!-- <div class="person-list-detail" *ngIf="detail">
       <ul>
         <li *ngFor="let p of persons | async; let i = index" class="person" (click)="onSelect(p)">
           <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span>
@@ -21,6 +32,6 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
   </section>
 </div>

@@ -3,6 +3,18 @@
     color: $color-person-default;
   }
 
+  .viz-container {
+    padding: $distance-outer-default;
+
+    svg {
+      overflow: visible;
+
+      path {
+        fill: #f00;
+      }
+    }
+  }
+
   .person-list-overview {
     .person {
       display: inline-block;
