@@ -8,7 +8,7 @@
           <!-- <path [attr.d]="p.path"></path> -->
         </div>
       </div>
-      <svg #svg width="100%" height="100%">
+      <svg #svg width="100%" height="0">
         <g #temp></g>
         <!-- <g class="persons">
           <g class="person" *ngFor="let p of persons" [attr.transform]="'translate(' + p.x + ' ' + p.y + ') scale(' + p.scale + ')'">
@@ -23,10 +23,10 @@
         <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
       </div>
     </div> -->
-    <!-- <div class="person-list-detail" *ngIf="detail">
+    <div class="person-list-detail" *ngIf="detail">
       <ul>
-        <li *ngFor="let p of persons | async; let i = index" class="person" (click)="onSelect(p)">
-          <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span>
+        <li *ngFor="let p of persons; let i = index" class="person" (click)="onSelect(p)">
+          <!-- <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span> -->
           <chart-timeline *ngIf="personYears[i]" class="color-year" [years]="personYears[i]"
             [height]="32" [minYear]="min" [maxYear]="max"></chart-timeline>
           <div class="life">
@@ -38,6 +38,6 @@
           </div>
         </li>
       </ul>
-    </div> -->
+    </div>
   </section>
 </div>
