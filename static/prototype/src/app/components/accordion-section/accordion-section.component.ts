@@ -20,7 +20,7 @@ import {RouterService} from '../../services/router.service';
     state('0', style({height: '40px'})),
     state('1', style({height: 'calc(50% - 20px)'})),
     state('2', style({height: 'calc(100% - 80px)'})),
-    transition('* <=> *', animate('200ms ease'))
+    transition('* <=> *', animate('400ms ease'))
   ])]
 })
 
