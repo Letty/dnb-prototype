@@ -16,7 +16,7 @@
         <g #temp></g>
       </svg>
     </div>
-    <svg class="person-list-detail" *ngIf="detail"
+    <svg class="person-list-detail" *ngIf="detail && personYearsLines"
       width="100%" [attr.height]="persons.length * 32 + 32">
       <rect class="grid" x="-24" y="16" [attr.width]="width + 48" height="1"></rect>
       <rect class="grid" [attr.x]="width - 60" y="16" width="1" [attr.height]="persons.length * 32"></rect>
@@ -29,6 +29,18 @@
         <g *ngFor="let p of persons; let i = index" [attr.transform]="'translate(0 ' + i * 32 + ')'">
           <rect class="grid" x="-24" y="32" [attr.width]="width + 48" height="1"></rect>
           <text class="count" [attr.x]="width" y="21">{{formatNum(p.count)}}</text>
+          <path class="sparkline" [attr.d]="personYearsLines[i]"></path>
+          <g *ngIf="p.year_of_birth">
+            <g [attr.transform]="'translate(' + yearScale(p.year_of_birth) + ' 0)'">
+              <rect y="12" width="1" height="9"></rect>
+              <text x="-4" y="20" class="year_of_birth">{{p.year_of_birth}}</text>
+            </g>
+            <rect [attr.x]="yearScale(p.year_of_birth)" y="16" [attr.width]="yearScale(p.year_of_death || 2018) - yearScale(p.year_of_birth)" height="1"></rect>
+            <g *ngIf="p.year_of_death" [attr.transform]="'translate(' + yearScale(p.year_of_death) + ' 0)'">
+              <rect y="12" width="1" height="9"></rect>
+              <text x="4" y="20" class="year_of_death">{{p.year_of_death}}</text>
+            </g>
+          </g>
         </g>
       </g>
     </svg>

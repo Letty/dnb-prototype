@@ -52,6 +52,19 @@
       font-family: 'RobotoMono', monospace;
       text-anchor: end;
     }
+    .year_of_birth, .year_of_death {
+      font-size: 0.8em;
+      font-family: 'RobotoMono', monospace;
+    }
+    .year_of_birth {
+      text-anchor: end;
+    }
+
+    .sparkline {
+      fill: none;
+      stroke: $color-year-default;
+    }
+
     .person {
       @include flex-default();
       align-items: center;

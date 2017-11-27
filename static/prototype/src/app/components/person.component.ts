@@ -8,7 +8,7 @@ import { scaleLinear } from 'd3-scale';
 // import _ from 'lodash';
 import {debounce} from '../decorators';
 
-import { IPerson } from '../app.interfaces';
+import { IPerson, IYear } from '../app.interfaces';
 import { DataService } from '../services/data.service';
 import { RouterService } from '../services/router.service';
 
@@ -30,16 +30,16 @@ export class PersonComponent implements OnInit {
   public persons = [];
   public loadingData = true;
   public offResults = '0';
-  public personYears = [];
+  private personYears = [];
+  public personYearsLines = [];
   public min = 1000;
   public max = 2018;
   public width = 0;
   public ticks = [];
 
-  private fontScale = scaleLinear()
-    .range([0.8, 2.5]);
-  private yearScale = scaleLinear()
-    .range([0, 100]);
+  private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
+  public yearScale = scaleLinear();
+  private maxPubInYear = 0;
 
   constructor(
     private api: ApiService,
@@ -68,11 +68,7 @@ export class PersonComponent implements OnInit {
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
       this.layout();
-
       this.loadingData = false;
-      const counts: Array<number> = this.persons.map(p => p.count);
-      this.fontScale.domain([Math.min(...counts), Math.max(...counts)]);
-      this.offResults = d3.format(',')(123456);
     });
 
     this.routerService.view.subscribe(view => {
@@ -80,6 +76,7 @@ export class PersonComponent implements OnInit {
     });
 
     this.dataService.personYears.subscribe(value => {
+      this.personYears = value;
       const birthYears = this.persons.map(d => (d as any).year_of_birth).filter(y => y != null);
       const pubYears = Array.prototype.concat(...value.map(d => d.map(e => e.year).filter(y => y !== 0)));
 
@@ -90,9 +87,16 @@ export class PersonComponent implements OnInit {
       this.min = Math.floor(minYear / 50) * 50;
       this.yearScale
         .domain([this.min, this.max])
-        .range([200, this.width - 60]);
+        .rangeRound([200, this.width - 60]);
 
-      this.personYears = value;
+      this.maxPubInYear = Math.max(...Array.prototype.concat(...value.map(d => d.map(e => e.count))));
+      this.yScale.domain([0, this.maxPubInYear]);
+
+      const line = d3.line<IYear>()
+        .x(d => this.yearScale(d.year))
+        .y(d => this.yScale(d.count));
+
+      this.personYearsLines = value.map(v => line(this.addMissingYears(v)));
 
       // console.log(birthYears, Math.min(...birthYears), Math.min(...pubYears));
       this.ticks = '.'.repeat(Math.ceil((this.max - this.min) / 50)).split('').map((t, i) => {
@@ -159,5 +163,21 @@ export class PersonComponent implements OnInit {
 
   formatNum (d) {
     return d3.format(',')(d);
+  }
+
+  addMissingYears(years: IYear[]): IYear[] {
+    const minYear = Math.min(...years.map(y => y.year)) - 1;
+    const maxYear = Math.max(...years.map(y => y.year)) + 1;
+
+    let allYears: IYear[] = [];
+    for (let i = minYear; i <= maxYear; i++) {
+      const year = years.find(y => y.year === i);
+      if (i >= this.min && i <= this.max) {
+        allYears.push(year ? year : {count: 0, year: i});
+      }
+    }
+    if (allYears.find(y => y.year === this.max) == null) allYears = [...allYears, {count: 0, year: this.max}];
+    if (allYears.find(y => y.year === this.min) == null) allYears = [{count: 0, year: this.min}, ...allYears];
+    return allYears;
   }
 }
