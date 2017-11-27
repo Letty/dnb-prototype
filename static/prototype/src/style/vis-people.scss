@@ -12,14 +12,20 @@
 
     .persons {
       position: relative;
+      margin: -2px -8px;
       .person {
         position: absolute;
         transform-origin: bottom left;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-
+        cursor: pointer;
         transition: transform .4s;
+        @include border-radius($border-radius-default);
+
+        &:hover {
+          background: $color-person-background;
+        }
       }
     }
   }

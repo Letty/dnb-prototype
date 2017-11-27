@@ -3,7 +3,9 @@
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
     <div #svgWrapper>
       <div class="persons">
-        <div class="person" *ngFor="let p of persons" [attr.test]="'translate(' + p.x + 'px, ' + p.y + 'px) scale(' + p.scale + ')'" [style.transform]="detail ? p.transformDetail : p.transform" [style.max-width]="(100 / p.scale) + '%'">
+        <div class="person" *ngFor="let p of persons" (click)="onSelect(p)"
+        [style.transform]="detail ? p.transformDetail : p.transform" [style.max-width]="(100 / p.scale) + '%'"
+        [style.padding]="(2 / p.scale) + 'px ' + (12 / p.scale) + 'px'" [style.border-radius]="(5 / p.scale) + 'px'">
           <span>{{p.name}} {{p.lastname}}</span>
           <!-- <path [attr.d]="p.path"></path> -->
         </div>

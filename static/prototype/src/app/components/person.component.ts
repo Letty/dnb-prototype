@@ -59,12 +59,9 @@ export class PersonComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('init');
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
-
-      console.log('update');
       this.layout();
 
       this.max = 2018;
@@ -142,7 +139,6 @@ export class PersonComponent implements OnInit {
 
     this.persons.forEach((p, i) => {
       let scale = scales[Math.min(row, 3)];
-      console.log(this.svg.nativeElement.clientWidth);
       if (i > 0 && remainingWidth - p.width * scale < 0) {
         remainingWidth = width;
         row += 1;
