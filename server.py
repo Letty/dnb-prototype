@@ -389,6 +389,38 @@ def filter_by_year_topic_result_year():
     return jsonify(year_result)
 
 
+@app.route('/setFilterForYearTopicResultTopic', methods=['POST'])
+def filter_by_year_topic_result_topic():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    topic_result = qh.get_topics_for_year_topic(params['topic_id'],
+                                                params['min_year'], params['max_year'], con)
+    con.close()
+    return jsonify(topic_result)
+
+
+@app.route('/setFilterForYearTopicResultPerson', methods=['POST'])
+def filter_by_year_topic_result_person():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    person_result = {'data': {}, 'error': None}
+
+    with con.cursor() as cursor:
+        sql = 'select ac.id, ac.lastname, ac.name, count(ai.a_id) count '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it '\
+            'where  it.t_id = %s and it.year >= %s and it.year <= %s and it.i_id = ai.i_id '\
+            'and ac.id = ai.a_id group by ai.a_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (params['topic_id'],
+                                 params['min_year'], params['max_year']))
+        except:
+            person_result['error'] = str(sys.exc_info()[0])
+        else:
+            person_result['data'] = cursor.fetchall()
+    con.close()
+    return jsonify(person_result)
+
+
 @app.route('/setFilterForYearTopicResultItems', methods=['POST'])
 def filter_by_year_topic_result_items():
     con = open_db_connection()
@@ -436,7 +468,7 @@ def filter_by_year_person_topic_result_year():
 def filter_by_year_person_topic_result_topic():
     con = open_db_connection()
     params = json.loads(request.data.decode('utf-8'))
-    topic_result = qh.get_topics_for_time_person_topic(params['person_id'], params['topic_id'],
+    topic_result = qh.get_topics_for_year_person_topic(params['person_id'], params['topic_id'],
                                                        params['min_year'], params['max_year'], con)
     con.close()
     return jsonify(topic_result)
@@ -581,12 +613,25 @@ def get_top_topic_network_filter_topic():
     return jsonify(network_result)
 
 
+@app.route('/getTopicNetworkFilterYearTopic', methods=['POST'])
+def get_top_topic_network_filter_year_topic():
+    con = open_db_connection()
+    network_result = {'data': []}
+    params = json.loads(request.data.decode('utf-8'))
+    result = qh.get_topics_for_year_topic(params['topic_id'], params['min_year'],
+                                          params['max_year'], con)
+    network_result['data'] = qh.combine_topics(
+        result['data'], params['topic_id'])
+    con.close()
+    return jsonify(network_result)
+
+
 @app.route('/getTopicNetworkFilterYearPersonTopic', methods=['POST'])
 def get_top_topic_network_filter_year_person_topic():
     con = open_db_connection()
     network_result = {'data': []}
     params = json.loads(request.data.decode('utf-8'))
-    result = qh.get_topics_for_time_person_topic(params['person_id'], params['topic_id'],
+    result = qh.get_topics_for_year_person_topic(params['person_id'], params['topic_id'],
                                                  params['min_year'], params['max_year'], con)
     network_result['data'] = qh.combine_topics(
         result['data'], params['topic_id'])
