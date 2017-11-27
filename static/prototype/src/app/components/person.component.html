@@ -4,8 +4,10 @@
     <div #svgWrapper>
       <div class="persons">
         <div class="person" *ngFor="let p of persons" (click)="onSelect(p)"
-        [style.transform]="detail ? p.transformDetail : p.transform" [style.max-width]="(100 / p.scale) + '%'"
-        [style.padding]="(2 / p.scale) + 'px ' + (12 / p.scale) + 'px'" [style.border-radius]="(5 / p.scale) + 'px'">
+        [style.transform]="detail ? p.transformDetail : p.transform"
+        [style.max-width]="detail ? '200px' : (100 / p.scale) + '%'"
+        [style.padding]="detail ? '2px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
+        [style.border-radius]="(5 / p.scale) + 'px'">
           <span>{{p.name}} {{p.lastname}}</span>
           <!-- <path [attr.d]="p.path"></path> -->
         </div>
@@ -25,10 +27,9 @@
         <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
       </div>
     </div> -->
-    <div class="person-list-detail" *ngIf="detail">
+    <!-- <div class="person-list-detail" *ngIf="detail">
       <ul>
         <li *ngFor="let p of persons; let i = index" class="person" (click)="onSelect(p)">
-          <!-- <span class="label">{{p.name}} <strong>{{p.lastname}}</strong></span> -->
           <chart-timeline *ngIf="personYears[i]" class="color-year" [years]="personYears[i]"
             [height]="32" [minYear]="min" [maxYear]="max"></chart-timeline>
           <div class="life">
@@ -40,6 +41,6 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
   </section>
 </div>
