@@ -1,6 +1,28 @@
 .person-div {
-  header .off-counter {
-    color: $color-person-default;
+  .collapsed {
+    position: absolute;
+    margin-top: -34px;
+    left: 106px;
+    right: 168px;
+    height: 32px;
+    overflow: hidden;
+
+    .item {
+      display: inline-block;
+      font-size: 0.85em;
+      max-width: 160px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background: $color-person-background;
+      padding: 3px 8px;
+      margin-right: 4px;
+      border-radius: 5px;
+      font-weight: 500;
+      height: 26px;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
   }
 
   .viz-container {

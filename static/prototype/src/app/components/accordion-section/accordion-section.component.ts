@@ -24,15 +24,18 @@ export class AccordionSectionComponent implements OnInit {
   constructor(private router: RouterService) { }
 
   ngOnInit () {
-    console.log(this.route);
-    console.log(this.router.view);
     this.router[this.route].subscribe(size => {
       this.size = size;
     });
   }
 
-  toggle(): void {
+  toggle (): void {
     console.log('clicked', this.route);
     this.router.toggle(this.route);
+  }
+
+  dataUpdate (e) {
+    console.log('UPDATEUPDATE');
+    console.log(e);
   }
 }

@@ -1,7 +1,11 @@
 <div class="person-div main-viz">
+  <div class="collapsed">
+    <div *ngFor="let p of persons" class="item">
+      {{p.name}} {{p.lastname}}
+    </div>
+  </div>
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
-
       <div class="persons">
         <div class="person" *ngFor="let p of persons" (click)="onSelect(p)"
         [style.transform]="detail ? p.transformDetail : p.transform"
