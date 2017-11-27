@@ -1,51 +1,9 @@
-$gutter-topics-default: 4px;
-
 .topic-div {
-
   height: 100%;
-
-  header .off-counter {
-    color: $color-topic-default;
-  }
-
-  .topic-list {
-    @include flex-default();
-    height: 20vh;
-
-    .topic-bins {
-      flex: 1;
-
-      .topic {
-        span {
-          @include border-radius($border-radius-default);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          text-align: center;
-          height: calc(100% - #{$gutter-topics-default});
-          width: calc(100% - #{$gutter-topics-default});
-          margin: 0 $gutter-topics-default;
-          top: $gutter-topics-default;
-          background-color: $color-topic-background;
-          color: $color-topic-default;
-          cursor: pointer;
-          line-height: 1.2em;
-
-          &:hover {
-            background-color: $color-topic-background--hover;
-          }
-        }
-      }
-    }
-  }
-  .topic-list-detail {
-    height: 100%;
-  }
 
   .viz-container {
     height: 100%;
     box-sizing: border-box;
-    padding: 0 $distance-outer-default;
+    padding: 16px $distance-outer-default;
   }
 }

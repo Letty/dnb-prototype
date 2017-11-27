@@ -13,7 +13,7 @@
              [style.transform]="getTranslate(node)"
              [style.width]="node.width + 'px'"
              [style.height]="node.height + 'px'">
-          <div class="node" (click)="onSelect(node)">
+          <div class="node" (click)="onSelect(node)" [class.selected]="node.id === selectedTopic">
             <span class="label" [style.font-size]="node.fontSize + 'px'">
               {{node.keyword}}
             </span>
