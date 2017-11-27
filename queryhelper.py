@@ -81,19 +81,25 @@ def get_topics_for_person_topic(person_id, topic_id, connection):
     return topic_result
 
 
-def get_topics_for_time_topic(person_id, topic_id, connection):
+def get_topics_for_year_topic(topic_id, min_year, max_year, connection):
     topic_result = {'data': None, 'error': None}
-    #
-    #
-    #
-    #
-    #
-    #
-    #
+
+    with connection.cursor() as cursor:
+        sql = 'select it2.t_id id, tc.keyword, count(it2.t_id) count from dnb_item_topic it1, '\
+            'dnb_item_topic it2, dnb_topic_count tc where it1.year >= %s and it1.year <= %s '\
+            'and it1.t_id = %s  and it2.t_id != %s and it1.i_id = it2.i_id  and it2.t_id = tc.id '\
+            'group by it2.t_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (min_year,
+                                 max_year, topic_id, topic_id))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            topic_result['data'] = cursor.fetchall()
     return topic_result
 
 
-def get_topics_for_time_person_topic(person_id, topic_id, min_year, max_year, connection):
+def get_topics_for_year_person_topic(person_id, topic_id, min_year, max_year, connection):
     topic_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
