@@ -69,6 +69,49 @@ def get_topics_for_topics(topic_id, connection):
     return topic_result
 
 
+def get_topics_for_person_topic(person_id, topic_id, connection):
+    topic_result = {'data': None, 'error': None}
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    return topic_result
+
+
+def get_topics_for_time_topic(person_id, topic_id, connection):
+    topic_result = {'data': None, 'error': None}
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    return topic_result
+
+
+def get_topics_for_time_person_topic(person_id, topic_id, min_year, max_year, connection):
+    topic_result = {'data': None, 'error': None}
+
+    with connection.cursor() as cursor:
+        sql = 'select it2.t_id id, tc.keyword, count(it2.t_id) count from dnb_author_item at, '\
+            'dnb_item_topic it1, dnb_item_topic it2, dnb_topic_count tc where at.a_id= %s '\
+            'and at.year >= %s and at.year <= %s and it1.t_id = %s  and at.i_id = it1.i_id '\
+            'and it2.t_id != %s and it1.i_id = it2.i_id  and it2.t_id = tc.id '\
+            'group by it2.t_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (person_id, min_year,
+                                 max_year, topic_id, topic_id))
+        except:
+            topic_result['error'] = str(sys.exc_info()[0])
+        else:
+            topic_result['data'] = cursor.fetchall()
+    return topic_result
+
+
 def combine_topics_with_queries(topics, connection):
     result = []
     topic_comb = list(itertools.combinations(topics, 2))

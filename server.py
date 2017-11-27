@@ -100,23 +100,6 @@ def filter_by_person_result_topic():
     return jsonify(topic_result)
 
 
-@app.route('/setFilterForPersonResultPerson', methods=['POST'])
-def filter_by_person_result_person():
-    # todo
-    person_id = request.data.decode('utf-8')
-    person_result = {'data': None, 'error': None}
-
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-
-    return jsonify(person_result)
-
-
 @app.route('/setFilterForPersonResultItems', methods=['POST'])
 def filter_by_person_result_items():
     con = open_db_connection()
@@ -324,20 +307,6 @@ def filter_by_year_person_result_topic():
     return jsonify(topic_result)
 
 
-@app.route('/setFilterForYearPersonResultPerson', methods=['POST'])
-def filter_by_year_person_result_person():
-    params = json.loads(request.data.decode('utf-8'))
-    person_result = {'data': {}, 'error': None}
-
-    #
-    #
-    ##
-    #
-    #
-    #
-    #
-
-
 @app.route('/setFilterForYearPersonResultItems', methods=['POST'])
 def filter_by_year_person_result_items():
     con = open_db_connection()
@@ -420,24 +389,6 @@ def filter_by_year_topic_result_year():
     return jsonify(year_result)
 
 
-@app.route('/setFilterForYearTopicResultPerson', methods=['POST'])
-def filter_by_year_topic_result_person():
-    params = json.loads(request.data.decode('utf-8'))
-    person_result = {'data': {}, 'error': None}
-
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-
-    return jsonify(person_result)
-
-
 @app.route('/setFilterForYearTopicResultItems', methods=['POST'])
 def filter_by_year_topic_result_items():
     con = open_db_connection()
@@ -479,6 +430,16 @@ def filter_by_year_person_topic_result_year():
             year_result['data'] = cursor.fetchall()
     con.close()
     return jsonify(year_result)
+
+
+@app.route('/setFilterForYearPersonTopicResultTopic', methods=['POST'])
+def filter_by_year_person_topic_result_topic():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    topic_result = qh.get_topics_for_time_person_topic(params['person_id'], params['topic_id'],
+                                                       params['min_year'], params['max_year'], con)
+    con.close()
+    return jsonify(topic_result)
 
 
 @app.route('/setFilterForYearPersonTopicResultItems', methods=['POST'])
@@ -616,5 +577,18 @@ def get_top_topic_network_filter_topic():
     network_result = {'data': []}
     result = qh.get_topics_for_topics(topic_id, con)
     network_result['data'] = qh.combine_topics(result['data'], topic_id)
+    con.close()
+    return jsonify(network_result)
+
+
+@app.route('/getTopicNetworkFilterYearPersonTopic', methods=['POST'])
+def get_top_topic_network_filter_year_person_topic():
+    con = open_db_connection()
+    network_result = {'data': []}
+    params = json.loads(request.data.decode('utf-8'))
+    result = qh.get_topics_for_time_person_topic(params['person_id'], params['topic_id'],
+                                                 params['min_year'], params['max_year'], con)
+    network_result['data'] = qh.combine_topics(
+        result['data'], params['topic_id'])
     con.close()
     return jsonify(network_result)
