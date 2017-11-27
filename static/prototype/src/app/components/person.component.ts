@@ -33,6 +33,8 @@ export class PersonComponent implements OnInit {
   public personYears = [];
   public min = 1000;
   public max = 2018;
+  public width = 0;
+  public ticks = [];
 
   private fontScale = scaleLinear()
     .range([0.8, 2.5]);
@@ -54,23 +56,18 @@ export class PersonComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   @debounce(250)
   onResize(event) {
+    this.width = this.svg.nativeElement.clientWidth;
     this.layout();
   }
 
 
   ngOnInit(): void {
+    this.width = this.svg.nativeElement.clientWidth;
+
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
       this.layout();
-
-      this.max = 2018;
-
-      this.min = this.persons.filter(d => (d as any).year_of_birth !== null) ?
-        Math.min(...this.persons.filter(d => (d as any).year_of_birth !== null).map(d => (d as any).year_of_birth)) : 0;
-
-
-      this.yearScale.domain([this.min, this.max]);
 
       this.loadingData = false;
       const counts: Array<number> = this.persons.map(p => p.count);
@@ -83,7 +80,28 @@ export class PersonComponent implements OnInit {
     });
 
     this.dataService.personYears.subscribe(value => {
+      const birthYears = this.persons.map(d => (d as any).year_of_birth).filter(y => y != null);
+      const pubYears = Array.prototype.concat(...value.map(d => d.map(e => e.year).filter(y => y !== 0)));
+
+      if (birthYears.length === 0 && pubYears.length === 0) return;
+
+      const minYear = Math.min(...birthYears, ...pubYears);
+
+      this.min = Math.floor(minYear / 50) * 50;
+      this.yearScale
+        .domain([this.min, this.max])
+        .range([200, this.width - 60]);
+
       this.personYears = value;
+
+      // console.log(birthYears, Math.min(...birthYears), Math.min(...pubYears));
+      this.ticks = '.'.repeat(Math.ceil((this.max - this.min) / 50)).split('').map((t, i) => {
+        const year = this.min + i * 50;
+        return {
+          year,
+          x: this.yearScale(year)
+        };
+      });
     });
   }
 
@@ -111,8 +129,7 @@ export class PersonComponent implements OnInit {
     });
     temp.selectAll('text').remove();
 
-    const width = this.svg.nativeElement.clientWidth;
-    let remainingWidth = width;
+    let remainingWidth = this.width;
     const scales = [3.2, 2.4, 1.8, 1.4];
     const height = 16.5;
     let row = 0;
@@ -121,13 +138,13 @@ export class PersonComponent implements OnInit {
     this.persons.forEach((p, i) => {
       let scale = scales[Math.min(row, 3)];
       if (i > 0 && remainingWidth - p.width * scale < 0) {
-        remainingWidth = width;
+        remainingWidth = this.width;
         row += 1;
         y += 16.5 * scales[Math.min(row, 3)] + 8 + 4 * Math.min(row, 3);
       }
       scale = scales[Math.min(row, 3)];
       p.scale = scale;
-      p.x = width - remainingWidth;
+      p.x = this.width - remainingWidth;
       p.row = row;
       p.y = y;
       remainingWidth -= p.width * p.scale + 24;
@@ -135,8 +152,12 @@ export class PersonComponent implements OnInit {
       const transform = `translate(${p.x}px, ${p.y}px) scale(${p.scale})`;
       p.transform = this.sanitizer.bypassSecurityTrustStyle(transform);
 
-      const transformDetail = `translate(0, ${i * 32}px) scale(1)`;
+      const transformDetail = `translate(0, ${i * 32 + 21}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
     });
+  }
+
+  formatNum (d) {
+    return d3.format(',')(d);
   }
 }
