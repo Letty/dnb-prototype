@@ -149,6 +149,21 @@ export class ApiService {
       .map(res => <IYear[]>res.json().data);
   }
 
+  filterDataForYearTopicResultPerson(yearMin: number, yearMax: number, topicID: string): Observable<IPerson[]> {
+    this.loadingData$.emit('person');
+    return this.http.post(`${this.server}/setFilterForYearTopicResultPerson`,
+      JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <IPerson[]>res.json().data);
+  }
+  filterDataForYearTopicResultTopic(yearMin: number, yearMax: number, topicID: string): Observable<ITopic[]> {
+    this.loadingData$.emit('topic');
+    return this.http.post(`${this.server}/setFilterForYearTopicResultTopic`,
+      JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <ITopic[]>res.json().data);
+  }
+
   filterDataForYearTopicResultItems(yearMin: number, yearMax: number, topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForYearTopicResultItems`,
@@ -219,6 +234,21 @@ export class ApiService {
       .map(res => res.json().data);
   }
 
+  getTopicNetworkFilterYearTopic(yearMin: number, yearMax: number, topicID: string): Observable<any> {
+    this.loadingData$.emit('links');
+    return this.http.post(`${this.server}/getTopicNetworkFilterYearTopic`,
+      JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID}),
+      this.headers)
+      .map(res => res.json().data);
+  }
+
+  getTopicNetworkFilterYearPerson(yearMin: number, yearMax: number, personID: string): Observable<any> {
+    this.loadingData$.emit('links');
+    return this.http.post(`${this.server}/getTopicNetworkFilterYearPerson`,
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}),
+      this.headers)
+      .map(res => res.json().data);
+  }
   getTopicNetworkFilterYearPersonTopic(yearMin: number, yearMax: number, personID: string,
                                        topicID: string): Observable<any> {
     this.loadingData$.emit('links');
