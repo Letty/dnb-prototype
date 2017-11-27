@@ -277,11 +277,11 @@ export class DataService {
       trackPiwik('filterData', 'Start Filter');
       const { defaultItems, defaultTopics, defaultYears, defaultPersons, defaultNetworkLinks, defaultPersonYears } = this.dataStore;
 
-      if (this.load.persons) this.setPerson(defaultPersons);
-      if (this.load.topics) this.setTopic(defaultTopics);
-      if (this.load.years) this.setYear(defaultYears);
+      if (this.load.person) this.setPerson(defaultPersons);
+      if (this.load.topic) this.setTopic(defaultTopics);
+      if (this.load.year) this.setYear(defaultYears);
       if (this.load.items) this.setItems(defaultItems);
-      if (this.load.networkLinks) this.setNetworkLinks(defaultNetworkLinks);
+      if (this.load.network) this.setNetworkLinks(defaultNetworkLinks);
       if (this.load.personYears) this.setPersonYears(defaultPersonYears);
     }
 
