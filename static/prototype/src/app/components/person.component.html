@@ -9,38 +9,13 @@
         [style.padding]="detail ? '2px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
         [style.border-radius]="(5 / p.scale) + 'px'">
           <span>{{p.name}} {{p.lastname}}</span>
-          <!-- <path [attr.d]="p.path"></path> -->
         </div>
       </div>
       <svg #svg width="100%" height="0">
         <g #temp></g>
-        <!-- <g class="persons">
-          <g class="person" *ngFor="let p of persons" [attr.transform]="'translate(' + p.x + ' ' + p.y + ') scale(' + p.scale + ')'">
-            <text>{{p.name}} {{p.lastname}}</text>
-            <path [attr.d]="p.path"></path>
-          </g>
-        </g> -->
       </svg>
     </div>
-    <!-- <div class="person-list-overview" *ngIf="!detail">
-      <div *ngFor="let p of persons | async" class="person" (click)="onSelect(p)">
-        <span [style]="setFontSize(p.count)">{{p.name}} <strong>{{p.lastname}}</strong></span>
-      </div>
-    </div> -->
-    <!-- <div class="person-list-detail" *ngIf="detail">
-      <ul>
-        <li *ngFor="let p of persons; let i = index" class="person" (click)="onSelect(p)">
-          <chart-timeline *ngIf="personYears[i]" class="color-year" [years]="personYears[i]"
-            [height]="32" [minYear]="min" [maxYear]="max"></chart-timeline>
-          <div class="life">
-            <span class="birth" [style]="setBirthWidth(p['year_of_birth'])">{{ p['year_of_birth'] }}</span>
-            <svg [style]="setLifeWidth(p['year_of_birth'], p['year_of_death'])" height="10px" viewBox="0 0 20 10" preserveAspectRatio="none">
-              <line x1="0" y1="5" x2="20" y2="5" class="lifespan" />
-            </svg>
-            <span class="death">{{ p['year_of_death'] }}</span>
-          </div>
-        </li>
-      </ul>
-    </div> -->
+    <div class="person-list-detail" *ngIf="detail">
+    </div>
   </section>
 </div>

@@ -92,25 +92,6 @@ export class PersonComponent implements OnInit {
     this.dataService.setFilter();
   }
 
-  setFontSize(count: number): string {
-    let style: any;
-    style = this.sanitizer.bypassSecurityTrustStyle('font-size: ' + this.fontScale(count) + 'em');
-    return style;
-  }
-
-  setBirthWidth(count: number): string {
-    let style: any;
-    style = this.sanitizer.bypassSecurityTrustStyle('width: ' + this.yearScale(count) + '%');
-    return style;
-  }
-
-  setLifeWidth(birth: number, death: number): string {
-    if (birth !== null && death === null) death = 2018;
-    let style: any;
-    style = this.sanitizer.bypassSecurityTrustStyle('width: ' + (this.yearScale(death) - this.yearScale(birth)) + '%');
-    return style;
-  }
-
   layout () {
     const temp = d3.select(this.temp.nativeElement);
     this.rawPersons.forEach(p => {
@@ -156,10 +137,6 @@ export class PersonComponent implements OnInit {
 
       const transformDetail = `translate(0, ${i * 32}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
-
-      // const h = height * p.scale;
-      // const w = p.width * p.scale;
-      // p.path = `M-8,-3 L-8,${-h - 3} A-3,${-h - 8} L${w + 3},${-h - 8} A${w + 8},${-h - 3} L${w + 8},-3 A${w + 3},-8 L-3,-8 A-8,-3`;
     });
   }
 }
