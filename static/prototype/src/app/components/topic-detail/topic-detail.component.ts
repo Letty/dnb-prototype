@@ -30,6 +30,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public links;
   private upcomingTopics = [];
   private upcomingLinks = [];
+
   private simulation;
   public width = 0;
   public height = 0;
@@ -40,6 +41,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   private loadingTopic = false;
   private loadingLinks = false;
+
+  public selectedTopic: number = null;
 
   public networkLinks: Observable<INetworkLink[]>;
 
@@ -52,6 +55,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       if (e === 'topic') { this.loadingTopic = true; }
       if (e === 'links') { this.loadingLinks = true; }
     });
+    selection.selTopic$.subscribe(
+      topic => {
+        this.selectedTopic = topic ? topic.id : null;
+      }
+    );
   }
 
   // Listeners
@@ -59,14 +67,14 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   @debounce(250)
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5);
+    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5) - 32;
     this.update();
   }
 
   // Life-cycle hooks
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5);
+    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5) - 32;
 
     this.simulation = this.getSimulation();
     this.nodes = [];
@@ -110,6 +118,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           oldNode.width = newNode.width;
           oldNode.height = newNode.height;
           oldNode.count = newNode.count;
+          oldNode.fontSize = newNode.fontSize;
 
           if (this.forces === false) {
             oldNode.x = newNode.x;
@@ -158,7 +167,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   ngOnChanges (changes: SimpleChanges) {
     if (changes.forces && !changes.forces.firstChange) {
       // window.setTimeout(() => {
-        this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5);
+        this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5) - 32;
         if (changes.forces.currentValue) {
           if (!this.loadingLinks) {
             this.simulate(this.nodes);
@@ -230,7 +239,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     nodes = _.sortBy(nodes, 'count');
 
-    const height = (window.innerHeight - 248) * 0.5;
+    const height = (window.innerHeight - 248) * 0.5 - 32;
     let remainingWidth = this.width;
     let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + b);
     let packs = [{
