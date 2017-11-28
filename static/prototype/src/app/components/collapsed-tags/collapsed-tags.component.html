@@ -1,0 +1,8 @@
+<div class="collapsed-tags">
+  <div class="total-results" *ngIf="totalResults != null && tags.length > 0">
+    <span class="mono">{{totalResults}}</span> Werke
+  </div>
+  <div *ngFor="let tag of tags" class="item">
+    {{tag.label}}
+  </div>
+</div>

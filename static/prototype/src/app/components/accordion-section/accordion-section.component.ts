@@ -33,9 +33,4 @@ export class AccordionSectionComponent implements OnInit {
     console.log('clicked', this.route);
     this.router.toggle(this.route);
   }
-
-  dataUpdate (e) {
-    console.log('UPDATEUPDATE');
-    console.log(e);
-  }
 }

@@ -18,6 +18,7 @@ export class DataService {
   items: Observable<IItem[]>;
   networkLinks: Observable<INetworkLink[]>;
   personYears: Observable<IYear[][]>;
+  totalResults: Observable<number>;
 
   private _topics: BehaviorSubject<ITopic[]>;
   private _persons: BehaviorSubject<IPerson[]>;
@@ -25,6 +26,7 @@ export class DataService {
   private _items: BehaviorSubject<IItem[]>;
   private _networkLinks: BehaviorSubject<INetworkLink[]>;
   private _personYears: BehaviorSubject<IYear[][]>;
+  private _totalResults: BehaviorSubject<number>;
 
   private load: any = {};
 
@@ -59,7 +61,9 @@ export class DataService {
     personYears: IYear[][],
     defaultPersonYears: IYear[][],
     personYearsAvailable: boolean,
-    personYearsRequired: boolean
+    personYearsRequired: boolean,
+
+    totalResults: number
   };
 
   constructor(
@@ -72,7 +76,8 @@ export class DataService {
       years: [], defaultYears: [], yearsAvailable: false, yearsRequired: false,
       items: [], defaultItems: [], itemsAvailable: false, itemsRequired: false,
       networkLinks: [], defaultNetworkLinks: [], networkLinksAvailable: false, networkLinksRequired: false,
-      personYears: [], defaultPersonYears: [], personYearsAvailable: false, personYearsRequired: false
+      personYears: [], defaultPersonYears: [], personYearsAvailable: false, personYearsRequired: false,
+      totalResults: 0
     };
 
     this._topics = <BehaviorSubject<ITopic[]>>new BehaviorSubject([]);
@@ -81,6 +86,7 @@ export class DataService {
     this._items = <BehaviorSubject<IItem[]>>new BehaviorSubject([]);
     this._networkLinks = <BehaviorSubject<INetworkLink[]>>new BehaviorSubject([]);
     this._personYears = <BehaviorSubject<IYear[][]>>new BehaviorSubject([]);
+    this._totalResults = <BehaviorSubject<number>>new BehaviorSubject(0);
 
     this.topics = this._topics.asObservable();
     this.persons = this._persons.asObservable();
@@ -88,12 +94,15 @@ export class DataService {
     this.items = this._items.asObservable();
     this.networkLinks = this._networkLinks.asObservable();
     this.personYears = this._personYears.asObservable();
+    this.totalResults = this._totalResults.asObservable();
 
     this.api.getYears()
       .subscribe(data => {
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);
+        this.dataStore.totalResults = data.length > 0 ? data.map(d => d.count).reduce((a, c) => a + c) : 0;
+        this._totalResults.next(Object.assign({}, this.dataStore).totalResults);
       }, err => console.log('error while loading default year'));
 
     this.api.getPersons()
@@ -134,7 +143,9 @@ export class DataService {
 
   setYear(years_: IYear[]): void {
     this.dataStore.years = years_;
+    this.dataStore.totalResults = years_.length > 0 ? years_.map(d => d.count).reduce((a, c) => a + c) : 0;
     this._years.next(Object.assign({}, this.dataStore).years);
+    this._totalResults.next(Object.assign({}, this.dataStore).totalResults);
   }
 
   setTopic(topics_: ITopic[]): void {

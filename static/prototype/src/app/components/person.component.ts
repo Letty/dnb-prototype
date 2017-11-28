@@ -36,6 +36,7 @@ export class PersonComponent implements OnInit {
   public max = 2018;
   public width = 0;
   public ticks = [];
+  public tags = [];
 
   private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
   public yearScale = scaleLinear();
@@ -67,6 +68,9 @@ export class PersonComponent implements OnInit {
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
+      this.tags = value.map(tag => {
+        return {label: `${tag.name} ${tag.lastname}`, tag};
+      });
       this.layout();
       this.loadingData = false;
     });

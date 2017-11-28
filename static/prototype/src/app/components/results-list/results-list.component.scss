@@ -12,29 +12,9 @@ $gutter-results-default: $distance-outer-default / 2;
 
   .collapsed {
     position: absolute;
-    margin-top: -32px;
-    position: absolute;
     margin-top: -44px;
     left: 108px;
     right: 168px;
-    height: 32px;
-    overflow: hidden;
-
-    .item {
-      display: inline-block;
-      font-size: 0.85em;
-      max-width: 160px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      background: $color-result-background;
-      padding: 3px 8px;
-      margin-right: 4px;
-      border-radius: 5px;
-      font-weight: 500;
-      height: 26px;
-      box-sizing: border-box;
-    }
   }
 
   .brick {
@@ -63,43 +43,43 @@ $gutter-results-default: $distance-outer-default / 2;
     @media screen and (min-width: 1920px) {
       width: 12.5%;
     }
-  }
 
-  .result {
-    cursor: pointer;
-  	background-color: $color-result-default;
-  	display: inline-block;
-  	width: 100%;
-    min-height: 360px;
+    .result {
+      cursor: pointer;
+    	background-color: $color-result-default;
+    	display: inline-block;
+    	width: 100%;
+      min-height: 360px;
 
-    box-sizing: border-box;
+      box-sizing: border-box;
 
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
 
-  	span {
-  		display: block;
-  		color: #fff;
-  		margin: 0 0 0.5em;
-  	}
+    	span {
+    		display: block;
+    		color: #fff;
+    		margin: 0 0 0.5em;
+    	}
 
-  	header {
-  		padding: $distance-outer-default;
-  		font-weight: bold;
-  		line-height: 1.2em;
+    	header {
+    		padding: $distance-outer-default;
+    		font-weight: bold;
+    		line-height: 1.2em;
 
-      .author{
-        display: flex;
-        font-weight: normal;
-      }
+        .author{
+          display: flex;
+          font-weight: normal;
+        }
 
-      margin-bottom: 200px;
-  	}
+        margin-bottom: 200px;
+    	}
 
-  	footer {
-  		padding: $distance-outer-default;
-      position: absolute;
-      bottom: 0px;
-  	}
+    	footer {
+    		padding: $distance-outer-default;
+        position: absolute;
+        bottom: 0px;
+    	}
+    }
   }
 }

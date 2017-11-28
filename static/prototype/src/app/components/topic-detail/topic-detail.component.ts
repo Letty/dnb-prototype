@@ -28,6 +28,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   public nodes;
   public links;
+  public tags;
   private upcomingTopics = [];
   private upcomingLinks = [];
 
@@ -83,6 +84,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.topics.subscribe(values => {
         this.loadingTopic = false;
         this.upcomingTopics = values;
+        this.tags = values.map(tag => {
+          return {label: tag.keyword, tag};
+        });
         this.update();
     });
 

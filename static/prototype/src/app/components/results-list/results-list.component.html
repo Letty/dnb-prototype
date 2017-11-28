@@ -1,9 +1,5 @@
 <div class="results-list" #resultList>
-  <div class="collapsed">
-    <div *ngFor="let item of items | async" class="item">
-      {{item.title}}
-    </div>
-  </div>
+  <collapsed-tags class="result collapsed" [tags]="tags" [totalResults]="totalResults"></collapsed-tags>
   <loading-data *ngIf="loadingData" class="color-result"></loading-data>
 
   <masonry>
