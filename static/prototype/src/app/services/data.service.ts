@@ -340,6 +340,7 @@ export class DataService {
 
   filterDataByPersonAndTopic(personID: string, topicID: string): void {
     if (this.load.year) this.api.filterDataForPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
+    if (this.load.topic) this.api.filterDataForPersonTopicResultTopic(personID, topicID).subscribe(data => this.setTopic(data));
     if (this.load.items) this.api.filterDataForPersonTopicResultItems(personID, topicID).subscribe(data => this.setItems(data));
   }
 

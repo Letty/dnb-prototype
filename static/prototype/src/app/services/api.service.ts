@@ -133,6 +133,14 @@ export class ApiService {
       .map(res => <IYear[]>res.json().data);
   }
 
+  filterDataForPersonTopicResultTopic(personID: string, topicID: string): Observable<ITopic[]> {
+    this.loadingData$.emit('topic');
+    return this.http.post(`${this.server}/setFilterForPersonTopicResultTopic`,
+      JSON.stringify({'person_id': personID, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <ITopic[]>res.json().data);
+  }
+
   filterDataForPersonTopicResultItems(personID: string, topicID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForPersonTopicResultItems`,

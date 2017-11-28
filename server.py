@@ -347,6 +347,16 @@ def filter_by_person_topic_result_year():
     return jsonify(year_result)
 
 
+@app.route('/setFilterForPersonTopicResultTopic', methods=['POST'])
+def filter_by_person_topic_result_topic():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    topic_result = qh.get_topics_for_person_topic(
+        params['person_id'], params['topic_id'], con)
+    con.close()
+    return jsonify(topic_result)
+
+
 @app.route('/setFilterForPersonTopicResultItems', methods=['POST'])
 def filter_by_person_topic_result_items():
     con = open_db_connection()
