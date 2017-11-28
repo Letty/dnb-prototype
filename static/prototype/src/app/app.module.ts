@@ -16,6 +16,7 @@ import {LoadingDataComponent} from './components/loading-data/loading-data.compo
 import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
 import {SearchComponent} from './components/search/search.component';
 import {AccordionSectionComponent} from './components/accordion-section/accordion-section.component';
+import {CollapsedTagsComponent} from './components/collapsed-tags/collapsed-tags.component';
 
 import {ApiService} from './services/api.service';
 import {SelectionService} from './services/selection.service';
@@ -40,7 +41,8 @@ import { FormsModule } from '@angular/forms';
     TopicDetailComponent,
     ResultsDetailComponent,
     SearchComponent,
-    AccordionSectionComponent
+    AccordionSectionComponent,
+    CollapsedTagsComponent
   ],
   imports: [
     BrowserModule,

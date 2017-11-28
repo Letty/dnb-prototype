@@ -1,0 +1,41 @@
+@import "../../../style/variables";
+@import "../../../style/mixins";
+
+.collapsed-tags {
+  position: absolute;
+  height: 32px;
+  overflow: hidden;
+
+  .item {
+    display: inline-block;
+    font-size: 0.85em;
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 3px 8px;
+    margin-right: 4px;
+    border-radius: 5px;
+    font-weight: 500;
+    height: 26px;
+    box-sizing: border-box;
+  }
+}
+
+:host(.topic) {
+  .item {
+    background: $color-topic-background;
+  }
+}
+
+:host(.person) {
+  .item {
+    background: $color-person-background;
+  }
+}
+
+:host(.result) {
+  .item {
+    background: $color-result-background;
+  }
+}
