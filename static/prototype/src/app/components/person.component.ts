@@ -38,6 +38,9 @@ export class PersonComponent implements OnInit {
   public ticks = [];
   public tags = [];
 
+  public selectedPerson: IPerson = null;
+  public selectedTag = null;
+
   private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
   public yearScale = scaleLinear();
   private maxPubInYear = 0;
@@ -52,6 +55,16 @@ export class PersonComponent implements OnInit {
       api.loadingData$.subscribe((e) => {
         if (e === 'person') { this.loadingData = true; }
       });
+      selection.selPerson$.subscribe(
+        person => {
+          this.selectedPerson = person;
+          this.tags = this.rawPersons.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
+            return {label: `${tag.name} ${tag.lastname}`, tag};
+          });
+          this.selectedTag = this.selectedPerson != null ?
+            {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
+        }
+      );
     }
 
   @HostListener('window:resize', ['$event'])
@@ -68,9 +81,10 @@ export class PersonComponent implements OnInit {
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
-      this.tags = value.map(tag => {
+      this.tags = value.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
         return {label: `${tag.name} ${tag.lastname}`, tag};
       });
+      this.selectedTag = this.selectedPerson != null ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
       this.layout();
       this.loadingData = false;
     });

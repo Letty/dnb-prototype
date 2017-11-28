@@ -30,23 +30,46 @@
     height: 26px;
     box-sizing: border-box;
     cursor: pointer;
+
+    &.selected {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      .close-button {
+        margin-left: 0.5em;
+      }
+    }
   }
 }
 
 :host(.topic) {
   .item {
     background: $color-topic-background;
+
+    &.selected {
+      color: $color-topic-background;
+      background: $color-topic-default;
+    }
   }
 }
 
 :host(.person) {
   .item {
     background: $color-person-background;
+
+    &.selected {
+      color: $color-person-background;
+      background: $color-person-default;
+    }
   }
 }
 
 :host(.result) {
   .item {
     background: $color-result-background;
+
+    &.selected {
+      color: $color-result-background;
+      background: $color-result-default;
+    }
   }
 }

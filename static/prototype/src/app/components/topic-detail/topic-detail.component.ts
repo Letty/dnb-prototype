@@ -29,6 +29,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public nodes;
   public links;
   public tags;
+  public selectedTag = null;
   private upcomingTopics = [];
   private upcomingLinks = [];
 
@@ -43,7 +44,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   private loadingTopic = false;
   private loadingLinks = false;
 
-  public selectedTopic: number = null;
+  public selectedTopic: ITopic = null;
 
   public networkLinks: Observable<INetworkLink[]>;
 
@@ -58,7 +59,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     });
     selection.selTopic$.subscribe(
       topic => {
-        this.selectedTopic = topic ? topic.id : null;
+        this.selectedTopic = topic;
       }
     );
   }
@@ -84,9 +85,10 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.topics.subscribe(values => {
         this.loadingTopic = false;
         this.upcomingTopics = values;
-        this.tags = values.map(tag => {
+        this.tags = values.filter(tag => this.selectedTopic == null || tag.id !== this.selectedTopic.id).map(tag => {
           return {label: tag.keyword, tag};
         });
+        this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
         this.update();
     });
 

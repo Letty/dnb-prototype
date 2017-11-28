@@ -10,6 +10,7 @@ export class CollapsedTagsComponent implements OnInit {
   @Output() selection: EventEmitter<any> = new EventEmitter();
   @Input() tags = [];
   @Input() totalResults: number = null;
+  @Input() selectedTag: any = null;
 
   constructor() {}
 

@@ -1,5 +1,5 @@
 <div class="person-div main-viz">
-  <collapsed-tags class="person collapsed" [tags]="tags" (selection)="onSelect($event)"></collapsed-tags>
+  <collapsed-tags class="person collapsed" [tags]="tags" [selectedTag]="selectedTag" (selection)="onSelect($event)"></collapsed-tags>
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
       <div class="persons">
