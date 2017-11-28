@@ -8,7 +8,7 @@
         <div class="person" *ngFor="let p of persons" [class.selected]="selectedPerson && p.id === selectedPerson.id" (click)="onSelect(p)"
           [style.transform]="detail ? p.transformDetail : p.transform"
           [style.max-width]="detail ? '176px' : (100 / p.scale) + '%'"
-          [style.width]="detail ? '176px' : (p.width * p.scale) + 'px'"
+          [style.width]="detail ? '176px' : (p.width) + 'px'"
           [style.padding]="detail ? '0px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
           [style.border-radius]="(5 / p.scale) + 'px'">
           <span>{{p.name}} {{p.lastname}}</span>
