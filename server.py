@@ -254,10 +254,9 @@ def filter_by_year_person_result_year():
 
     with con.cursor() as cursor:
         sql = 'select a_id id, count(a_id) as count, year from dnb_author_item '\
-            'where a_id = %s and year >= %s and year <= %s GROUP by a_id, year'
+            'where a_id = %s GROUP by a_id, year'
         try:
-            cursor.execute(sql, (params['person_id'],
-                                 params['min_year'], params['max_year']))
+            cursor.execute(sql, (params['person_id']))
         except:
             year_result['error'] = str(sys.exc_info()[0])
         else:
@@ -386,11 +385,9 @@ def filter_by_year_topic_result_year():
 
     with con.cursor() as cursor:
         sql = 'select count(ai.i_id) count, ai.year from dnb_author_item ai, dnb_item_topic it '\
-            'where ai.year > %s and ai.year < %s and it.t_id = %s '\
-            'and ai.i_id = it.i_id group by ai.year'
+            'where it.t_id = %s and ai.i_id = it.i_id group by ai.year'
         try:
-            cursor.execute(sql, (params['min_year'],
-                                 params['max_year'], params['topic_id']))
+            cursor.execute(sql, (params['topic_id']))
         except:
             year_result['error'] = str(sys.exc_info()[0])
         else:
@@ -461,11 +458,9 @@ def filter_by_year_person_topic_result_year():
 
     with con.cursor() as cursor:
         sql = 'select count(ai.i_id) count, ai.year from dnb_author_item ai, dnb_item_topic it '\
-            'where ai.a_id =%s and ai.year > %s and ai.year < %s and it.t_id = %s and '\
-            'ai.i_id = it.i_id group by ai.year'
+            'where it.t_id = %s and ai.a_id = %s and ai.i_id = it.i_id group by ai.year'
         try:
-            cursor.execute(sql, (params['person_id'], params['min_year'],
-                                 params['max_year'], params['topic_id']))
+            cursor.execute(sql, (params['topic_id'], params['person_id']))
         except:
             year_result['error'] = str(sys.exc_info()[0])
         else:
