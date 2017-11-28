@@ -8,7 +8,7 @@ import {ApiService} from '../../services/api.service';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-import {formatNum} from '../../services/formatting';
+import {formatNum, formatTitleResult} from '../../services/formatting';
 
 import {ITopic, INetworkLink} from '../../app.interfaces';
 import {RouterService} from '../../services/router.service';
@@ -401,7 +401,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.dataService.setFilter();
   }
 
-  _formatNum (d) {
-    return formatNum(d);
+  _formatNum (value) {
+    return formatNum(value);
+  }
+
+  _formatTitleResult (topic, subject, value) {
+    return formatTitleResult(topic, subject, value);
   }
 }

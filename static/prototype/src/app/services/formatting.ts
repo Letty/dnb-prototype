@@ -12,3 +12,7 @@ const numberFormat = localeFormatter.format(',');
 export function formatNum(val) {
   return numberFormat(val);
 }
+
+export function formatTitleResult(topic, subject, value) {
+	return topic + " „" + subject.join(' ') + "“ hat " + formatNum(value) + " Ergebniss" + (value > 1 ? 'e' : '');
+}
