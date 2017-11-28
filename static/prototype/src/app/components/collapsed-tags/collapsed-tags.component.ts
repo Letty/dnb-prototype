@@ -9,6 +9,7 @@ import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 export class CollapsedTagsComponent implements OnInit {
   @Output() selection: EventEmitter<any> = new EventEmitter();
   @Input() tags = [];
+  @Input() totalResults: number = null;
 
   constructor() {}
 

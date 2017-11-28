@@ -8,6 +8,8 @@ import {Observable} from 'rxjs/Observable';
 import _ from 'lodash';
 import { MasonryModule } from 'angular2-masonry';
 
+import {format} from 'd3-format';
+
 @NgModule({
   imports: [
     MasonryModule
@@ -29,6 +31,7 @@ export class ResultsListComponent implements OnInit {
   public itemTitle: string = null;
   public loadingData = true;
   public loadingDetailData = false;
+  public totalResults: string = null;
 
   constructor(private api: ApiService,
               private dataService: DataService) {
@@ -49,13 +52,16 @@ export class ResultsListComponent implements OnInit {
       this.resultList.nativeElement.scrollTop = 0;
     });
 
+    this.dataService.totalResults.subscribe(value => {
+      this.totalResults = format(',')(value);
+    });
   }
 
   getItem(item: IItem): void {
     this.loadingDetailData = true;
     this.itemTitle = `${item.name} ${item.lastname}: ${item.title}`;
     this.api.getItem(item.id).subscribe(data => {
-      if (this.loadingDetailData === false) { return; }
+      if (this.loadingDetailData === false) return;
       this.loadingDetailData = false;
       this.item = data;
     });

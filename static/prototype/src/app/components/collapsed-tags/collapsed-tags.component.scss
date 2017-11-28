@@ -6,6 +6,16 @@
   height: 32px;
   overflow: hidden;
 
+  .total-results {
+    display: inline-block;
+    margin-right: 20px;
+    transform: translateY(-8px);
+
+    .mono {
+      font-family: 'RobotoMono', monospace;
+    }
+  }
+
   .item {
     display: inline-block;
     font-size: 0.85em;
