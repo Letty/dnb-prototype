@@ -23,10 +23,7 @@ export interface IItem {
   name: string;
   lastname: string;
   title: string;
-  publisher: Array<{
-    name: string,
-    ort: string
-  }>;
+  publisher: Array<string>;
   year: number;
   height: number;
 }

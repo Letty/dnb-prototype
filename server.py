@@ -4,6 +4,7 @@ import json
 from datetime import datetime, date
 import pymysql.cursors
 import queryhelper as qh
+import utils
 
 app = Flask(__name__, static_url_path='')
 CORS(app)  # remove for production
@@ -55,7 +56,8 @@ def get_start_results():
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
             'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 50'
         cursor.execute(sql, (year))
-        result = cursor.fetchall()
+        res = cursor.fetchall()
+        result = utils.extract_publisher_name(res)
     con.close()
     return jsonify(result)
 
@@ -105,7 +107,7 @@ def filter_by_person_result_items():
     con = open_db_connection()
     # todo
     person_id = request.data.decode('utf-8')
-    person_result = {'data': None, 'error': None}
+    item_result = {'data': None, 'error': None}
 
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.lastname, ac.name '\
@@ -114,11 +116,13 @@ def filter_by_person_result_items():
         try:
             cursor.execute(sql, (person_id))
         except:
-            person_result['error'] = str(sys.exc_info()[0])
+            item_result['error'] = str(sys.exc_info()[0])
         else:
-            person_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            item_result['data'] = utils.extract_publisher_name(res)
+
     con.close()
-    return jsonify(person_result)
+    return jsonify(item_result)
 
 
 @app.route('/setFilterForTopicResultYear', methods=['POST'])
@@ -183,7 +187,8 @@ def filter_by_topic_result_items():
             err = sys.exc_info()[0]
             items_result['error'] = str(err)
         else:
-            items_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
 
@@ -241,7 +246,8 @@ def filter_by_year_result_items():
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
-            items_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
 
@@ -322,7 +328,8 @@ def filter_by_year_person_result_items():
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
-            items_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
 
@@ -372,7 +379,8 @@ def filter_by_person_topic_result_items():
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
-            items_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
 
@@ -445,7 +453,8 @@ def filter_by_year_topic_result_items():
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
-            items_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
 
@@ -496,7 +505,8 @@ def filter_by_year_person_topic_result_items():
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
-            items_result['data'] = cursor.fetchall()
+            res = cursor.fetchall()
+            items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
 

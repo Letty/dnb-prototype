@@ -1,3 +1,7 @@
+import ast
+import json
+
+
 def seq_iter(obj):
     return obj if isinstance(obj, dict) else range(len(obj))
 
@@ -27,3 +31,16 @@ def createTopicList(topics_result, topic_id):
 
     # todo order result by count and limit to 20 entries
     return result
+
+
+def extract_publisher_name(data):
+    for r in data:
+        if r['publisher'] != '':
+            publisher_name = []
+            p = ast.literal_eval(r['publisher'])
+            j_ = json.dumps(p)
+            j = json.loads(j_)
+            for pub in j:
+                publisher_name.append(pub['name'])
+            r['publisher'] = publisher_name
+    return data
