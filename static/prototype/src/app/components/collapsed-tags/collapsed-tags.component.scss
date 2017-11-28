@@ -44,6 +44,9 @@
 :host(.topic) {
   .item {
     background: $color-topic-background;
+    &:hover {
+      background: $color-topic-background--hover;
+    }
 
     &.selected {
       color: $color-topic-background;
@@ -55,6 +58,9 @@
 :host(.person) {
   .item {
     background: $color-person-background;
+    &:hover {
+      background: $color-person-background--hover;
+    }
 
     &.selected {
       color: $color-person-background;
@@ -66,6 +72,9 @@
 :host(.result) {
   .item {
     background: $color-result-background;
+    &:hover {
+      background: $color-result-background--hover;
+    }
 
     &.selected {
       color: $color-result-background;
