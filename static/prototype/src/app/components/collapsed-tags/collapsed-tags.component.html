@@ -1,6 +1,6 @@
 <div class="collapsed-tags">
-  <div class="total-results" *ngIf="totalResults != null && tags.length > 0">
-    <span class="mono">{{totalResults}}</span> Werke
+  <div class="total-results" *ngIf="totalResults != null && tags.length > 0" title="Insgesamt wurden xxx gefunden.">
+    <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults > 1 ? 'e' : ''}}
   </div>
   <div *ngIf="selectedTag != null" class="item selected" (click)="selected(selectedTag.tag)" [class.visible]="showTags">
     {{selectedTag.label}}

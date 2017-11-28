@@ -9,8 +9,6 @@ import {RouterService} from '../../services/router.service';
 import _ from 'lodash';
 import { MasonryModule } from 'angular2-masonry';
 
-import {formatNum} from '../../services/formatting';
-
 @NgModule({
   imports: [
     MasonryModule
@@ -32,7 +30,7 @@ export class ResultsListComponent implements OnInit {
   public itemTitle: string = null;
   public loadingData = true;
   public loadingDetailData = false;
-  public totalResults: string = null;
+  public totalResults: number = null;
   public collapsed = true;
 
   constructor(private api: ApiService,
@@ -59,7 +57,7 @@ export class ResultsListComponent implements OnInit {
     });
 
     this.dataService.totalResults.subscribe(value => {
-      this.totalResults = formatNum(value);
+      this.totalResults = value;
     });
   }
 

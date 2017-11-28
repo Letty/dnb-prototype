@@ -1,5 +1,7 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
+import {formatNum} from '../../services/formatting';
+
 @Component({
   selector: 'collapsed-tags',
   templateUrl: './collapsed-tags.component.html',
@@ -21,5 +23,9 @@ export class CollapsedTagsComponent implements OnInit {
 
   selected (node) {
     this.selection.emit(node);
+  }
+
+  _formatNum (d) {
+    return formatNum(d);
   }
 }
