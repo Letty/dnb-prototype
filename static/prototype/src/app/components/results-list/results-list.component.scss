@@ -9,6 +9,7 @@ $gutter-results-default: $distance-outer-default / 2;
   height: calc(100% - 40px);
   box-sizing: border-box;
   overflow-y: auto;
+  position: relative;
 
   .collapsed {
     position: absolute;

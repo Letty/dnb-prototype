@@ -1,9 +1,13 @@
 .person-div {
+  position: relative;
+  height: 100%;
+
   .collapsed {
     position: absolute;
     margin-top: -34px;
     left: 108px;
     right: 168px;
+    height: 100%;
   }
 
   .viz-container {

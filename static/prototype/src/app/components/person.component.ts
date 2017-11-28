@@ -87,6 +87,7 @@ export class PersonComponent implements OnInit {
       });
       this.selectedTag = this.selectedPerson != null ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
       this.layout();
+      console.log('LOADING');
       this.loadingData = false;
     });
 

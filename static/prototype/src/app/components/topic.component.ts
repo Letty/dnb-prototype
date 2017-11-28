@@ -22,7 +22,6 @@ export class TopicComponent implements OnInit {
   public show = true;
   public topics: Observable<ITopic[]>;
   public loadingData = true;
-  public offResults = '0';
 
   constructor(
     private api: ApiService,
@@ -40,7 +39,6 @@ export class TopicComponent implements OnInit {
     this.topics = this.dataService.topics;
     this.dataService.topics.subscribe(value => {
       this.loadingData = false;
-      this.offResults = formatNum(123456); // 🤔
     });
 
     this.routerService.view.subscribe(view => {
