@@ -9,7 +9,7 @@ import {RouterService} from '../../services/router.service';
 import _ from 'lodash';
 import { MasonryModule } from 'angular2-masonry';
 
-import {format} from 'd3-format';
+import {formatNum} from '../../services/formatting';
 
 @NgModule({
   imports: [
@@ -59,7 +59,7 @@ export class ResultsListComponent implements OnInit {
     });
 
     this.dataService.totalResults.subscribe(value => {
-      this.totalResults = format(',')(value);
+      this.totalResults = formatNum(value);
     });
   }
 

@@ -13,6 +13,7 @@ import { DataService } from '../services/data.service';
 import { RouterService } from '../services/router.service';
 
 import * as d3 from 'd3';
+import {formatNum} from '../services/formatting';
 
 @Component({
   selector: 'chart-person',
@@ -74,7 +75,6 @@ export class PersonComponent implements OnInit {
     this.width = this.svg.nativeElement.clientWidth;
     this.layout();
   }
-
 
   ngOnInit(): void {
     this.width = this.svg.nativeElement.clientWidth;
@@ -185,10 +185,6 @@ export class PersonComponent implements OnInit {
     });
   }
 
-  formatNum (d) {
-    return d3.format(',')(d);
-  }
-
   addMissingYears(years: IYear[]): IYear[] {
     const minYear = Math.min(...years.map(y => y.year)) - 1;
     const maxYear = Math.max(...years.map(y => y.year)) + 1;
@@ -203,5 +199,9 @@ export class PersonComponent implements OnInit {
     if (allYears.find(y => y.year === this.max) == null) allYears = [...allYears, {count: 0, year: this.max}];
     if (allYears.find(y => y.year === this.min) == null) allYears = [{count: 0, year: this.min}, ...allYears];
     return allYears;
+  }
+
+  _formatNum (d) {
+    return formatNum(d);
   }
 }

@@ -33,7 +33,7 @@
           <rect class="grid" x="-24" y="32" [attr.width]="width + 48" height="1"></rect>
           <rect class="background" x="-24" [attr.width]="width + 48" height="32" (click)="onSelect(p)"></rect>
           <rect class="selected" *ngIf="selectedPerson && p.id === selectedPerson.id" width="221" height="32"></rect>
-          <text class="count" [attr.x]="width" y="21">{{formatNum(p.count)}}</text>
+          <text class="count" [attr.x]="width" y="21">{{_formatNum(p.count)}}</text>
           <path class="sparkline" [attr.d]="personYearsLines[i]"></path>
           <g *ngIf="p.year_of_birth">
             <g [attr.transform]="'translate(' + yearScale(p.year_of_birth) + ' 0)'">

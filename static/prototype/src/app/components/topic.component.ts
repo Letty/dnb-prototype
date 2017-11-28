@@ -9,7 +9,7 @@ import { RouterService } from '../services/router.service';
 
 import { ITopic } from '../app.interfaces';
 
-import { format } from 'd3';
+import {formatNum} from '../services/formatting';
 
 @Component({
   selector: 'topic',
@@ -40,7 +40,7 @@ export class TopicComponent implements OnInit {
     this.topics = this.dataService.topics;
     this.dataService.topics.subscribe(value => {
       this.loadingData = false;
-      this.offResults = format(',')(123456);
+      this.offResults = formatNum(123456); // 🤔
     });
 
     this.routerService.view.subscribe(view => {
