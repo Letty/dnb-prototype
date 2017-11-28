@@ -4,6 +4,7 @@ import {ApiService} from '../../services/api.service';
 import {IYear, IItem} from '../../app.interfaces';
 import {DataService} from '../../services/data.service';
 import {Observable} from 'rxjs/Observable';
+import {RouterService} from '../../services/router.service';
 
 import _ from 'lodash';
 import { MasonryModule } from 'angular2-masonry';
@@ -32,13 +33,18 @@ export class ResultsListComponent implements OnInit {
   public loadingData = true;
   public loadingDetailData = false;
   public totalResults: string = null;
+  public collapsed = true;
 
   constructor(private api: ApiService,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private routerService: RouterService) {
     api.loadingData$.subscribe((e) => {
       if (e === 'item') {
         this.loadingData = true;
       }
+    });
+    routerService.result.subscribe(size => {
+      this.collapsed = size === 0 || size === null;
     });
   }
 

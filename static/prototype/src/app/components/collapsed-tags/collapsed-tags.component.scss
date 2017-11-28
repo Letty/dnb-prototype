@@ -30,6 +30,14 @@
     height: 26px;
     box-sizing: border-box;
     cursor: pointer;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     &.selected {
       -webkit-font-smoothing: antialiased;

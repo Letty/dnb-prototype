@@ -1,5 +1,7 @@
 <div class="chart-topic" #svgWrapper>
-  <collapsed-tags class="collapsed topic" [tags]="tags" [selectedTag]="selectedTag" (selection)="onSelect($event)"></collapsed-tags>
+  <collapsed-tags class="collapsed topic"
+  [tags]="tags" [selectedTag]="selectedTag" [showTags]="collapsed"
+  (selection)="onSelect($event)"></collapsed-tags>
   <svg width="100%" height="100%">
     <g *ngIf="nodes && forces" [attr.transform]="translate">
       <g *ngFor="let link of links">

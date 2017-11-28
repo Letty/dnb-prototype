@@ -12,6 +12,8 @@ export class CollapsedTagsComponent implements OnInit {
   @Input() totalResults: number = null;
   @Input() selectedTag: any = null;
 
+  @Input() showTags = false;
+
   constructor() {}
 
   ngOnInit () {

@@ -9,6 +9,7 @@ import * as d3 from 'd3';
 import _ from 'lodash';
 
 import {ITopic, INetworkLink} from '../../app.interfaces';
+import {RouterService} from '../../services/router.service';
 
 import {debounce} from '../../decorators';
 
@@ -32,6 +33,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public selectedTag = null;
   private upcomingTopics = [];
   private upcomingLinks = [];
+  public collapsed = false;
 
   private simulation;
   public width = 0;
@@ -51,7 +53,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   constructor(private sanitizer: DomSanitizer,
               private selection: SelectionService,
               private dataService: DataService,
-              private api: ApiService
+              private api: ApiService,
+              private routerService: RouterService
   ) {
     api.loadingData$.subscribe((e) => {
       if (e === 'topic') { this.loadingTopic = true; }
@@ -90,6 +93,10 @@ export class TopicDetailComponent implements OnInit, OnChanges {
         });
         this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
         this.update();
+    });
+
+    this.routerService.topic.subscribe(size => {
+      this.collapsed = size === 0;
     });
 
     this.networkLinks = this.dataService.networkLinks;

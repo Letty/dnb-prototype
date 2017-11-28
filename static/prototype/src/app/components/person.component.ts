@@ -37,6 +37,7 @@ export class PersonComponent implements OnInit {
   public width = 0;
   public ticks = [];
   public tags = [];
+  public collapsed = false;
 
   public selectedPerson: IPerson = null;
   public selectedTag = null;
@@ -89,8 +90,13 @@ export class PersonComponent implements OnInit {
       this.loadingData = false;
     });
 
-    this.routerService.view.subscribe(view => {
-      this.detail = view === 'person';
+    // this.routerService.view.subscribe(view => {
+    //   this.detail = view === 'person';
+    // });
+
+    this.routerService.person.subscribe(size => {
+      this.detail = size === 2;
+      this.collapsed = size === 0 ? true : false;
     });
 
     this.dataService.personYears.subscribe(value => {
