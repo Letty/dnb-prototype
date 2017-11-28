@@ -10,6 +10,19 @@
     padding: $distance-outer-default;
     position: relative;
 
+    &.detail {
+      pointer-events: none;
+
+      .persons {
+        .person.selected {
+          border-radius: 0 !important;
+          padding: 8px 23px 8px 22px !important;
+          width: 176px !important;
+          margin: -8px 0 0 -9px;
+        }
+      }
+    }
+
     svg {
       overflow: visible;
     }
@@ -36,6 +49,7 @@
         &.selected {
           background: $color-person-default;
           color: $color-person-background;
+          transition: transform .4s, max-width .4s, margin .4s, width .4s, padding .4s, border-radius .4s;
         }
       }
     }
@@ -48,6 +62,18 @@
   .person-list-detail {
     .grid {
       fill: $color-grey;
+    }
+    .background {
+      pointer-events: all;
+      fill: none;
+      cursor: pointer;
+
+      &:hover {
+        fill: $color-person-background;
+      }
+    }
+    .selected {
+      fill: none;
     }
     .grid-label {
       text-anchor: middle;
