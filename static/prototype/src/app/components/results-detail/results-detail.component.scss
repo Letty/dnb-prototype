@@ -87,6 +87,7 @@
 
             .value {
               max-width: calc(100% - #{$prop-width});
+              color: $color-body-font;
 
               &.tags {
                 margin: -4px 0 -8px 0;

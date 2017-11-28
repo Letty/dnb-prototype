@@ -6,7 +6,7 @@
     {{selectedTag.label}}
     <strong class="close-button">&times;</strong>
   </div>
-  <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags">
+  <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags" title="{{tag.label}}">
     {{tag.label}}
   </div>
 </div>
