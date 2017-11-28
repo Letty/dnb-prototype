@@ -588,7 +588,7 @@ def get_top_topic_network():
 
 
 @app.route('/getTopicNetworkFilterYear', methods=['POST'])
-def get_top_topic_network_filter_year():
+def get_topic_network_filter_year():
     con = open_db_connection()
     years = json.loads(request.data.decode('utf-8'))
     network_result = {'data': []}
@@ -600,7 +600,7 @@ def get_top_topic_network_filter_year():
 
 
 @app.route('/getTopicNetworkFilterPerson', methods=['POST'])
-def get_top_topic_network_filter_person():
+def get_topic_network_filter_person():
     con = open_db_connection()
     person_id = request.data.decode('utf-8')
     network_result = {'data': []}
@@ -613,7 +613,7 @@ def get_top_topic_network_filter_person():
 
 
 @app.route('/getTopicNetworkFilterTopic', methods=['POST'])
-def get_top_topic_network_filter_topic():
+def get_topic_network_filter_topic():
     con = open_db_connection()
     topic_id = request.data.decode('utf-8')
     network_result = {'data': []}
@@ -624,7 +624,7 @@ def get_top_topic_network_filter_topic():
 
 
 @app.route('/getTopicNetworkFilterYearTopic', methods=['POST'])
-def get_top_topic_network_filter_year_topic():
+def get_topic_network_filter_year_topic():
     con = open_db_connection()
     network_result = {'data': []}
     params = json.loads(request.data.decode('utf-8'))
@@ -637,7 +637,7 @@ def get_top_topic_network_filter_year_topic():
 
 
 @app.route('/getTopicNetworkFilterPersonTopic', methods=['POST'])
-def get_top_topic_network_filter_person_topic():
+def get_topic_network_filter_person_topic():
     con = open_db_connection()
     network_result = {'data': []}
     params = json.loads(request.data.decode('utf-8'))
@@ -650,7 +650,7 @@ def get_top_topic_network_filter_person_topic():
 
 
 @app.route('/getTopicNetworkFilterYearPersonTopic', methods=['POST'])
-def get_top_topic_network_filter_year_person_topic():
+def get_topic_network_filter_year_person_topic():
     con = open_db_connection()
     network_result = {'data': []}
     params = json.loads(request.data.decode('utf-8'))
