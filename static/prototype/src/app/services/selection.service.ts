@@ -22,6 +22,7 @@ export class SelectionService {
   selMaxYear$ = this.selectedMaxYear.asObservable();
 
   setPerson(person: IPerson): void {
+    if (person && this.personID === person.id) person = null;
     this.personID = person ? person.id : null;
     this.selectedPerson.next(person);
   }
@@ -31,6 +32,7 @@ export class SelectionService {
   }
 
   setTopic(topic: ITopic): void {
+    if (topic && this.topicID === topic.id) topic = null;
     this.topicID = topic ? topic.id : null;
     this.selectedTopic.next(topic);
   }
