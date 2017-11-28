@@ -7,7 +7,7 @@ import {getClassMembers} from '@angular/compiler-cli/src/diagnostics/typescript_
 import {DataService} from '../../services/data.service';
 import {Observable} from 'rxjs/Observable';
 
-import {format} from 'd3';
+import {formatNum} from '../../services/formatting';
 
 @Component({
   selector: 'results-header',
@@ -35,7 +35,7 @@ export class ResultsHeaderComponent implements OnInit {
     this.dataService.years.subscribe(value => {
       this.years = value;
       this.loadingData = false;
-      this.results = format(',')(this.years.length ? this.years.map(y => y.count).reduce((a, b) => a + b) : 0);
+      this.results = formatNum(this.years.length ? this.years.map(y => y.count).reduce((a, b) => a + b) : 0);
     });
 
     // this.selection.yearMin.subscribe(value => {

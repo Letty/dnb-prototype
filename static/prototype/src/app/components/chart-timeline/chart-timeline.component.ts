@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges, HostListener} from '@angular/core';
 import * as d3 from 'd3';
+import {formatNum} from '../../services/formatting';
 import _ from 'lodash';
 
 import {SelectionService} from '../../services/selection.service';
@@ -156,7 +157,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     }) : [];
     this.yTicks = this.showYTicks ? this.yTickValues.map(d => {
       return {
-        value: d3.format(',')(d),
+        value: formatNum(d),
         transform: `translate(0 ${isNaN(this.yScale(d)) ? 0 : this.yScale(d)})`
       };
     }) : [];
@@ -203,7 +204,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     const x = this.xScale(year ? year.year : fullyear);
 
     this.ruler = year ? {
-      count: d3.format(',')(year.count),
+      count: formatNum(year.count),
       transform: `translate(${x}, ${this.yScale(year.count)})`
     } : {
       count: 0,
