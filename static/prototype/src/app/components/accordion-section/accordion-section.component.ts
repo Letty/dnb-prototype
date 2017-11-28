@@ -8,15 +8,6 @@ import {RouterService} from '../../services/router.service';
   styleUrls: ['./accordion-section.component.scss'],
   animations: [
   trigger('scale', [
-    // transition('* => 0', [
-    //   animate(200, style({height: '40px'}))
-    // ]),
-    // transition('* => 1', [
-    //   animate(200, style({height: 'calc(50% - 20px)'}))
-    // ]),
-    // transition('* => 2', [
-    //   animate(200, style({height: 'calc(100% - 80px)'}))
-    // ])
     state('0', style({height: '40px'})),
     state('1', style({height: 'calc(50% - 20px)'})),
     state('2', style({height: 'calc(100% - 80px)'})),
@@ -33,15 +24,18 @@ export class AccordionSectionComponent implements OnInit {
   constructor(private router: RouterService) { }
 
   ngOnInit () {
-    console.log(this.route);
-    console.log(this.router.view);
     this.router[this.route].subscribe(size => {
       this.size = size;
     });
   }
 
-  toggle(): void {
+  toggle (): void {
     console.log('clicked', this.route);
     this.router.toggle(this.route);
+  }
+
+  dataUpdate (e) {
+    console.log('UPDATEUPDATE');
+    console.log(e);
   }
 }
