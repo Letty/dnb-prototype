@@ -12,10 +12,13 @@
   <div class="topics">
     <div class="wrapper">
       <ng-container *ngFor="let node of nodes">
-        <div class="bbox" *ngIf="node.type !== 'gravity'"
-             [style.transform]="getTranslate(node)"
-             [style.width]="node.width + 'px'"
-             [style.height]="node.height + 'px'">
+        <div
+          class="bbox"
+          title="Das Thema „{{node.keyword}}“ hat {{_formatNum(node.count)}} Ergebnisse"
+          *ngIf="node.type !== 'gravity'"
+          [style.transform]="getTranslate(node)"
+          [style.width]="node.width + 'px'"
+          [style.height]="node.height + 'px'">
           <div class="node" (click)="onSelect(node)" [class.selected]="selectedTopic != null && node.id === selectedTopic.id">
             <span class="label" [style.font-size]="node.fontSize + 'px'">
               {{node.keyword}}
@@ -28,10 +31,16 @@
   <svg #svg width="100%" height="100%">
     <g *ngIf="nodes && forces" [attr.transform]="translate">
       <g *ngFor="let link of links">
-        <circle *ngIf="link.sourceAnchor" r="3" [attr.cx]="link.sourceAnchor.x"
-                [attr.cy]="link.sourceAnchor.y"></circle>
-        <circle *ngIf="link.targetAnchor" r="3" [attr.cx]="link.targetAnchor.x"
-                [attr.cy]="link.targetAnchor.y"></circle>
+        <circle
+          *ngIf="link.sourceAnchor"
+          r="3"
+          [attr.cx]="link.sourceAnchor.x"
+          [attr.cy]="link.sourceAnchor.y"></circle>
+        <circle
+          *ngIf="link.targetAnchor"
+          r="3"
+          [attr.cx]="link.targetAnchor.x"
+          [attr.cy]="link.targetAnchor.y"></circle>
       </g>
     </g>
   </svg>

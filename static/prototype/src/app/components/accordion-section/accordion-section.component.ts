@@ -16,7 +16,7 @@ import {RouterService} from '../../services/router.service';
 })
 
 export class AccordionSectionComponent implements OnInit {
-  @Input() title: string = null;
+  @Input() label: string = null;
   @Input() route: string = null;
 
   public size = 0;
