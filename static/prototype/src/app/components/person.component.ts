@@ -174,7 +174,7 @@ export class PersonComponent implements OnInit {
       const transform = `translate(${p.x}px, ${p.y}px) scale(${p.scale})`;
       p.transform = this.sanitizer.bypassSecurityTrustStyle(transform);
 
-      const transformDetail = `translate(0, ${i * 32 + 21}px) scale(1)`;
+      const transformDetail = `translate(0, ${i * 32 + 26}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
     });
   }

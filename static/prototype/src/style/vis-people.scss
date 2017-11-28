@@ -25,11 +25,17 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         cursor: pointer;
+        line-height: 1.3em;
         transition: transform .4s, max-width .4s;
         @include border-radius($border-radius-default);
 
         &:hover {
           background: $color-person-background;
+        }
+
+        &.selected {
+          background: $color-person-default;
+          color: $color-person-background;
         }
       }
     }

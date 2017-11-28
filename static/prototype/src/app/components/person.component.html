@@ -3,10 +3,10 @@
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
       <div class="persons">
-        <div class="person" *ngFor="let p of persons" (click)="onSelect(p)"
+        <div class="person" *ngFor="let p of persons" [class.selected]="selectedPerson && p.id === selectedPerson.id" (click)="onSelect(p)"
         [style.transform]="detail ? p.transformDetail : p.transform"
         [style.max-width]="detail ? '176px' : (100 / p.scale) + '%'"
-        [style.padding]="detail ? '2px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
+        [style.padding]="detail ? '0px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
         [style.border-radius]="(5 / p.scale) + 'px'">
           <span>{{p.name}} {{p.lastname}}</span>
         </div>
