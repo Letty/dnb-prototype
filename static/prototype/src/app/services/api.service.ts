@@ -257,6 +257,13 @@ export class ApiService {
       this.headers)
       .map(res => res.json().data);
   }
+  getTopicNetworkFilterPersonTopic(personID: string, topicID: string): Observable<any> {
+    this.loadingData$.emit('links');
+    return this.http.post(`${this.server}/getTopicNetworkFilterPersonTopic`,
+      JSON.stringify({'person_id': personID, 'topic_id': topicID}),
+      this.headers)
+      .map(res => res.json().data);
+  }
   getTopicNetworkFilterYearPersonTopic(yearMin: number, yearMax: number, personID: string,
                                        topicID: string): Observable<any> {
     this.loadingData$.emit('links');

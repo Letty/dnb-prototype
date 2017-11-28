@@ -636,6 +636,19 @@ def get_top_topic_network_filter_year_topic():
     return jsonify(network_result)
 
 
+@app.route('/getTopicNetworkFilterPersonTopic', methods=['POST'])
+def get_top_topic_network_filter_person_topic():
+    con = open_db_connection()
+    network_result = {'data': []}
+    params = json.loads(request.data.decode('utf-8'))
+    result = qh.get_topics_for_person_topic(params['person_id'], params['topic_id'],
+                                            con)
+    network_result['data'] = qh.combine_topics(
+        result['data'], params['topic_id'])
+    con.close()
+    return jsonify(network_result)
+
+
 @app.route('/getTopicNetworkFilterYearPersonTopic', methods=['POST'])
 def get_top_topic_network_filter_year_person_topic():
     con = open_db_connection()
