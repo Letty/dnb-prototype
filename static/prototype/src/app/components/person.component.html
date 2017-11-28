@@ -1,13 +1,15 @@
 <div class="person-div main-viz">
-  <collapsed-tags class="person collapsed" [tags]="tags"></collapsed-tags>
+  <collapsed-tags class="person collapsed"
+    [tags]="tags" [selectedTag]="selectedTag" [showTags]="collapsed"
+    (selection)="onSelect($event)"></collapsed-tags>
   <section class="viz-container">
     <loading-data *ngIf="loadingData" class="color-person"></loading-data>
       <div class="persons">
-        <div class="person" *ngFor="let p of persons" (click)="onSelect(p)"
-        [style.transform]="detail ? p.transformDetail : p.transform"
-        [style.max-width]="detail ? '176px' : (100 / p.scale) + '%'"
-        [style.padding]="detail ? '2px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
-        [style.border-radius]="(5 / p.scale) + 'px'">
+        <div class="person" *ngFor="let p of persons" [class.selected]="selectedPerson && p.id === selectedPerson.id" (click)="onSelect(p)"
+          [style.transform]="detail ? p.transformDetail : p.transform"
+          [style.max-width]="detail ? '176px' : (100 / p.scale) + '%'"
+          [style.padding]="detail ? '0px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
+          [style.border-radius]="(5 / p.scale) + 'px'">
           <span>{{p.name}} {{p.lastname}}</span>
         </div>
       </div>

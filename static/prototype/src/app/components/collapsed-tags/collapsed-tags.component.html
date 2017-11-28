@@ -2,7 +2,11 @@
   <div class="total-results" *ngIf="totalResults != null && tags.length > 0">
     <span class="mono">{{totalResults}}</span> Werke
   </div>
-  <div *ngFor="let tag of tags" class="item">
+  <div *ngIf="selectedTag != null" class="item selected" (click)="selected(selectedTag.tag)" [class.visible]="showTags">
+    {{selectedTag.label}}
+    <strong class="close-button">&times;</strong>
+  </div>
+  <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags">
     {{tag.label}}
   </div>
 </div>

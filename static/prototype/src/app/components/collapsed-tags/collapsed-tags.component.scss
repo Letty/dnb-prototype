@@ -29,23 +29,64 @@
     font-weight: 500;
     height: 26px;
     box-sizing: border-box;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    &.selected {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      .close-button {
+        margin-left: 0.5em;
+      }
+    }
   }
 }
 
 :host(.topic) {
   .item {
     background: $color-topic-background;
+    &:hover {
+      background: $color-topic-background--hover;
+    }
+
+    &.selected {
+      color: $color-topic-background;
+      background: $color-topic-default;
+    }
   }
 }
 
 :host(.person) {
   .item {
     background: $color-person-background;
+    &:hover {
+      background: $color-person-background--hover;
+    }
+
+    &.selected {
+      color: $color-person-background;
+      background: $color-person-default;
+    }
   }
 }
 
 :host(.result) {
   .item {
     background: $color-result-background;
+    &:hover {
+      background: $color-result-background--hover;
+    }
+
+    &.selected {
+      color: $color-result-background;
+      background: $color-result-default;
+    }
   }
 }

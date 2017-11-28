@@ -9,6 +9,7 @@ import * as d3 from 'd3';
 import _ from 'lodash';
 
 import {ITopic, INetworkLink} from '../../app.interfaces';
+import {RouterService} from '../../services/router.service';
 
 import {debounce} from '../../decorators';
 
@@ -29,8 +30,10 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   public nodes;
   public links;
   public tags;
+  public selectedTag = null;
   private upcomingTopics = [];
   private upcomingLinks = [];
+  public collapsed = false;
 
   private simulation;
   public width = 0;
@@ -43,14 +46,15 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   private loadingTopic = false;
   private loadingLinks = false;
 
-  public selectedTopic: number = null;
+  public selectedTopic: ITopic = null;
 
   public networkLinks: Observable<INetworkLink[]>;
 
   constructor(private sanitizer: DomSanitizer,
               private selection: SelectionService,
               private dataService: DataService,
-              private api: ApiService
+              private api: ApiService,
+              private routerService: RouterService
   ) {
     api.loadingData$.subscribe((e) => {
       if (e === 'topic') { this.loadingTopic = true; }
@@ -58,7 +62,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     });
     selection.selTopic$.subscribe(
       topic => {
-        this.selectedTopic = topic ? topic.id : null;
+        this.selectedTopic = topic;
       }
     );
   }
@@ -84,10 +88,15 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.topics.subscribe(values => {
         this.loadingTopic = false;
         this.upcomingTopics = values;
-        this.tags = values.map(tag => {
+        this.tags = values.filter(tag => this.selectedTopic == null || tag.id !== this.selectedTopic.id).map(tag => {
           return {label: tag.keyword, tag};
         });
+        this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
         this.update();
+    });
+
+    this.routerService.topic.subscribe(size => {
+      this.collapsed = size === 0;
     });
 
     this.networkLinks = this.dataService.networkLinks;

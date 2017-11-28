@@ -37,6 +37,10 @@ export class PersonComponent implements OnInit {
   public width = 0;
   public ticks = [];
   public tags = [];
+  public collapsed = false;
+
+  public selectedPerson: IPerson = null;
+  public selectedTag = null;
 
   private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
   public yearScale = scaleLinear();
@@ -52,6 +56,16 @@ export class PersonComponent implements OnInit {
       api.loadingData$.subscribe((e) => {
         if (e === 'person') { this.loadingData = true; }
       });
+      selection.selPerson$.subscribe(
+        person => {
+          this.selectedPerson = person;
+          this.tags = this.rawPersons.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
+            return {label: `${tag.name} ${tag.lastname}`, tag};
+          });
+          this.selectedTag = this.selectedPerson != null ?
+            {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
+        }
+      );
     }
 
   @HostListener('window:resize', ['$event'])
@@ -68,15 +82,21 @@ export class PersonComponent implements OnInit {
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
-      this.tags = value.map(tag => {
+      this.tags = value.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
         return {label: `${tag.name} ${tag.lastname}`, tag};
       });
+      this.selectedTag = this.selectedPerson != null ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
       this.layout();
       this.loadingData = false;
     });
 
-    this.routerService.view.subscribe(view => {
-      this.detail = view === 'person';
+    // this.routerService.view.subscribe(view => {
+    //   this.detail = view === 'person';
+    // });
+
+    this.routerService.person.subscribe(size => {
+      this.detail = size === 2;
+      this.collapsed = size === 0 ? true : false;
     });
 
     this.dataService.personYears.subscribe(value => {
@@ -160,7 +180,7 @@ export class PersonComponent implements OnInit {
       const transform = `translate(${p.x}px, ${p.y}px) scale(${p.scale})`;
       p.transform = this.sanitizer.bypassSecurityTrustStyle(transform);
 
-      const transformDetail = `translate(0, ${i * 32 + 21}px) scale(1)`;
+      const transformDetail = `translate(0, ${i * 32 + 26}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
     });
   }
