@@ -67,7 +67,7 @@ def get_timeline():
     con = open_db_connection()
     result = []
     with con.cursor() as cursor:
-        sql = 'select * from dnb_year_count where year > 1000 and year < 2021'
+        sql = 'select * from dnb_year_count where year >= 1000 and year <= 2021'
         cursor.execute(sql)
         result = cursor.fetchall()
     con.close()
@@ -173,8 +173,11 @@ def filter_by_topic_result_topic():
         cursor.execute(sql, (topic_id))
         topic = cursor.fetchone()
     topic_result = qh.get_topics_for_topics(topic_id, con)
-    topic_result['data'].append(topic)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -373,8 +376,11 @@ def filter_by_person_topic_result_topic():
         topic = cursor.fetchone()
     topic_result = qh.get_topics_for_person_topic(
         params['person_id'], params['topic_id'], con)
-    topic_result['data'].append(topic)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -434,8 +440,11 @@ def filter_by_year_topic_result_topic():
         topic = cursor.fetchone()
     topic_result = qh.get_topics_for_year_topic(params['topic_id'],
                                                 params['min_year'], params['max_year'], con)
-    topic_result['data'].append(topic)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -470,7 +479,7 @@ def filter_by_year_topic_result_items():
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
-            'where ai.year > %s and ai.year < %s and it.t_id = %s and '\
+            'where ai.year >= %s and ai.year <= %s and it.t_id = %s and '\
             'item.id = ai.i_id and ai.a_id = ac.id limit 100'
         try:
             cursor.execute(sql, (params['min_year'],
@@ -535,8 +544,11 @@ def filter_by_year_person_topic_result_topic():
 
     topic_result = qh.get_topics_for_year_person_topic(params['person_id'], params['topic_id'],
                                                        params['min_year'], params['max_year'], con)
-    topic_result['data'].append(t)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -549,7 +561,7 @@ def filter_by_year_person_topic_result_items():
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
-            'where ai.a_id =%s and ai.year > %s and ai.year < %s and it.t_id = %s and '\
+            'where ai.a_id =%s and ai.year >= %s and ai.year <= %s and it.t_id = %s and '\
             'item.id = ai.i_id and ai.a_id = ac.id and ai.i_id = it.i_id limit 100'
         try:
             cursor.execute(sql, (params['person_id'], params['min_year'],
