@@ -115,7 +115,7 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
 
         this.years = years.map(y => {
           return {
-            formatted: this.format(y[0] === y[1] ? `${y[0]}` : `${y[0]}-${y[1]}`),
+            formatted: this.format(y[0] === y[1] ? `${y[0]}` : `${y[0]}—${y[1]}`),
             start: y[0],
             end: y[1]
           };

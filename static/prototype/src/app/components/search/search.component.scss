@@ -22,16 +22,24 @@
     height: 40px;
     box-sizing: border-box;
     font-size: 1em;
+    border: 1px solid transparent;
 
     position: relative;
     z-index: 2;
 
     background: $color-grey url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32px' height='32px'><path d='M19.7,19.3 C20.6,18.1 21.1,16.7 21.1,15.1 C21.1,11.2 18,8 14.1,8 C10.2,8 7,11.2 7,15.1 C7,19 10.2,22.2 14.1,22.2 C15.7,22.2 17.2,21.7 18.3,20.8 L21.3,23.8 C21.5,24 21.8,24.1 22,24.1 C22.2,24.1 22.5,24 22.7,23.8 C23.1,23.4 23.1,22.8 22.7,22.4 L19.7,19.3 Z M14.1,20.1 C11.3,20.1 9,17.9 9,15.1 C9,12.3 11.3,10 14.1,10 C16.9,10 19.2,12.3 19.2,15.1 C19.2,17.9 16.9,20.1 14.1,20.1 Z' fill='%23#{str-slice(#{$color-body-font}, 2)}'></path></svg>") 4px center no-repeat;
 
+    &:hover {
+      @include box-shadow($effect-header-shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
     &:focus {
       outline: none;
       color: $color-body-font;
       @include box-shadow($effect-header-shadow);
+      background-color: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.05);
 
       &::placeholder {
         opacity: 0;
@@ -73,7 +81,6 @@
         border-bottom: none;
       }
 
-
       &.year {
         color: $color-year-default;
       }
@@ -87,6 +94,11 @@
 
     .suggestion {
       padding-left: 32px;
+      cursor: pointer;
+
+      &:hover, &:focus {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
     }
 
     .section-title {
