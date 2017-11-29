@@ -90,9 +90,9 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     this.topics.subscribe(values => {
         this.loadingTopic = false;
         this.upcomingTopics = values;
-        this.tags = values.filter(tag => this.selectedTopic == null || tag.id !== this.selectedTopic.id).map(tag => {
+        this.tags = values.map(tag => {
           return {label: tag.keyword, tag};
-        });
+        }).filter(tag => this.selectedTopic == null || tag.tag.id !== this.selectedTopic.id);
         this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
         this.update();
     });

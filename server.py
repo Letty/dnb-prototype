@@ -177,7 +177,7 @@ def filter_by_topic_result_topic():
     if len(topic_result['data']) > 0:
         topic_result['data'].append(topic)
     else:
-        topic_result['data'] = topic
+        topic_result['data'] = [topic]
     return jsonify(topic_result)
 
 
@@ -380,7 +380,7 @@ def filter_by_person_topic_result_topic():
     if len(topic_result['data']) > 0:
         topic_result['data'].append(topic)
     else:
-        topic_result['data'] = topic
+        topic_result['data'] = [topic]
     return jsonify(topic_result)
 
 
@@ -444,7 +444,7 @@ def filter_by_year_topic_result_topic():
     if len(topic_result['data']) > 0:
         topic_result['data'].append(topic)
     else:
-        topic_result['data'] = topic
+        topic_result['data'] = [topic]
     return jsonify(topic_result)
 
 
@@ -548,7 +548,7 @@ def filter_by_year_person_topic_result_topic():
     if len(topic_result['data']) > 0:
         topic_result['data'].append(topic)
     else:
-        topic_result['data'] = topic
+        topic_result['data'] = [topic]
     return jsonify(topic_result)
 
 

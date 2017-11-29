@@ -83,9 +83,9 @@ export class PersonComponent implements OnInit {
     this._persons = this.dataService.persons;
     this.dataService.persons.subscribe(value => {
       this.rawPersons = value;
-      this.tags = value.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
+      this.tags = value.map(tag => {
         return {label: `${tag.name} ${tag.lastname}`, tag};
-      });
+      }).filter(d => this.selectedPerson == null || d.tag.id !== this.selectedPerson.id);
       this.selectedTag = this.selectedPerson != null ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
       this.layout();
       console.log('LOADING');
