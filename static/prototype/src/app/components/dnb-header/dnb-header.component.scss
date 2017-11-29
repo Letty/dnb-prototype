@@ -71,8 +71,10 @@
     font-weight: 500;
     margin-left: $distance-outer-default;
     display: inline-block;
-    span {
+
+    li {
       padding: 0.2em 0.5em;
+      display: inline-block;
 
       &:first-of-type {
         padding-left: 0;
@@ -80,6 +82,14 @@
 
       &:last-of-type {
         padding-right: 0;
+      }
+
+      a {
+        color: $color-lighter-body-font;
+
+        &:hover {
+          color: darken($color-lighter-body-font, 10%);
+        }
       }
     }
   }
