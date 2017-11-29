@@ -5,11 +5,11 @@ import {ApiService} from '../../services/api.service';
 import {IItem, IPerson, ITopic} from '../../app.interfaces';
 import {DataService} from '../../services/data.service';
 import {SelectionService} from '../../services/selection.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs/Observable'; // in use?
 
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
-import _ from 'lodash';
+import _ from 'lodash'; // in use?
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 

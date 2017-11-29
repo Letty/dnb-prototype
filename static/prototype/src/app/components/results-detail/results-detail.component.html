@@ -32,7 +32,7 @@
               {{item.person.length > 1 ? 'Personen' : 'Person'}}
             </div>
             <div class="value tags">
-              <span *ngFor="let person of item.person" class="tag person">{{person.name}} {{person.lastname}}</span>
+              <span *ngFor="let person of item.person" class="tag person" (click)="selectPerson(person)">{{person.name}} {{person.lastname}}</span>
             </div>
           </div>
           <div class="datum" *ngIf="item.keyword.length">
@@ -40,7 +40,7 @@
               {{item.keyword.length > 1 ? 'Themen' : 'Thema'}}
             </div>
             <div class="value tags">
-              <span *ngFor="let topic of item.keyword" class="tag topic">{{topic.keyword}}</span>
+              <span *ngFor="let topic of item.keyword" class="tag topic" (click)="selectTopic(topic)">{{topic.keyword}}</span>
             </div>
           </div>
           <div class="datum" *ngIf="item.item.publisher">
@@ -56,7 +56,7 @@
               Erschienen
             </div>
             <div class="value tags">
-              <span class="tag year">{{item.item.year}}</span>
+              <span class="tag year" (click)="selectYear(item.item.year)">{{item.item.year}}</span>
             </div>
           </div>
           <div class="datum" *ngIf="item.item.content">

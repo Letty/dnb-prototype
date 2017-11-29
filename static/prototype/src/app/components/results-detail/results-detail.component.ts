@@ -2,8 +2,9 @@ import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {ApiService} from '../../services/api.service';
 
-import {IItem} from '../../app.interfaces';
+import {IItem, IPerson, ITopic} from '../../app.interfaces';
 import {DataService} from '../../services/data.service';
+import {SelectionService} from '../../services/selection.service';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
@@ -33,6 +34,10 @@ import {Observable} from 'rxjs/Observable';
 })
 
 export class ResultsDetailComponent implements OnInit, OnChanges {
+  public selectedMinYear: number;
+  public selectedMaxYear: number;
+  public selectedPerson: IPerson;
+  public selectedTopic: ITopic;
 
   @Output() closeDetail: EventEmitter<any> = new EventEmitter();
   @Input() loadingData = false;
@@ -44,7 +49,33 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
 
   public inOut = 'in';
 
-  constructor() {}
+  constructor(
+    private selection: SelectionService,
+    private dataService: DataService
+  ) {
+    selection.selPerson$.subscribe(
+      person => {
+        this.selectedPerson = person;
+      }
+    );
+
+    selection.selTopic$.subscribe(
+      topic => {
+        this.selectedTopic = topic;
+      }
+    );
+
+    selection.selMinYear$.subscribe(
+      year => {
+        this.selectedMinYear = year;
+      }
+    );
+    selection.selMaxYear$.subscribe(
+      year => {
+        this.selectedMaxYear = year;
+      }
+    );
+  }
 
   ngOnInit(): void {
   }
@@ -58,5 +89,30 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
 
   animationDone (e) {
     if (e.toState === 'out') this.closeDetail.emit();
+  }
+
+  reset () {
+    this.selection.setYear(null, null);
+    this.selection.setTopic(null);
+    this.selection.setPerson(null);
+  }
+
+  selectYear(year): void {
+    this.reset();
+    this.selection.setYear(year, null);
+    this.dataService.setFilter();
+    this.close();
+  }
+  selectTopic(topic): void {
+    this.reset();
+    this.selection.setTopic(topic);
+    this.dataService.setFilter();
+    this.close();
+  }
+  selectPerson(person): void {
+    this.reset();
+    this.selection.setPerson(person);
+    this.dataService.setFilter();
+    this.close();
   }
 }
