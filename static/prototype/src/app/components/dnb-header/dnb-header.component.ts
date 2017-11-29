@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {Observable} from 'rxjs';
 
 import {getPiwikID} from '../../services/piwikTracking';
 
@@ -10,16 +9,16 @@ import {getPiwikID} from '../../services/piwikTracking';
     })
 
 export class DnbHeaderComponent {
-	public piwikVisitorId = '';
+  public piwikVisitorId = '';
 
   constructor() {
   }
 
   ngOnInit(): void {
-  	getPiwikID(this.setPiwikID.bind(this));
+    getPiwikID(this.setPiwikID.bind(this));
   }
 
   setPiwikID(id: string): void {
-  	this.piwikVisitorId = id;
+    this.piwikVisitorId = id;
   }
 }
