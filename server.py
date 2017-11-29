@@ -151,7 +151,7 @@ def filter_by_topic_result_person():
 
     with con.cursor() as cursor:
         sql = 'select a.a_id id, ac.name, ac.lastname, ac.date_of_birth, ac.date_of_death,a.count '\
-            'from dnb2.dnb_author_topic a, dnb2.dnb_author_count ac where a.t_id =%s '\
+            'from dnb_author_topic a, dnb_author_count ac where a.t_id =%s '\
             'and a.a_id=ac.id order by count desc limit 20'
         try:
             cursor.execute(sql, (topic_id))
@@ -167,7 +167,13 @@ def filter_by_topic_result_person():
 def filter_by_topic_result_topic():
     con = open_db_connection()
     topic_id = request.data.decode('utf-8')
+    topic = []
+    with con.cursor() as cursor:
+        sql = 'select id, keyword, count from dnb_topic_count where id =%s '
+        cursor.execute(sql, (topic_id))
+        topic = cursor.fetchone()
     topic_result = qh.get_topics_for_topics(topic_id, con)
+    topic_result['data'].append(topic)
     con.close()
     return jsonify(topic_result)
 
@@ -271,6 +277,7 @@ def filter_by_year_person_result_year():
     return jsonify(year_result)
 
 
+# todo in extra fkt und dazu noch das netzwerk
 @app.route('/setFilterForYearPersonResultTopic', methods=['POST'])
 def filter_by_year_person_result_topic():
     con = open_db_connection()
@@ -357,8 +364,16 @@ def filter_by_person_topic_result_year():
 def filter_by_person_topic_result_topic():
     con = open_db_connection()
     params = json.loads(request.data.decode('utf-8'))
+    topic = []
+    with con.cursor() as cursor:
+        sql = 'select a.t_id id, tc.keyword, a.count from dnb_author_topic a '\
+            'inner join dnb_topic_count tc on a.t_id= tc.id '\
+            'where a.a_id=%s and a.t_id=%s'
+        cursor.execute(sql, (params['person_id'], params['topic_id']))
+        topic = cursor.fetchone()
     topic_result = qh.get_topics_for_person_topic(
         params['person_id'], params['topic_id'], con)
+    topic_result['data'].append(topic)
     con.close()
     return jsonify(topic_result)
 
@@ -408,8 +423,18 @@ def filter_by_year_topic_result_year():
 def filter_by_year_topic_result_topic():
     con = open_db_connection()
     params = json.loads(request.data.decode('utf-8'))
+    topic = []
+    with con.cursor() as cursor:
+        sql = 'select it.t_id id, tc.keyword, count(it.t_id) count '\
+            'from dnb_item_topic it inner join dnb_topic_count tc '\
+            'on it.t_id = tc.id where it.year >= %s and it.year <= %s '\
+            'and it.t_id = %s'
+        cursor.execute(sql, (params['min_year'], params[
+                       'max_year'], params['topic_id']))
+        topic = cursor.fetchone()
     topic_result = qh.get_topics_for_year_topic(params['topic_id'],
                                                 params['min_year'], params['max_year'], con)
+    topic_result['data'].append(topic)
     con.close()
     return jsonify(topic_result)
 
@@ -482,8 +507,35 @@ def filter_by_year_person_topic_result_year():
 def filter_by_year_person_topic_result_topic():
     con = open_db_connection()
     params = json.loads(request.data.decode('utf-8'))
+
+    t = {}
+    with con.cursor() as cursor:
+        sql = 'select ai.i_id, ai.year, it.t_id, item.title, tc.keyword from dnb_author_item ai, ' \
+            'dnb_item_topic it, dnb_topic_count tc, dnb_item item where  ai.a_id = %s ' \
+            'and ai.year >= %s and ai.year <= %s and it.t_id = %s and ai.i_id = it.i_id and '\
+            'it.t_id = tc.id and item.id=ai.i_id'
+        cursor.execute(sql, (params['person_id'],
+                             params['min_year'], params['max_year'], params['topic_id']))
+        topics = {}
+        data = cursor.fetchall()
+        for d in data:
+            try:
+                topics[d['t_id']]
+            except KeyError:
+                topics[d['t_id']] = {
+                    'keyword': d['keyword'],
+                    'count': 1
+                }
+            else:
+                topics[d['t_id']]['count'] += 1
+
+        for key in topics:
+            t = {'id': key, 'keyword': topics[key][
+                'keyword'], 'count': topics[key]['count']}
+
     topic_result = qh.get_topics_for_year_person_topic(params['person_id'], params['topic_id'],
                                                        params['min_year'], params['max_year'], con)
+    topic_result['data'].append(t)
     con.close()
     return jsonify(topic_result)
 

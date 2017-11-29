@@ -320,10 +320,7 @@ export class DataService {
       });
     }
     if (this.load.topic) {
-      this.api.filterDataByTopicResultTopic(topicID).subscribe(data => {
-        data.push({id: +topicID, keyword: '', count: 1});
-        this.setTopic(data);
-      });
+      this.api.filterDataByTopicResultTopic(topicID).subscribe(data => this.setTopic(data));
     }
     if (this.load.year) this.api.filterDataByTopicResultYear(topicID).subscribe(data => this.setYear(data));
     if (this.load.items) this.api.filterDataByTopicResultItems(topicID).subscribe(data => this.setItems(data));
