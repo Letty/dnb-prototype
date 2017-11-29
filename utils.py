@@ -35,12 +35,13 @@ def createTopicList(topics_result, topic_id):
 
 def extract_publisher_name(data):
     for r in data:
-        if r['publisher'] != '':
-            publisher_name = []
-            p = ast.literal_eval(r['publisher'])
-            j_ = json.dumps(p)
-            j = json.loads(j_)
-            for pub in j:
-                publisher_name.append(pub['name'])
-            r['publisher'] = publisher_name
+        if 'publisher' in r:
+            if r['publisher'] != '':
+                publisher_name = []
+                p = ast.literal_eval(r['publisher'])
+                j_ = json.dumps(p)
+                j = json.loads(j_)
+                for pub in j:
+                    publisher_name.append(pub['name'])
+                r['publisher'] = publisher_name
     return data
