@@ -183,7 +183,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   setYear(e): void {
     if (!this.interactiveRuler) { return; }
-    this.updateRuler(Math.round(this.xScale.invert(e.clientX - e.target.getBoundingClientRect().left)));
+    this.updateRuler(Math.round(this.xScale.invert(e.clientX - this.svg.nativeElement.getBoundingClientRect().left)));
   }
 
   resetYear() {
@@ -227,6 +227,8 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     if (this.enableBrush && this.selMin != null && this.selMax != null) {
       this.breakRecursion = true;
       this.brush.move(d3.select(this.brushContainer.nativeElement), [this.xScale(this.selMin), this.xScale(this.selMax)]);
+    } else if (this.enableBrush) {
+      this.brush.move(d3.select(this.brushContainer.nativeElement), null);
     }
   }
 }
