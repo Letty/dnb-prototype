@@ -2,6 +2,9 @@
   <svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetRuler()">
     <g #brush class="brush" pointer-events="all"></g>
     <g *ngIf="init" class="no-interaction">
+      <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
+        <line x1="0" [attr.x2]="width"></line>
+      </g>
       <path [attr.d]="path" class="area-path"></path>
       <path [attr.d]="pathFromSelection" class="area-path selection"></path>
       <g *ngFor="let t of xTicks">
@@ -12,17 +15,13 @@
         <text *ngIf="t.show" class="x-axis brush-tick"
           [attr.y]="height - 5" [attr.x]="t.x">{{t.year}}</text>
       </g>
-      <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
-        <text class="y-axis" y="4" x="0">{{t.value}}</text>
-        <line x1="48" [attr.x2]="width"></line>
-      </g>
       <g>
         <rect x="0" y="44" [attr.width]="width" height="1"></rect>
       </g>
       <g class="ruler" *ngIf="ruler">
         <g [attr.transform]="ruler.transform">
-          <circle class="outer" r="5"></circle>
-          <circle class="inner" r="2.5"></circle>
+          <!-- <circle class="outer" r="5"></circle> -->
+          <circle class="inner" r="2"></circle>
 
           <g [attr.transform]="rulerOffset">
             <text #rulerLabel>{{ruler.count}}</text>

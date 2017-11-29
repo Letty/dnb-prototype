@@ -21,7 +21,7 @@ import { debounce } from '../../decorators';
 export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() years: IYear[] = [];
   @Input() showXTicks = false;
-  @Input() showYTicks = false;
+  @Input() showYTicks = true;
   @Input() showRuler = false;
   @Input() interactiveRuler = false;
   @Input() enableBrush = false;
@@ -43,10 +43,10 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   public width = 0;
   public ruler;
   public label: string = null;
-  public rulerOffset = 'translate(0 -8)';
+  public rulerOffset = 'translate(0 -6)';
   public init = true;
   private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
-  private yTickValues = [100000, 200000, 300000, 400000];
+  private yTickValues = [1, 2];
   private brush = d3.brushX();
   private xScale;
   private yScale;
@@ -162,13 +162,19 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
     this.yScale = d3.scalePow()
       .exponent(0.3)
-      .rangeRound([areaHeight, 20])
+      .rangeRound([areaHeight, 18])
       .domain([0, maxY ? maxY.count : 0]);
+
+    const minHeight = 2;
 
     const area = d3.area<IYear>()
       .x(d => this.xScale(d.year))
       .y0(areaHeight)
-      .y1(d => this.yScale(d.count));
+      .y1(d => {
+        const height = this.yScale(d.count);
+        if (height > areaHeight - minHeight && d.count > 0) return areaHeight - minHeight;
+        return height;
+      });
 
     this.path = area(this.addMissingYears(this.years, this.minYear, this.maxYear));
     this.pathFromSelection = (this.selMin != null && this.selMax != null) ?
@@ -190,10 +196,15 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       year: this.selMax
     }] : [];
 
+    const yTickScale = d3.scalePow()
+      .exponent(0.3)
+      .rangeRound([areaHeight, 18])
+      .domain([0, 2]);
+
     this.yTicks = this.showYTicks ? this.yTickValues.map(d => {
       return {
         value: formatNum(d),
-        transform: `translate(0 ${isNaN(this.yScale(d)) ? 0 : this.yScale(d)})`
+        transform: `translate(0 ${isNaN(yTickScale(d)) ? 0 : yTickScale(d)})`
       };
     }) : [];
 
@@ -275,7 +286,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       } else if (x - elWidth / 2 < -8) {
         offset = -8 - (x - elWidth / 2);
       }
-      this.rulerOffset = `translate(${offset} -8)`;
+      this.rulerOffset = `translate(${offset} -6)`;
     }, 0);
   }
 

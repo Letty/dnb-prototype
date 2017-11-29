@@ -17,7 +17,7 @@ svg {
     stroke: $color-deep-grey;
   }
   line {
-    stroke: $color-year-default;
+    stroke: $color-grey;
   }
   rect {
     fill: $color-grey;
@@ -72,10 +72,6 @@ svg {
       circle {
         fill: white;
         stroke-width: 1;
-
-        &.inner {
-          stroke-width: 2;
-        }
       }
 
       text {
