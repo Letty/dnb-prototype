@@ -1,12 +1,12 @@
 <div class="collapsed-tags">
-  <div class="total-results" *ngIf="totalResults != null && tags.length > 0" title="Insgesamt wurde{{totalResults > 1 ? 'n' : ''}} {{_formatNum(totalResults)}} Werk{{totalResults > 1 ? 'e' : ''}} gefunden.">
+  <div class="total-results" *ngIf="totalResults != null && tags.length > 0" title="{{ _formatTotalResult(totalResults) }}">
     <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults > 1 ? 'e' : ''}}
   </div>
-  <div *ngIf="selectedTag != null" class="item selected visible" (click)="selected(selectedTag.tag)">
+  <div *ngIf="selectedTag != null" class="item selected visible" (click)="selected(selectedTag.tag)" title="{{ _formatTagAction(selectedTag.label, 'remove') }}">
     <span>{{selectedTag.label}}</span>
     <span class="close-button">&times;</span>
   </div>
-  <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags" title="{{tag.label}}">
+  <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags" title="{{ _formatTagAction(tag.label, isResultBar ? 'display' : 'select') }}">
     <span>{{tag.label}}</span>
   </div>
 </div>

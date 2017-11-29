@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
-import {formatNum} from '../../services/formatting';
+import {formatNum, formatTitleResult, formatTotalResult, formatTagAction} from '../../services/formatting';
 
 @Component({
   selector: 'collapsed-tags',
@@ -13,6 +13,7 @@ export class CollapsedTagsComponent implements OnInit {
   @Input() tags = [];
   @Input() totalResults: number = null;
   @Input() selectedTag: any = null;
+  @Input() isResultBar: boolean = false;
 
   @Input() showTags = false;
 
@@ -27,5 +28,17 @@ export class CollapsedTagsComponent implements OnInit {
 
   _formatNum (d) {
     return formatNum(d);
+  }
+
+  _formatTitleResult(topic, subject, value) {
+    return formatTitleResult(topic, subject, value);
+  }
+
+  _formatTotalResult(value) {
+    return formatTotalResult(value);
+  }
+
+  _formatTagAction(subject, action) {
+    return formatTagAction(subject, action);
   }
 }
