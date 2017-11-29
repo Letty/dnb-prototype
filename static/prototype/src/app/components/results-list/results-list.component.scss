@@ -45,11 +45,13 @@ $gutter-results-default: $distance-outer-default / 2;
     }
 
     .result {
+      transition: all .2s ease-in-out;
       cursor: pointer;
     	background-color: $color-result-default;
     	display: inline-block;
     	width: 100%;
       min-height: 360px;
+      position: relative;
 
       box-sizing: border-box;
 
@@ -66,8 +68,9 @@ $gutter-results-default: $distance-outer-default / 2;
     		padding: $distance-outer-default;
     		font-weight: bold;
     		line-height: 1.2em;
+        width: calc(100% - #{$distance-outer-default * 2});
 
-        .author{
+        .author {
           display: flex;
           font-weight: normal;
         }
@@ -76,10 +79,18 @@ $gutter-results-default: $distance-outer-default / 2;
     	}
 
     	footer {
+        width: calc(100% - #{$distance-outer-default * 2});
     		padding: $distance-outer-default;
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
+        left: 0;
     	}
     }
+
+    &:hover .result {
+      background-color: darken($color-result-default, 2%);
+      transform: scale(1.01);
+    }
   }
+
 }
