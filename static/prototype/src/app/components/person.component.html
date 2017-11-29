@@ -19,7 +19,7 @@
         <g #temp></g>
       </svg>
     </div>
-    <svg class="person-list-detail" *ngIf="detail && personYearsLines"
+    <svg class="person-list-detail" *ngIf="personYearsLines" [class.visible]="detail && personYearsLines"
       width="100%" [attr.height]="persons.length * 32 + 32">
       <rect class="grid" x="-24" y="16" [attr.width]="width + 48" height="1"></rect>
       <rect class="grid" [attr.x]="width - 60" y="16" width="1" [attr.height]="persons.length * 32"></rect>

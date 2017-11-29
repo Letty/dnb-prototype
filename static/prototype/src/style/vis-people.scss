@@ -66,11 +66,21 @@
   }
 
   .person-list-detail {
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      .background {
+        pointer-events: all;
+      }
+    }
+
     .grid {
       fill: $color-grey;
     }
     .background {
-      pointer-events: all;
       fill: none;
       cursor: pointer;
 
