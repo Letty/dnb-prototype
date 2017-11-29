@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
 
-const enable_trackPiwik = true;
-declare var _paq: any; // Because _pag is declared outside of TypeScript
+import {getPiwikID} from '../../services/piwikTracking';
 
 @Component({
   selector: 'dnb-header',
@@ -17,14 +16,7 @@ export class DnbHeaderComponent {
   }
 
   ngOnInit(): void {
-  	if (enable_trackPiwik && typeof _paq !== undefined) {
-	    let visitor_id;
-	    let that = this;
-			_paq.push([ function() {
-				visitor_id = this.getVisitorId();
-				that.setPiwikID(visitor_id);
-			}]);
-	  }
+  	getPiwikID(this.setPiwikID.bind(this));
   }
 
   setPiwikID(id: string): void {
