@@ -19,11 +19,7 @@
   .item {
     display: inline-block;
     font-size: 0.85em;
-    max-width: 160px;
-    overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: 3px 8px;
     margin-right: 4px;
     border-radius: 5px;
     font-weight: 500;
@@ -34,6 +30,15 @@
     transition: opacity .4s;
     pointer-events: none;
 
+    span {
+      max-width: 160px;
+      padding: 3px 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: inline-block;;
+    }
+
     &.visible {
       opacity: 1;
       pointer-events: auto;
@@ -42,8 +47,15 @@
     &.selected {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      .close-button {
-        margin-left: 0.5em;
+
+      span {
+        max-width: 130px;
+        padding: 3px 1.5px 3px 8px;
+
+        &.close-button {
+          padding: 3px 8px 3px 1.5px;
+          font-weight: bold;
+        }
       }
     }
   }
@@ -52,6 +64,7 @@
 :host(.topic) {
   .item {
     background: $color-topic-background;
+
     &:hover {
       background: $color-topic-background--hover;
     }
@@ -59,6 +72,11 @@
     &.selected {
       color: $color-topic-background;
       background: $color-topic-default;
+
+      &:hover {
+        color: #fff;
+        background: darken($color-topic-default, 2%);
+      }
     }
   }
 }
@@ -66,6 +84,7 @@
 :host(.person) {
   .item {
     background: $color-person-background;
+
     &:hover {
       background: $color-person-background--hover;
     }
@@ -73,6 +92,11 @@
     &.selected {
       color: $color-person-background;
       background: $color-person-default;
+
+      &:hover {
+        color: #fff;
+        background: darken($color-person-default, 2%);
+      }
     }
   }
 }
@@ -80,6 +104,7 @@
 :host(.result) {
   .item {
     background: $color-result-background;
+
     &:hover {
       background: $color-result-background--hover;
     }
@@ -87,6 +112,11 @@
     &.selected {
       color: $color-result-background;
       background: $color-result-default;
+
+      &:hover {
+        color: #fff;
+        background: darken($color-result-default, 2%);
+      }
     }
   }
 }
