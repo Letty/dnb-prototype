@@ -1,6 +1,8 @@
 .person-div {
   position: relative;
   height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .collapsed {
     position: absolute;
@@ -13,6 +15,7 @@
   .viz-container {
     padding: $distance-outer-default;
     position: relative;
+    margin-bottom: $distance-outer-default;
 
     &.detail {
       pointer-events: none;
