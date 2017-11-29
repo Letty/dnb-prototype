@@ -6,4 +6,6 @@ div.chart-timeline.year-area-svg svg g.brush rect.selection{
 
 .color-year div.chart-timeline.year-area-svg svg g.brush rect.selection{
   fill: $color-year-background;
+  opacity: 1;
+  fill-opacity: 1;
 }

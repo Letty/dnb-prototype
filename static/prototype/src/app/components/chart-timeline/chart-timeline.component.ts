@@ -26,7 +26,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() interactiveRuler = false;
   @Input() enableBrush = false;
   @Input() logXScale = false;
-  @Input() height = 160;
+  @Input() height = 64;
 
   @Input() minYear = 1000;
   @Input() maxYear = 2018;
@@ -39,10 +39,11 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   public pathFromSelection: string;
   public xTicks = [];
   public yTicks = [];
+  public brushTicks = [];
   public width = 0;
   public ruler;
   public label: string = null;
-  public rulerOffset = 'translate(0 3)';
+  public rulerOffset = 'translate(0 -8)';
   public init = true;
   private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
   private yTickValues = [100000, 200000, 300000, 400000];
@@ -157,11 +158,11 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     this.xScale.rangeRound([0, this.width])
       .domain([this.minYear, this.maxYear]);
 
-    const areaHeight = this.showXTicks ? this.height - 16 : this.height;
+    const areaHeight = this.height - 19;
 
     this.yScale = d3.scalePow()
       .exponent(0.3)
-      .rangeRound([areaHeight, 8])
+      .rangeRound([areaHeight, 20])
       .domain([0, maxY ? maxY.count : 0]);
 
     const area = d3.area<IYear>()
@@ -179,6 +180,16 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
         x: this.xScale(d)
       };
     }) : [];
+
+    this.brushTicks = (this.selMin != null && this.selMax != null) ?
+    [{
+      x: this.xScale(this.selMin),
+      year: this.selMin
+    }, {
+      x: this.xScale(this.selMax),
+      year: this.selMax
+    }] : [];
+
     this.yTicks = this.showYTicks ? this.yTickValues.map(d => {
       return {
         value: formatNum(d),
@@ -234,21 +245,38 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
     this.ruler = year ? {
       count: formatNum(year.count),
-      transform: `translate(${x}, ${this.yScale(year.count)})`
+      transform: `translate(${x}, ${this.yScale(year.count)})`,
+      year: year.year,
+      x: x
     } : {
       count: 0,
-      transform: `translate(${this.xScale(fullyear)}, ${this.yScale(0)})`
+      transform: `translate(${x}, ${this.yScale(0)})`,
+      year: fullyear,
+      x: x
     };
+
+    this.xTicks.forEach(t => {
+      t.show = Math.abs(t.x - this.ruler.x) > 32 && (
+        this.brushTicks.length < 2 || (
+          Math.abs(t.x - this.brushTicks[0].x && Math.abs(t.x - this.brushTicks[1].x)
+          )
+        )
+      );
+    });
+
+    this.brushTicks.forEach(t => {
+      t.show = Math.abs(t.x - this.ruler.x) > 32;
+    });
 
     setTimeout(() => {
       const elWidth = this.rulerLabel.nativeElement.getBBox().width;
       let offset = 0;
-      if (x + elWidth / 2 > this.width - 2) {
-        offset = this.width - 2 - (x + elWidth / 2);
-      } else if (x - elWidth / 2 < 2) {
-        offset = 2 - (x - elWidth / 2);
+      if (x + elWidth / 2 > this.width + 8) {
+        offset = this.width + 8 - (x + elWidth / 2);
+      } else if (x - elWidth / 2 < -8) {
+        offset = -8 - (x - elWidth / 2);
       }
-      this.rulerOffset = `translate(${offset}, 3)`;
+      this.rulerOffset = `translate(${offset} -8)`;
     }, 0);
   }
 

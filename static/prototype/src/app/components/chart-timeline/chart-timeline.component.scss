@@ -33,12 +33,21 @@ svg {
   width: 100%;
   svg {
     overflow: visible;
+
+    .no-interaction {
+      pointer-events: none;
+    }
+
     text {
       font-size: 10px;
       font-family: 'RobotoMono', monospace;
 
       &.x-axis {
         text-anchor: middle;
+
+        &.brush-tick {
+          fill: $color-year-default;
+        }
       }
 
       &.shadow {
