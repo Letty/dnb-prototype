@@ -2,7 +2,7 @@
   <div class="total-results" *ngIf="totalResults != null && tags.length > 0" title="Insgesamt wurde{{totalResults > 1 ? 'n' : ''}} {{_formatNum(totalResults)}} Werk{{totalResults > 1 ? 'e' : ''}} gefunden.">
     <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults > 1 ? 'e' : ''}}
   </div>
-  <div *ngIf="selectedTag != null" class="item selected" (click)="selected(selectedTag.tag)" [class.visible]="showTags">
+  <div *ngIf="selectedTag != null" class="item selected visible" (click)="selected(selectedTag.tag)">
     <span>{{selectedTag.label}}</span>
     <span class="close-button">&times;</span>
   </div>
