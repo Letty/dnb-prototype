@@ -173,8 +173,11 @@ def filter_by_topic_result_topic():
         cursor.execute(sql, (topic_id))
         topic = cursor.fetchone()
     topic_result = qh.get_topics_for_topics(topic_id, con)
-    topic_result['data'].append(topic)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -373,8 +376,11 @@ def filter_by_person_topic_result_topic():
         topic = cursor.fetchone()
     topic_result = qh.get_topics_for_person_topic(
         params['person_id'], params['topic_id'], con)
-    topic_result['data'].append(topic)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -434,8 +440,11 @@ def filter_by_year_topic_result_topic():
         topic = cursor.fetchone()
     topic_result = qh.get_topics_for_year_topic(params['topic_id'],
                                                 params['min_year'], params['max_year'], con)
-    topic_result['data'].append(topic)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
@@ -535,8 +544,11 @@ def filter_by_year_person_topic_result_topic():
 
     topic_result = qh.get_topics_for_year_person_topic(params['person_id'], params['topic_id'],
                                                        params['min_year'], params['max_year'], con)
-    topic_result['data'].append(t)
     con.close()
+    if len(topic_result['data']) > 0:
+        topic_result['data'].append(topic)
+    else:
+        topic_result['data'] = topic
     return jsonify(topic_result)
 
 
