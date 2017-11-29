@@ -29,17 +29,19 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   @Input() height = 160;
 
   @Input() minYear = 1000;
-  @Input() maxYear = new Date().getFullYear();
+  @Input() maxYear = 2018;
 
   @ViewChild('svgWrapper') svg;
   @ViewChild('brush') brushContainer;
   @ViewChild('rulerLabel') rulerLabel;
 
   public path: string;
+  public pathFromSelection: string;
   public xTicks = [];
   public yTicks = [];
   public width = 0;
   public ruler;
+  public label: string = null;
   public rulerOffset = 'translate(0 3)';
   public init = true;
   private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
@@ -52,6 +54,8 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   private selMin: number = null;
   private selMax: number = null;
+
+  public brushStart = 0;
 
   constructor(
     private selection: SelectionService,
@@ -85,12 +89,15 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
 
+
+
     if (this.enableBrush) {
       this.brush
         .extent([[0, 0], [this.width, this.height]])
-        .on('brush end', (e) => {
+        .on('brush end', e => {
           const sel = d3.event.selection;
           if (d3.event.type === 'end' && sel) {
+            console.log('HERE', this.breakRecursion);
             if (this.breakRecursion) {
               this.breakRecursion = false;
               return;
@@ -103,11 +110,25 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
             );
             this.dataService.setFilter();
           }
-      });
+          this.updatePath();
+        });
 
       d3.select(this.brushContainer.nativeElement)
         .call(this.brush)
-        .call(this.brush.move, this.xScale.range());
+        .call(this.brush.move, this.xScale.range())
+        .selectAll('.overlay')
+          .on('mousedown', () => {
+            this.brushStart = this.offsetX(d3.event.clientX);
+          })
+          .on('mouseup', () => {
+            if (this.offsetX(d3.event.clientX) !== this.brushStart) return;
+            console.log(Math.round(this.xScale.invert(this.brushStart)));
+            this.selection.setYear(
+              Math.round(this.xScale.invert(this.brushStart)),
+              Math.round(this.xScale.invert(this.brushStart))
+            );
+            this.dataService.setFilter();
+          });
 
       d3.select('.brush .handle')
         .style('display', 'none');
@@ -126,6 +147,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   // Methods
   updatePath(): void {
+    this.label = this.selMin && this.selMax ? this.selMin === this.selMax ? `${this.selMin}` : `${this.selMin}-${this.selMax}` : null;
     // const selection = this.selection.getSelection();
     const maxY = _.maxBy(this.years, 'count');
 
@@ -147,7 +169,9 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       .y0(areaHeight)
       .y1(d => this.yScale(d.count));
 
-    this.path = area(this.addMissingYears(this.years));
+    this.path = area(this.addMissingYears(this.years, this.minYear, this.maxYear));
+    this.pathFromSelection = (this.selMin != null && this.selMax != null) ?
+      area(this.addMissingYears(this.years, this.selMin, this.selMax)) : this.path;
 
     this.xTicks = this.showXTicks ? this.xTickValues.map(d => {
       return {
@@ -163,18 +187,18 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     }) : [];
 
     if (maxY != null) {
-      this.resetYear();
+      this.resetRuler();
     }
   }
 
-  addMissingYears(years: IYear[]): IYear[] {
+  addMissingYears(years: IYear[], start: number, end: number): IYear[] {
     const minYear = Math.min(...years.map(y => y.year)) - 1;
     const maxYear = Math.max(...years.map(y => y.year)) + 1;
 
     const allYears: IYear[] = [];
     for (let i = minYear; i <= maxYear; i++) {
       const year = years.find(y => y.year === i);
-      if (i >= this.minYear && i <= this.maxYear) {
+      if (i >= start && i <= end) {
         allYears.push(year ? year : {count: 0, year: i});
       }
     }
@@ -183,11 +207,16 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   setYear(e): void {
     if (!this.interactiveRuler) { return; }
-    this.updateRuler(Math.round(this.xScale.invert(e.clientX - this.svg.nativeElement.getBoundingClientRect().left)));
+    this.updateRuler(Math.round(this.xScale.invert(this.offsetX(e.clientX))));
   }
 
-  resetYear() {
+  offsetX(x) {
+    return x - this.svg.nativeElement.getBoundingClientRect().left;
+  }
+
+  resetRuler() {
     const years = this.years.filter(y => {
+      if (this.selMin && this.selMax) return y.year <= this.selMax && y.year >= this.selMin;
       return y.year <= this.maxYear && y.year >= this.minYear;
     });
     if (years != null && years.length) {
@@ -225,10 +254,15 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   updateBrush (): void {
     if (this.enableBrush && this.selMin != null && this.selMax != null) {
-      this.breakRecursion = true;
+      if (this.selMin !== this.selMax) this.breakRecursion = true;
       this.brush.move(d3.select(this.brushContainer.nativeElement), [this.xScale(this.selMin), this.xScale(this.selMax)]);
     } else if (this.enableBrush) {
       this.brush.move(d3.select(this.brushContainer.nativeElement), null);
     }
+  }
+
+  resetYear(): void {
+    this.selection.setYear(null, null);
+    this.dataService.setFilter();
   }
 }

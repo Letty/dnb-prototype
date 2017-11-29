@@ -132,7 +132,7 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   selectYear(year) {
-    console.log('y', new Date().getTime());
+    console.log('y', year);
     this.selection.setYear(year.start, year.end);
     this.dataService.setFilter();
     this.showSuggestions = false;

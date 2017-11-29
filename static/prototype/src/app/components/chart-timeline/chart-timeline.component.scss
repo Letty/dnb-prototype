@@ -3,24 +3,32 @@
 svg {
   display: block;
 
-  text, .area-path {
-    fill: #000;
+  text {
+    fill: $color-deep-grey;
   }
-  line, circle {
-    stroke: #000;
-  }
-}
+  .area-path {
+    fill: $color-year-background;
 
-:host(.color-year) {
-  text, .area-path {
-    fill: $color-year-default;
+    &.selection {
+      fill: $color-year-default;
+    }
   }
-  line, circle {
+  circle {
+    stroke: $color-deep-grey;
+  }
+  line {
     stroke: $color-year-default;
   }
+  rect {
+    fill: $color-grey;
+  }
 }
 
+
+
+
 .chart-timeline {
+  position: relative;
   // padding: 8px 0;
   width: 100%;
   svg {
@@ -64,6 +72,26 @@ svg {
       text {
         text-anchor: middle;
       }
+    }
+  }
+
+  .label {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-family: 'RobotoMono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: $color-year-default;
+    pointer-events: none;
+
+    &.clickable {
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    .close-button {
+      margin-left: 0.5em;
     }
   }
 }
