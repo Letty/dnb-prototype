@@ -87,6 +87,7 @@
 
             .value {
               max-width: calc(100% - #{$prop-width});
+              color: $color-body-font;
 
               &.tags {
                 margin: -4px 0 -8px 0;
@@ -110,10 +111,26 @@
                   vertical-align: top;
                   cursor: pointer;
 
+                  &:hover {
+                    background-color: $color-person-background--hover;
+                  }
 
                   &.topic {
                     background: $color-topic-background;
                     color: $color-topic-default;
+
+                    &:hover {
+                      background-color: $color-topic-background--hover;
+                    }
+                  }
+
+                  &.year {
+                    background: $color-year-background;
+                    color: $color-year-default;
+
+                    &:hover {
+                      background-color: $color-year-background--hover;
+                    }
                   }
                 }
               }

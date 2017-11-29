@@ -5,12 +5,20 @@
     <svg class="arrow" width="48px" height="64px" (click)="close()">
       <polygon id="Shape" fill="#FFFFFF" fill-rule="nonzero" points="22.7 38.7 24.1 37.3 19.8 33 32 33 32 31 19.8 31 24.1 26.7 22.7 25.3 16 32"></polygon>
     </svg>
-    <div>{{itemTitle}}</div>
+    <div>{{itemAutor}}: {{itemTitle}}</div>
     </header>
     <loading-data *ngIf="loadingData" class="color-result"></loading-data>
     <div class="details" *ngIf="item">
       <div class="meta-data">
         <div class="wrapper">
+          <div class="datum">
+            <div class="prop">
+              Autor
+            </div>
+            <div class="value">
+              {{itemAutor}}
+            </div>
+          </div>
           <div class="datum">
             <div class="prop">
               Titel
@@ -47,8 +55,8 @@
             <div class="prop">
               Erschienen
             </div>
-            <div class="value">
-              {{item.item.year}}
+            <div class="value tags">
+              <span class="tag year">{{item.item.year}}</span>
             </div>
           </div>
           <div class="datum" *ngIf="item.item.content">
@@ -61,7 +69,7 @@
           </div>
           <div class="buttons">
             <a class="button" *ngIf="item.item.toc" [attr.href]="item.item.toc" target="_blank" rel="no-referrer">Inhaltsverzeichnis anzeigen</a>
-            <a class="button" [attr.href]="'http://d-nb.info/' + item.item.id" target="_blank" rel="no-referrer">Datensatz auf der Seite der DNB anzeigen</a>
+            <a class="button" [attr.href]="'https://d-nb.info/' + item.item.id" target="_blank" rel="no-referrer">Datensatz auf der Seite der DNB anzeigen</a>
           </div>
         </div>
       </div>

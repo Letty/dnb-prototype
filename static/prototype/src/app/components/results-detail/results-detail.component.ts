@@ -38,6 +38,7 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
   @Input() loadingData = false;
   @Input() item: any = null;
   @Input() itemTitle: string = null;
+  @Input() itemAutor: string = null;
 
   public items: Observable<IItem[]>;
 

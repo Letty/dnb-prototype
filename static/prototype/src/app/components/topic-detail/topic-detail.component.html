@@ -14,7 +14,7 @@
       <ng-container *ngFor="let node of nodes">
         <div
           class="bbox"
-          title="Das Thema „{{node.keyword}}“ hat {{_formatNum(node.count)}} Ergebnisse"
+          title="{{ _formatTitleResult('Das Thema', [node.keyword], node.count) }}"
           *ngIf="node.type !== 'gravity'"
           [style.transform]="getTranslate(node)"
           [style.width]="node.width + 'px'"

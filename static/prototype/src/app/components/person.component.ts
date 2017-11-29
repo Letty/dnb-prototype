@@ -13,7 +13,7 @@ import { DataService } from '../services/data.service';
 import { RouterService } from '../services/router.service';
 
 import * as d3 from 'd3';
-import {formatNum} from '../services/formatting';
+import {formatNum, formatTitleResult} from '../services/formatting';
 
 @Component({
   selector: 'chart-person',
@@ -204,5 +204,9 @@ export class PersonComponent implements OnInit {
 
   _formatNum (d) {
     return formatNum(d);
+  }
+
+  _formatTitleResult (topic, subject, value) {
+    return formatTitleResult(topic, subject, value);
   }
 }

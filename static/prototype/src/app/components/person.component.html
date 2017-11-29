@@ -11,7 +11,7 @@
           [style.width]="detail ? '176px' : (p.width) + 'px'"
           [style.padding]="detail ? '0px 12px' : (2 / p.scale) + 'px ' + (12 / p.scale) + 'px'"
           [style.border-radius]="(5 / p.scale) + 'px'">
-          <span>{{p.name}} {{p.lastname}}</span>
+          <span title="{{ _formatTitleResult('Die Person', [p.name, p.lastname], p.count) }}">{{p.name}} {{p.lastname}}</span>
         </div>
       </div>
     <div class="helper" #svgWrapper>
@@ -30,6 +30,7 @@
       </g>
       <g transform="translate(0 16)">
         <g *ngFor="let p of persons; let i = index" [attr.transform]="'translate(0 ' + i * 32 + ')'">
+          <title>{{ _formatTitleResult('Die Person', [p.name, p.lastname], p.count) }}</title>
           <rect class="grid" x="-24" y="32" [attr.width]="width + 48" height="1"></rect>
           <rect class="background" x="-24" [attr.width]="width + 48" height="32" (click)="onSelect(p)"></rect>
           <rect class="selected" *ngIf="selectedPerson && p.id === selectedPerson.id" width="221" height="32"></rect>

@@ -28,6 +28,7 @@ export class ResultsListComponent implements OnInit {
   public item: any = null;
   public tags = [];
   public itemTitle: string = null;
+  public itemAutor: string = null;
   public loadingData = true;
   public loadingDetailData = false;
   public totalResults: number = null;
@@ -63,7 +64,8 @@ export class ResultsListComponent implements OnInit {
 
   getItem(item: IItem): void {
     this.loadingDetailData = true;
-    this.itemTitle = `${item.name} ${item.lastname}: ${item.title}`;
+    this.itemTitle = `${item.title}`;
+    this.itemAutor = `${item.name} ${item.lastname}`;
     this.api.getItem(item.id).subscribe(data => {
       if (this.loadingDetailData === false) return;
       this.loadingDetailData = false;
