@@ -258,14 +258,13 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     this.xTicks.forEach(t => {
       t.show = Math.abs(t.x - this.ruler.x) > 32 && (
         this.brushTicks.length < 2 || (
-          Math.abs(t.x - this.brushTicks[0].x && Math.abs(t.x - this.brushTicks[1].x)
-          )
+          Math.abs(t.x - this.brushTicks[0].x) > 32 && Math.abs(t.x - this.brushTicks[1].x) > 32
         )
       );
     });
 
-    this.brushTicks.forEach(t => {
-      t.show = Math.abs(t.x - this.ruler.x) > 32;
+    this.brushTicks.forEach((t, i) => {
+      t.show = Math.abs(t.x - this.ruler.x) > 32 && (i > 0 || Math.abs(t.x - this.brushTicks[1].x) > 32);
     });
 
     setTimeout(() => {
