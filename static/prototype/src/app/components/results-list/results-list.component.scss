@@ -84,6 +84,10 @@ $gutter-results-default: $distance-outer-default / 2;
         position: absolute;
         bottom: 0;
         left: 0;
+        line-height: 1.2;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     	}
     }
 
