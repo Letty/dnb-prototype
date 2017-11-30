@@ -44,6 +44,7 @@ export class RouterService {
     this.result = this._result.asObservable();
 
     this.setView('index');
+    this.showInfo$ = new EventEmitter();
   }
 
   setView(view_: string): void {

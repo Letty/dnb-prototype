@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {getPiwikID} from '../../services/piwikTracking';
+import {RouterService} from '../../services/router.service';
 
 @Component({
   selector: 'dnb-header',
@@ -11,8 +12,9 @@ import {getPiwikID} from '../../services/piwikTracking';
 export class DnbHeaderComponent implements OnInit {
   public piwikVisitorId = '';
 
-  constructor() {
-  }
+  constructor(
+    private router: RouterService
+  ) {}
 
   ngOnInit(): void {
     getPiwikID(this.setPiwikID.bind(this));
@@ -20,5 +22,9 @@ export class DnbHeaderComponent implements OnInit {
 
   setPiwikID(id: string): void {
     this.piwikVisitorId = id;
+  }
+
+  toggleInformation() {
+    this.router.toggleInfo();
   }
 }

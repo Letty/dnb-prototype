@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   public showPerson = true;
   public showTopic = true;
 
-  public showInformation = true;
+  public showInformation = false;
 
   constructor(
     private routerService: RouterService
@@ -24,5 +24,12 @@ export class AppComponent implements OnInit {
       this.showPerson = view !== 'topic';
       this.showTopic = view !== 'person';
     });
+    this.routerService.showInfo$.subscribe(show => {
+      this.showInformation = show;
+    });
+  }
+
+  toggleInformation(): void {
+    this.routerService.toggleInfo();
   }
 }
