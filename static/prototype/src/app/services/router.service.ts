@@ -23,6 +23,9 @@ export class RouterService {
     result: number
   };
 
+  private showInfo = false;
+  public showInfo$: EventEmitter<boolean>;
+
   constructor(private dataService: DataService) {
     this.routerStore = {
       view: 'index',
@@ -77,5 +80,10 @@ export class RouterService {
     this._person.next(Object.assign('', this.routerStore).person);
     this._result.next(Object.assign('', this.routerStore).result);
     this.dataService.setRoute(this.routerStore.view);
+  }
+
+  toggleInfo () {
+    this.showInfo = !this.showInfo;
+    this.showInfo$.emit(this.showInfo);
   }
 }
