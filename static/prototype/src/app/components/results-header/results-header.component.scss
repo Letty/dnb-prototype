@@ -5,23 +5,15 @@
   margin-top: auto;
   position: relative;
 
-  .section-title {
-    background: $color-result-default;
-    height: 40px;
-    box-sizing: border-box;
-    padding: 8px 24px;
-    font-size: 14px;
-    color: white;
-
-    .title {
-      font-weight: bold;
-    }
-  }
-
   background: $color-header-background;
 
   .chart-timeline {
     box-sizing: border-box;
     padding: 0 $distance-outer-default;
+
+    transition: opacity .4s;
+    &.loading {
+      opacity: 0;
+    }
   }
 }
