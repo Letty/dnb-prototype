@@ -27,6 +27,10 @@
           margin: -8px 0 0 -9px;
         }
       }
+
+      .person-list-detail {
+        height: inherit;
+      }
     }
 
     svg {
@@ -69,6 +73,7 @@
     opacity: 0;
     transition: opacity .4s;
     pointer-events: none;
+    height: 20px;
 
     &.visible {
       opacity: 1;

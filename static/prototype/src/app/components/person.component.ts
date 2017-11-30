@@ -40,11 +40,13 @@ export class PersonComponent implements OnInit {
   public tags = [];
   public collapsed = false;
   public viewSize = 1;
+  public defaultHeight = '0px';
 
   public selectedPerson: IPerson = null;
   public selectedTag = null;
 
   private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
+  // private yScale = d3.scaleLinear().range([27, 6]);
   public yearScale = scaleLinear();
   private maxPubInYear = 0;
 
@@ -155,6 +157,9 @@ export class PersonComponent implements OnInit {
       const transformDetail = `translate(0, ${i * 32 + 26}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
     });
+
+    this.defaultHeight = `${this.persons.length > 0 ? this.persons[this.persons.length - 1].y : 0}px`;
+    console.log(this.defaultHeight);
   }
 
   drawTimelines () {
