@@ -15,6 +15,12 @@
   .viz-container {
     transition: opacity .4s;
 
+    .wrapper {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
     &.loading {
       opacity: 0;
     }
