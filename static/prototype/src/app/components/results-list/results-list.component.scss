@@ -14,7 +14,7 @@ $gutter-results-default: $distance-outer-default / 2;
     position: absolute;
     margin-top: -44px;
     left: calc(90px + #{$distance-outer-default});
-    right: 168px;
+    right: calc(160px + #{$distance-outer-default});
   }
 
   .result-section {

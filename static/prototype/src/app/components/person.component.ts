@@ -159,7 +159,6 @@ export class PersonComponent implements OnInit {
     });
 
     this.defaultHeight = `${this.persons.length > 0 ? this.persons[this.persons.length - 1].y : 0}px`;
-    console.log(this.defaultHeight);
   }
 
   drawTimelines () {
