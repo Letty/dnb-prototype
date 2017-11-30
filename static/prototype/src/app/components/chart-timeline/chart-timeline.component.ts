@@ -90,8 +90,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
 
-
-
     if (this.enableBrush) {
       this.brush
         .extent([[0, 0], [this.width, this.height]])

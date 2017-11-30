@@ -101,7 +101,10 @@ export class DataService {
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);
-        this.dataStore.totalResults = data.length > 0 ? data.map(d => d.count).reduce((a, c) => a + c) : 0;
+        const min = (this.selection.getSelection() as any).min_year;
+        const max = (this.selection.getSelection() as any).max_year;
+        const selectedYears = min && max ? data.filter(d => d.year >= min && d.year <= max) : data;
+        this.dataStore.totalResults = selectedYears.length > 0 ? selectedYears.map(d => d.count).reduce((a, c) => a + c) : 0;
         this._totalResults.next(Object.assign({}, this.dataStore).totalResults);
       }, err => console.log('error while loading default year'));
 
