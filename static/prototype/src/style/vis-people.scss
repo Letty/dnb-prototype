@@ -6,7 +6,7 @@
   .collapsed {
     position: absolute;
     margin-top: -34px;
-    left: 108px;
+    left: calc(80px + #{$distance-outer-default});
     right: 168px;
     height: 100%;
   }
@@ -16,6 +16,10 @@
     position: relative;
     margin-bottom: $distance-outer-default;
     transition: opacity .4s;
+
+    &.loading {
+      opacity: 0;
+    }
 
     &.detail {
       pointer-events: none;
@@ -41,9 +45,7 @@
 
 
 
-    &.loading {
-      opacity: 0;
-    }
+
 
     svg {
       overflow: visible;

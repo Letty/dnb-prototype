@@ -7,7 +7,7 @@
   .collapsed {
     position: absolute;
     margin-top: -34px;
-    left: 108px;
+    left: calc(72px + #{$distance-outer-default});
     right: 168px;
     height: 100%;
   }
