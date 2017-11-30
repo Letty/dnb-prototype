@@ -31,6 +31,11 @@
       .person-list-detail {
         height: inherit;
       }
+
+      .scroll-helper {
+        height: 0px !important;
+        transition: height .0s;
+      }
     }
 
     svg {
@@ -67,6 +72,11 @@
 
   .helper {
     height: 0;
+  }
+
+  .scroll-helper {
+    pointer-events: none;
+    transition: height .0s .4s;
   }
 
   .person-list-detail {
