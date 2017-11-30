@@ -75,6 +75,7 @@ export class PersonComponent implements OnInit {
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
     this.layout();
+    this.drawTimelines();
   }
 
   ngOnInit(): void {
@@ -101,35 +102,7 @@ export class PersonComponent implements OnInit {
 
     this.dataService.personYears.subscribe(value => {
       this.personYears = value;
-      const birthYears = this.persons.map(d => (d as any).year_of_birth).filter(y => y != null);
-      const pubYears = Array.prototype.concat(...value.map(d => d.map(e => e.year).filter(y => y !== 0)));
-
-      if (birthYears.length === 0 && pubYears.length === 0) return;
-
-      const minYear = Math.min(...birthYears, ...pubYears);
-
-      this.min = Math.floor(minYear / 50) * 50;
-      this.yearScale
-        .domain([this.min, this.max])
-        .rangeRound([200, this.width - 60]);
-
-      this.maxPubInYear = Math.max(...Array.prototype.concat(...value.map(d => d.map(e => e.count))));
-      this.yScale.domain([0, this.maxPubInYear]);
-
-      const line = d3.line<IYear>()
-        .x(d => this.yearScale(d.year))
-        .y(d => this.yScale(d.count));
-
-      this.personYearsLines = value.map(v => line(this.addMissingYears(v)));
-
-      // console.log(birthYears, Math.min(...birthYears), Math.min(...pubYears));
-      this.ticks = '.'.repeat(Math.ceil((this.max - this.min) / 50)).split('').map((t, i) => {
-        const year = this.min + i * 50;
-        return {
-          year,
-          x: this.yearScale(year)
-        };
-      });
+      this.drawTimelines();
     });
   }
 
@@ -182,6 +155,38 @@ export class PersonComponent implements OnInit {
 
       const transformDetail = `translate(0, ${i * 32 + 26}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
+    });
+  }
+
+  drawTimelines () {
+    const birthYears = this.persons.map(d => (d as any).year_of_birth).filter(y => y != null);
+    const pubYears = Array.prototype.concat(...this.personYears.map(d => d.map(e => e.year).filter(y => y !== 0)));
+
+    if (birthYears.length === 0 && pubYears.length === 0) return;
+
+    const minYear = Math.min(...birthYears, ...pubYears);
+
+    this.min = Math.floor(minYear / 50) * 50;
+    this.yearScale
+      .domain([this.min, this.max])
+      .rangeRound([200, this.width - 60]);
+
+    this.maxPubInYear = Math.max(...Array.prototype.concat(...this.personYears.map(d => d.map(e => e.count))));
+    this.yScale.domain([0, this.maxPubInYear]);
+
+    const line = d3.line<IYear>()
+      .x(d => this.yearScale(d.year))
+      .y(d => this.yScale(d.count));
+
+    this.personYearsLines = this.personYears.map(v => line(this.addMissingYears(v)));
+
+    // console.log(birthYears, Math.min(...birthYears), Math.min(...pubYears));
+    this.ticks = '.'.repeat(Math.ceil((this.max - this.min) / 50)).split('').map((t, i) => {
+      const year = this.min + i * 50;
+      return {
+        year,
+        x: this.yearScale(year)
+      };
     });
   }
 

@@ -77,7 +77,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
   // Listeners
   @HostListener('window:resize', ['$event'])
-  // @debounce(250)
+  @debounce(250)
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
     this.brush.extent([[0, 0], [this.width, this.height]]);
