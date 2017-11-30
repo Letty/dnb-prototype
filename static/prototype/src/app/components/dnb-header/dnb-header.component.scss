@@ -75,6 +75,8 @@
     li {
       padding: 0.2em 0.5em;
       display: inline-block;
+      cursor: pointer;
+      color: $color-lighter-body-font;
 
       &:first-of-type {
         padding-left: 0;
@@ -84,12 +86,16 @@
         padding-right: 0;
       }
 
-      a {
-        color: $color-lighter-body-font;
+      &:hover {
+        color: darken($color-lighter-body-font, 10%);
+      }
 
-        &:hover {
-          color: darken($color-lighter-body-font, 10%);
-        }
+      a {
+        color: inherit;
+
+        // &:hover {
+        //   color: darken($color-lighter-body-font, 10%);
+        // }
       }
     }
   }
