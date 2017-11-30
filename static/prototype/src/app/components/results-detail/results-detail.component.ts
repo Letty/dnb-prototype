@@ -99,7 +99,7 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
 
   selectYear(year): void {
     this.reset();
-    this.selection.setYear(year, null);
+    this.selection.setYear(year, year);
     this.dataService.setFilter();
     this.close();
   }
