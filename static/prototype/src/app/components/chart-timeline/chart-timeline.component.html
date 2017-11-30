@@ -1,8 +1,8 @@
 <div class="chart-timeline year-area-svg" #svgWrapper>
   <collapsed-tags class="collapsed year"
   [selectedTag]="label ? {label: label} : null" [showTags]="true"
-  (selection)="resetYear()"></collapsed-tags>
-  <svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetRuler()">
+  (selection)="resetYear()" [loadingData]="loadingData"></collapsed-tags>
+  <svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetRuler()" [class.loading]="loadingData">
     <g #brush class="brush" pointer-events="all"></g>
     <g *ngIf="init" class="no-interaction">
       <!-- <g *ngFor="let t of yTicks" [attr.transform]="t.transform">

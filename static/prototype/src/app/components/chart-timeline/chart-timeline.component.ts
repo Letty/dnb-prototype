@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 import {SelectionService} from '../../services/selection.service';
 import {DataService} from '../../services/data.service';
+import {ApiService} from '../../services/api.service';
 
 import {IYear} from '../../app.interfaces';
 
@@ -51,6 +52,8 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   private xScale;
   private yScale;
 
+  public loadingData = true;
+
   private breakRecursion = false;
 
   private selMin: number = null;
@@ -59,6 +62,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   public brushStart = 0;
 
   constructor(
+    private api: ApiService,
     private selection: SelectionService,
     private dataService: DataService) {
       selection.selMinYear$.subscribe(
@@ -73,6 +77,12 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
           this.updateBrush();
         }
       );
+      api.loadingData$.subscribe((e) => {
+        if (e === 'year') { this.loadingData = true; }
+      });
+      dataService.years.subscribe(value => {
+        this.loadingData = false;
+      });
     }
 
   // Listeners

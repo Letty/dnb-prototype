@@ -1,8 +1,7 @@
 <div class="chart-topic">
-  <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
   <collapsed-tags class="collapsed topic"
   [tags]="tags" [selectedTag]="selectedTag" [showTags]="collapsed"
-  (selection)="onSelect($event)"></collapsed-tags>
+  (selection)="onSelect($event)" [loadingData]="loadingData"></collapsed-tags>
   <section class="viz-container" [class.loading]="loadingData">
     <div class="wrapper" #svgWrapper>
       <svg width="100%" height="100%">

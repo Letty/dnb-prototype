@@ -14,6 +14,7 @@ export class CollapsedTagsComponent implements OnInit {
   @Input() totalResults: number = null;
   @Input() selectedTag: any = null;
   @Input() isResultBar = false;
+  @Input() loadingData = false;
 
   @Input() showTags = false;
 

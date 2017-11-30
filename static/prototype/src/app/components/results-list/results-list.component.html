@@ -1,8 +1,7 @@
 <div class="results-list" #resultList>
   <collapsed-tags class="result collapsed"
   [tags]="tags" [totalResults]="totalResults" [showTags]="collapsed"
-  (selection)="getItem($event)" [isResultBar]="true"></collapsed-tags>
-  <loading-data *ngIf="loadingData" class="color-result"></loading-data>
+  (selection)="getItem($event)" [isResultBar]="true" [loadingData]="loadingData"></collapsed-tags>
 
   <section class="result-section" [class.loading]="loadingData">
     <masonry>

@@ -37,10 +37,16 @@ svg {
     left: calc(116px + #{$distance-outer-default});
     top: 4px;
     right: 0px;
+    color: $color-year-default;
   }
 
   svg {
     overflow: visible;
+
+    transition: opacity .4s;
+    &.loading {
+      opacity: 0;
+    }
 
     .no-interaction {
       pointer-events: none;

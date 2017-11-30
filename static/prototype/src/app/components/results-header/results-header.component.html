@@ -1,6 +1,5 @@
 <div class="results-header">
-  <loading-data *ngIf="loadingData" class="color-year"></loading-data>
-  <div class="chart-timeline" [class.loading]="loadingData">
+  <div class="chart-timeline">
     <chart-timeline class="color-year" [years]="years"
       [height]="64" [showXTicks]="true"
       [enableBrush]="true" [logXScale]="true"

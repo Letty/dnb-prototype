@@ -8,6 +8,37 @@
   white-space: nowrap;
   width: 100%;
 
+  .loading {
+    opacity: 0;
+    position: absolute;
+    top: 2px;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+
+    svg {
+      margin-top: -1px;
+      margin-right: $distance-inner-default;
+      animation-duration: 1s;
+      animation-name: rotate;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+
+  .loading, .content {
+    transition: opacity .4s;
+  }
+
+  &.loading-data {
+    .loading {
+      opacity: 1;
+    }
+    .content {
+      opacity: 0;
+    }
+  }
+
   .total-results {
     display: inline-block;
     margin-right: 20px;
@@ -90,6 +121,14 @@
       }
     }
   }
+  .loading {
+    .quart {
+      fill: $color-topic-background;
+    }
+    .three-quarts {
+      fill: $color-topic-default;
+    }
+  }
 }
 
 :host(.person) {
@@ -110,6 +149,14 @@
       }
     }
   }
+  .loading {
+    .quart {
+      fill: $color-person-background;
+    }
+    .three-quarts {
+      fill: $color-person-default;
+    }
+  }
 }
 
 :host(.result) {
@@ -128,6 +175,14 @@
         color: #fff;
         background: darken($color-result-default, 2%);
       }
+    }
+  }
+  .loading {
+    .quart {
+      fill: $color-result-background;
+    }
+    .three-quarts {
+      fill: $color-result-default;
     }
   }
 }
@@ -151,7 +206,24 @@
       }
     }
   }
+  .loading {
+    .quart {
+      fill: $color-year-background;
+    }
+    .three-quarts {
+      fill: $color-year-default;
+    }
+  }
   .overlay {
     display: none;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
