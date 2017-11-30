@@ -7,7 +7,7 @@
     position: absolute;
     margin-top: -34px;
     left: calc(80px + #{$distance-outer-default});
-    right: 168px;
+    right: calc(160px + #{$distance-outer-default});
     height: 100%;
   }
 

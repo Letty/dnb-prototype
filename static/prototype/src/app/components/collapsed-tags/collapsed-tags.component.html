@@ -9,4 +9,5 @@
   <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags" title="{{ _formatTagAction(tag.label, isResultBar ? 'display' : 'select') }}">
     <span>{{tag.label}}</span>
   </div>
+  <div class="overlay"></div>
 </div>

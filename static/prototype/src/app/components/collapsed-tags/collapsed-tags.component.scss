@@ -5,6 +5,8 @@
   position: absolute;
   height: 32px;
   overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 
   .total-results {
     display: inline-block;
@@ -58,6 +60,15 @@
         }
       }
     }
+  }
+  .overlay {
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    width: 48px;
+    pointer-events: none;
+    top: 0px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
   }
 }
 
@@ -122,6 +133,7 @@
 }
 
 :host(.year) {
+  pointer-events: none;
   .item {
     background: $color-year-background;
 
@@ -138,5 +150,8 @@
         background: darken($color-year-default, 2%);
       }
     }
+  }
+  .overlay {
+    display: none;
   }
 }
