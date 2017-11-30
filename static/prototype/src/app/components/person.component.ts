@@ -89,8 +89,7 @@ export class PersonComponent implements OnInit {
       }).filter(d => this.selectedPerson == null || d.tag.id !== this.selectedPerson.id);
       this.selectedTag = this.selectedPerson != null ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
       this.layout();
-      console.log('LOADING');
-      this.loadingData = false;
+      if (!this.detail) this.loadingData = false;
     });
 
     this.routerService.person.subscribe(size => {
@@ -103,6 +102,7 @@ export class PersonComponent implements OnInit {
     this.dataService.personYears.subscribe(value => {
       this.personYears = value;
       this.drawTimelines();
+      this.loadingData = false;
     });
   }
 
