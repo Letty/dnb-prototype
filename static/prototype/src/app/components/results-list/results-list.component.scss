@@ -67,8 +67,11 @@ $gutter-results-default: $distance-outer-default / 2;
       	span {
       		display: block;
       		color: #fff;
-      		margin: 0 0 0.5em;
-      	}
+          margin: 0 0 0.5rem;
+
+          &:last-of-type {
+            margin: 0;
+          }
 
       	header {
       		padding: $distance-outer-default;
@@ -99,7 +102,7 @@ $gutter-results-default: $distance-outer-default / 2;
 
       &:hover .result {
         background-color: darken($color-result-default, 2%);
-        transform: scale(1.01);
+        // transform: scale(1.01);
       }
     }
   }
