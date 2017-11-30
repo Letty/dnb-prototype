@@ -155,3 +155,102 @@ def combine_topics(topics, selected_topic_id):
             {'source': int(selected_topic_id), 'target': t['id'], 'strength': t['count']})
 
     return result
+
+
+def get_default_people(connection):
+    result = []
+    with connection.cursor() as cursor:
+        sql = 'select * from dnb_author_count order by count DESC limit 20'
+        cursor.execute(sql)
+        result = cursor.fetchall()
+    return result
+
+
+def get_person_for_topic(connection, topic_id):
+    person_result = {'data': None, 'error': None}
+    with connection.cursor() as cursor:
+        sql = 'select a.a_id id, ac.name, ac.lastname, ac.date_of_birth, ac.date_of_death,a.count '\
+            'from dnb_author_topic a, dnb_author_count ac where a.t_id =%s '\
+            'and a.a_id=ac.id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (topic_id))
+        except:
+            person_result['error'] = str(sys.exc_info()[0])
+        else:
+            person_result['data'] = cursor.fetchall()
+
+    return person_result
+
+
+def get_one_person_for_topic(connection, topic_id, person_id):
+    person_result = []
+    with connection.cursor() as cursor:
+        sql = 'select a.a_id id, ac.name, ac.lastname, ac.date_of_birth, ac.date_of_death,a.count '\
+            'from dnb_author_topic a, dnb_author_count ac where a.t_id =%s '\
+            'and a.a_id=%s and a.a_id=ac.id'
+        cursor.execute(sql, (topic_id, person_id))
+        person_result = cursor.fetchone()
+
+    return person_result
+
+
+def get_person_for_year(connection, min_year, max_year):
+    person_result = {'data': None, 'error': None}
+    with connection.cursor() as cursor:
+        sql = 'select ai.a_id id, ac.lastname, ac.name, ac.date_of_birth, ac.date_of_death, '\
+            'count(ai.a_id) count from dnb_author_item ai, dnb_author_count ac '\
+            'where ai.a_id = ac.id and ai.year >= %s and ai.year <= %s '\
+            'group by ai.a_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (min_year, max_year))
+        except:
+            person_result['error'] = str(sys.exc_info()[0])
+        else:
+            person_result['data'] = cursor.fetchall()
+
+    return person_result
+
+
+def get_one_person_for_year(connection, person_id, min_year, max_year):
+    person_result = []
+    with connection.cursor() as cursor:
+        sql = 'select ai.a_id id, ac.lastname, ac.name, ac.date_of_birth, ac.date_of_death, '\
+            'count(ai.a_id) count from dnb_author_item ai, dnb_author_count ac '\
+            'where ai.a_id = %s and ai.a_id = ac.id and ai.year >= %s and ai.year <= %s'
+        cursor.execute(sql, (person_id, min_year, max_year))
+        person_result = cursor.fetchone()
+
+    return person_result
+
+
+def get_person_for_year_topic(connection, params):
+    person_result = {'data': None, 'error': None}
+    with connection.cursor() as cursor:
+        sql = 'select ac.id, ac.lastname, ac.name, count(ai.a_id) count '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it '\
+            'where  it.t_id = %s and it.year >= %s and it.year <= %s and it.i_id = ai.i_id '\
+            'and ac.id = ai.a_id group by ai.a_id order by count desc limit 20'
+        try:
+            cursor.execute(sql, (params['topic_id'],
+                                 params['min_year'], params['max_year']))
+        except:
+            person_result['error'] = str(sys.exc_info()[0])
+        else:
+            person_result['data'] = cursor.fetchall()
+
+    return person_result
+
+
+def get_one_person_for_year_topic(connection, params):
+    person_result = []
+    with connection.cursor() as cursor:
+        sql = 'select ac.id, ac.lastname, ac.name, count(ai.a_id) count '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it '\
+            'where it.t_id = %s and it.year >= %s and it.year <= %s and ai.a_id = %s '\
+            'and it.i_id = ai.i_id and ac.id = ai.a_id'
+
+        cursor.execute(sql, (params['topic_id'], params['min_year'],
+                             params['max_year'], params['person_id']))
+        person_result = cursor.fetchone()
+
+    return person_result

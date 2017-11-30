@@ -53,6 +53,12 @@ export class ApiService {
       res => <ITopic[]>res.json().data);
   }
 
+  filterDataByPersonResultPerson(personID: string): Observable<IPerson[]> {
+    this.loadingData$.emit('person');
+    return this.http.post(`${this.server}/setFilterForPersonResultPerson`, personID, this.headers).map(
+      res => <IPerson[]>res.json().data);
+  }
+
   filterDataByPersonResultItems(personID: string): Observable<IItem[]> {
     this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForPersonResultItems`, personID, this.headers)
@@ -111,6 +117,13 @@ export class ApiService {
       .map(res => <IYear[]>res.json().data);
   }
 
+  filterDataForYearPersonResultPerson(yearMin: number, yearMax: number, personID: string): Observable<IPerson[]> {
+    this.loadingData$.emit('topic');
+    return this.http.post(`${this.server}/setFilterForYearPersonResultPerson`,
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
+      .map(res => <IPerson[]>res.json().data);
+  }
+
   filterDataForYearPersonResultTopic(yearMin: number, yearMax: number, personID: string): Observable<ITopic[]> {
     this.loadingData$.emit('topic');
     return this.http.post(`${this.server}/setFilterForYearPersonResultTopic`,
@@ -123,6 +136,14 @@ export class ApiService {
     return this.http.post(`${this.server}/setFilterForYearPersonResultItems`,
       JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
       .map(res => <IItem[]>res.json().data);
+  }
+
+  filterDataForPersonTopicResultPerson(personID: string, topicID: string): Observable<IPerson[]> {
+    this.loadingData$.emit('person');
+    return this.http.post(`${this.server}/setFilterForPersonTopicResultPerson`,
+      JSON.stringify({'person_id': personID, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <IPerson[]>res.json().data);
   }
 
   filterDataForPersonTopicResultYear(personID: string, topicID: string): Observable<IYear[]> {
@@ -189,6 +210,14 @@ export class ApiService {
       .map(res => <IYear[]>res.json().data);
   }
 
+  filterDataForYearPersonTopicResultPerson(yearMin: number, yearMax: number, personID: string,
+                                          topicID: string): Observable<IPerson[]> {
+    this.loadingData$.emit('person');
+    return this.http.post(`${this.server}/setFilterForYearPersonTopicResultPerson`,
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      , this.headers)
+      .map(res => <IPerson[]>res.json().data);
+  }
   filterDataForYearPersonTopicResultTopic(yearMin: number, yearMax: number, personID: string,
                                           topicID: string): Observable<ITopic[]> {
     this.loadingData$.emit('topic');
