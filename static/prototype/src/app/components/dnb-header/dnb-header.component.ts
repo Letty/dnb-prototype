@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {getPiwikID} from '../../services/piwikTracking';
 
@@ -8,7 +8,7 @@ import {getPiwikID} from '../../services/piwikTracking';
   styleUrls: ['./dnb-header.component.scss']
     })
 
-export class DnbHeaderComponent {
+export class DnbHeaderComponent implements OnInit {
   public piwikVisitorId = '';
 
   constructor() {
