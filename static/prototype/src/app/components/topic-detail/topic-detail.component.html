@@ -1,4 +1,5 @@
 <div class="chart-topic" #svgWrapper>
+  <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
   <collapsed-tags class="collapsed topic"
   [tags]="tags" [selectedTag]="selectedTag" [showTags]="collapsed"
   (selection)="onSelect($event)"></collapsed-tags>

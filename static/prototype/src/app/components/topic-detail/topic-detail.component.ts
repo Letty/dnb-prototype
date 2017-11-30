@@ -36,6 +36,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   private upcomingTopics = [];
   private upcomingLinks = [];
   public collapsed = false;
+  public detail = false;
 
   private simulation;
   public width = 0;
@@ -47,6 +48,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   private loadingTopic = false;
   private loadingLinks = false;
+  public loadingData = true;
 
   public selectedTopic: ITopic = null;
 
@@ -59,8 +61,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
               private routerService: RouterService
   ) {
     api.loadingData$.subscribe((e) => {
-      if (e === 'topic') { this.loadingTopic = true; }
-      if (e === 'links') { this.loadingLinks = true; }
+      if (e === 'topic') this.loadingTopic = this.loadingData = true;
+      if (e === 'links') this.loadingLinks = true;
     });
     selection.selTopic$.subscribe(
       topic => {
@@ -99,6 +101,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     this.routerService.topic.subscribe(size => {
       this.collapsed = size === 0;
+      this.detail = size === 2;
     });
 
     this.networkLinks = this.dataService.networkLinks;
@@ -115,6 +118,8 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     }))) {
       return;
     }
+
+    this.loadingData = false;
 
     const nodes = _.cloneDeep(this.upcomingTopics);
 
