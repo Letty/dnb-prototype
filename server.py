@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS  # remove for production
 import json
+import ast
 from datetime import datetime, date
 import pymysql.cursors
 import queryhelper as qh
@@ -607,6 +608,18 @@ def get_item():
         else:
             item_result['data']['keyword'] = cursor.fetchall()
     con.close()
+    if len(item_result['data']['item']) > 0:
+        for r in item_result['data']['item']:
+            if 'publisher' in r:
+                if item_result['data']['item']['publisher'] != '':
+                    publisher_name = []
+                    p = ast.literal_eval(
+                        item_result['data']['item']['publisher'])
+                    j_ = json.dumps(p)
+                    j = json.loads(j_)
+                    for pub in j:
+                        publisher_name.append(pub['name'])
+                    item_result['data']['item']['publisher'] = publisher_name
     return jsonify(item_result)
 
 

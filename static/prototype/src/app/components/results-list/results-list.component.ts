@@ -71,7 +71,7 @@ export class ResultsListComponent implements OnInit {
 
   getItem(item: IItem): void {
     this.loadingDetailData = true;
-    this.itemTitle = `${item.title}`;
+    this.itemTitle = item.title;
     this.itemAutor = `${item.name} ${item.lastname}`;
     this.api.getItem(item.id).subscribe(data => {
       if (this.loadingDetailData === false) return;
