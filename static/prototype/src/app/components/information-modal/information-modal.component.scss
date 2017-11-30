@@ -31,17 +31,24 @@
       height: 64px;
       background: $color-result-default;
       color: $color-header-background;
-      padding-left: 32px;
+      padding: 0 32px;
+
+      @include flex-default();
+      align-items: center;
 
       h2 {
-        line-height: 64px;
         margin: 0;
       }
 
-      svg.arrow {
-        position: absolute;
-        top: 0;
-        left: 0;
+      span {
+        font-size: 2rem;
+        cursor: pointer;
+        text-align: right;
+        color: rgba(255, 255, 255, 0.9);
+
+        &:hover {
+          color: #fff;
+        }
       }
     }
 
@@ -49,6 +56,53 @@
       padding: 32px;
       overflow: scroll;
       height: calc(80vh - 64px * 2);
+      @include flex-default();
+
+      aside, section {
+        width: 48%;
+        padding-bottom: 32px;
+      }
+
+      a {
+        font-weight: bold;
+        color: $color-body-font;
+
+        &:hover {
+          color: #000;
+        }
+      }
+
+      h3 {
+        font-size: 1.8rem;
+
+        &:first-of-type {
+          margin-top: 0;
+        }
+      }
+
+      h4 {
+        font-size: 1.3rem;
+
+        &.year {
+          color: $color-year-default;
+        }
+
+        &.people {
+          color: $color-person-default;
+        }
+
+        &.topics {
+          color: $color-topic-default;
+        }
+
+        &.results {
+          color: $color-result-default;
+        }
+      }
+
+      p {
+        max-width: 600px;
+      }
     }
   }
 }
