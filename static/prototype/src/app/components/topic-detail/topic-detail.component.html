@@ -1,47 +1,50 @@
 <div class="chart-topic" #svgWrapper>
+  <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
   <collapsed-tags class="collapsed topic"
   [tags]="tags" [selectedTag]="selectedTag" [showTags]="collapsed"
   (selection)="onSelect($event)"></collapsed-tags>
-  <svg width="100%" height="100%">
-    <g *ngIf="nodes && forces" [attr.transform]="translate">
-      <g *ngFor="let link of links">
-        <path [attr.d]="link.path" [attr.stroke-width]="link.value"></path>
+  <section class="viz-container" [class.loading]="loadingData">
+    <svg width="100%" height="100%">
+      <g *ngIf="nodes && forces" [attr.transform]="translate">
+        <g *ngFor="let link of links">
+          <path [attr.d]="link.path" [attr.stroke-width]="link.value"></path>
+        </g>
       </g>
-    </g>
-  </svg>
-  <div class="topics">
-    <div class="wrapper">
-      <ng-container *ngFor="let node of nodes">
-        <div
-          class="bbox"
-          title="{{ _formatTitleResult('Das Thema', [node.keyword], node.count) }}"
-          *ngIf="node.type !== 'gravity'"
-          [style.transform]="getTranslate(node)"
-          [style.width]="node.width + 'px'"
-          [style.height]="node.height + 'px'">
-          <div class="node" (click)="onSelect(node)" [class.selected]="selectedTopic != null && node.id === selectedTopic.id">
-            <span class="label" [style.font-size]="node.fontSize + 'px'">
-              {{node.keyword}}
-            </span>
+    </svg>
+    <div class="topics">
+      <div class="wrapper">
+        <ng-container *ngFor="let node of nodes">
+          <div
+            class="bbox"
+            title="{{ _formatTitleResult('Das Thema', [node.keyword], node.count) }}"
+            *ngIf="node.type !== 'gravity'"
+            [style.transform]="getTranslate(node)"
+            [style.width]="node.width + 'px'"
+            [style.height]="node.height + 'px'">
+            <div class="node" (click)="onSelect(node)" [class.selected]="selectedTopic != null && node.id === selectedTopic.id">
+              <span class="label" [style.font-size]="node.fontSize + 'px'">
+                {{node.keyword}}
+              </span>
+            </div>
           </div>
-        </div>
-      </ng-container>
+        </ng-container>
+      </div>
     </div>
-  </div>
-  <svg #svg width="100%" height="100%">
-    <g *ngIf="nodes && forces" [attr.transform]="translate">
-      <g *ngFor="let link of links">
-        <circle
-          *ngIf="link.sourceAnchor"
-          r="3"
-          [attr.cx]="link.sourceAnchor.x"
-          [attr.cy]="link.sourceAnchor.y"></circle>
-        <circle
-          *ngIf="link.targetAnchor"
-          r="3"
-          [attr.cx]="link.targetAnchor.x"
-          [attr.cy]="link.targetAnchor.y"></circle>
+    <svg #svg width="100%" height="100%">
+      <g *ngIf="nodes && forces" [attr.transform]="translate">
+        <g *ngFor="let link of links">
+          <circle
+            *ngIf="link.sourceAnchor"
+            r="3"
+            [attr.cx]="link.sourceAnchor.x"
+            [attr.cy]="link.sourceAnchor.y"></circle>
+          <circle
+            *ngIf="link.targetAnchor"
+            r="3"
+            [attr.cx]="link.targetAnchor.x"
+            [attr.cy]="link.targetAnchor.y"></circle>
+        </g>
       </g>
-    </g>
-  </svg>
+    </svg>
+  </section>
 </div>

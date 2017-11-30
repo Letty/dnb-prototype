@@ -157,7 +157,6 @@ export class DataService {
   }
 
   setPerson(persons_: IPerson[]): void {
-    console.log('updateperson');
     this.dataStore.persons = persons_;
     this._persons.next(Object.assign({}, this.dataStore).persons);
   }

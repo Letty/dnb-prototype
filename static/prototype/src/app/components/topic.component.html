@@ -1,6 +1,5 @@
 <div class="topic-div main-viz" *ngIf="show">
-  <loading-data *ngIf="loadingData" class="color-topic"></loading-data>
-  <section class="viz-container">
+  <!-- <section class="viz-container"> -->
     <!-- <div class="topic-list" *ngIf="!detail">
       <div *ngFor="let bin of topics | async" class="topic-bins">
         <div *ngFor="let t of bin" class="topic" (click)="onSelect(t)" [style]="setTopicHeight(t.percentage)">
@@ -11,5 +10,5 @@
     <!-- <div class="topic-list-detail" *ngIf="detail"> -->
     <topic-detail [topics]="topics" [forces]="detail"></topic-detail>
     <!-- </div> -->
-  </section>
+  <!-- </section> -->
 </div>

@@ -30,7 +30,6 @@ export class AccordionSectionComponent implements OnInit {
   }
 
   toggle (): void {
-    console.log('clicked', this.route);
     this.router.toggle(this.route);
   }
 }

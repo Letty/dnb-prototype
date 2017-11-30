@@ -82,7 +82,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     this.width = this.svg.nativeElement.clientWidth;
     this.brush.extent([[0, 0], [this.width, this.height]]);
     this.updatePath();
-    console.log(this.width);
     this.updateBrush();
   }
 
@@ -96,7 +95,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
         .on('brush end', e => {
           const sel = d3.event.selection;
           if (d3.event.type === 'end' && sel) {
-            console.log('HERE', this.breakRecursion);
             if (this.breakRecursion) {
               this.breakRecursion = false;
               return;
@@ -121,7 +119,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
           })
           .on('mouseup', () => {
             if (this.offsetX(d3.event.clientX) !== this.brushStart) return;
-            console.log(Math.round(this.xScale.invert(this.brushStart)));
             this.selection.setYear(
               Math.round(this.xScale.invert(this.brushStart)),
               Math.round(this.xScale.invert(this.brushStart))

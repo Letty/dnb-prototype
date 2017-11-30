@@ -40,11 +40,13 @@ export class PersonComponent implements OnInit {
   public tags = [];
   public collapsed = false;
   public viewSize = 1;
+  public defaultHeight = '0px';
 
   public selectedPerson: IPerson = null;
   public selectedTag = null;
 
   private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
+  // private yScale = d3.scaleLinear().range([27, 6]);
   public yearScale = scaleLinear();
   private maxPubInYear = 0;
 
@@ -96,7 +98,6 @@ export class PersonComponent implements OnInit {
       this.detail = size === 2;
       this.collapsed = size === 0 ? true : false;
       this.viewSize = size;
-      console.log(this.viewSize);
     });
 
     this.dataService.personYears.subscribe(value => {
@@ -156,6 +157,9 @@ export class PersonComponent implements OnInit {
       const transformDetail = `translate(0, ${i * 32 + 26}px) scale(1)`;
       p.transformDetail = this.sanitizer.bypassSecurityTrustStyle(transformDetail);
     });
+
+    this.defaultHeight = `${this.persons.length > 0 ? this.persons[this.persons.length - 1].y : 0}px`;
+    console.log(this.defaultHeight);
   }
 
   drawTimelines () {
@@ -180,7 +184,6 @@ export class PersonComponent implements OnInit {
 
     this.personYearsLines = this.personYears.map(v => line(this.addMissingYears(v)));
 
-    // console.log(birthYears, Math.min(...birthYears), Math.min(...pubYears));
     this.ticks = '.'.repeat(Math.ceil((this.max - this.min) / 50)).split('').map((t, i) => {
       const year = this.min + i * 50;
       return {

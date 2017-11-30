@@ -75,7 +75,6 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
       .distinctUntilChanged()
       .subscribe(term => {
         term = term.trim();
-        console.log('input');
         if (term.length >= 3) {
           this.api.searchForTopic(term).subscribe(data => {
             this.topics = data.map(d => {

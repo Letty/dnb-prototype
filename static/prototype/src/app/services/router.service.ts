@@ -50,7 +50,6 @@ export class RouterService {
   }
 
   toggle(section: string): void {
-    console.log('toggled', section);
     let {view, topic, person, result} = this.routerStore;
     switch (section) {
       case 'topic': view = topic === 2 ? 'index' : 'topic';
