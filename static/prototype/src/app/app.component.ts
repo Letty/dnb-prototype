@@ -13,6 +13,8 @@ export class AppComponent implements OnInit {
   public showPerson = true;
   public showTopic = true;
 
+  public showInformation = true;
+
   constructor(
     private routerService: RouterService
   ) {}

@@ -1,0 +1,23 @@
+<div class="information-modal">
+  <div class="close" (click)="close()" [@fadeInOut]="inOut" (@fadeInOut.done)="animationDone($event)"></div>
+  <div class="panel" [@slideInOut]="inOut">
+    <header class="header">
+      <h2>DNB Katalog-Interface Prototyp</h2>
+    </header>
+    <div class="details">
+      <h3>Das Projekt</h3>
+      <p>Kann man durch eine digitale Bibliothek flanieren? Wie sieht die Zukunft der digitalen Literaturrecherche aus? Wie kann der Bestand der <a href="http://www.dnb.de/">Deutschen Nationalbibliothek</a> mit Hilfe von Informationsvisualisierungen noch besser zugänglich gemacht werden?</p>
+      <p>Diese Fragen standen im Zentrum eines Forschungsprojektes, das wir in Kooperation mit dem <a href="https://uclab.fh-potsdam.de">Urban Complexity Lab</a> der <a href="https://www.fh-potsdam.de/">Fachhochschule Potsdam</a> durchführt haben.</p>
+      <h3>Das Interface</h3>
+      <p>Das Interface teilt sich in fünf Bereiche auf. Die ersten vier Bereiche reagieren jeweils aufeinander und dienen als Filter-Möglichkeiten für den letzten Bereich, der die Ergebnisse auflistet. Der oberste Header-Bereich stellt neben Links zu Informationen und einem Feedback-Formular die Suche bereit. Über das Eingabefeld lässt sich gezielt nach Zeiträumen, Themen oder Personen per Text-Suche recherchieren.</p>
+      <h4 class="year">Erscheinungsjahr</h4>
+      <p>Die Zeitleiste gibt eine ständige Auskunft über die Verteilung Erscheinungsjahre der Werke über Zeit. Sowohl die zeitliche X-Achse als auch die Anzahl der Werke auf der Y-Achse sind logaritmisch skaliert. Die Zeitleiste dient außerdem durch Auswählen von Zeiträumen als Filter.</p>
+      <h4 class="topics">Themen</h4>
+      <p>Die Themenansicht bietet zwei unterschiedliche Darstellungsformen: die Übersicht und die Detailansicht. In der Übersicht werden die Themen der aktuellen Ergebnisse nach Menge skaliert und so miteinander vergleichbar gemacht. In der Detailansicht, die über den Button »Details einblenden« erreichbar ist, werden die Themen in ihrer inhaltlichen Nähe dargestellt. Dickere Linien bedeuten einen engere Verwandtschaft.</p>
+      <h4 class="people">Personen</h4>
+      <p>Auch der Bereich für Personen lässt zwei Darstellungen zu. In der Übersicht werden die Personen der Ergebnisse aufgelistet und entsprechend ihrer Anzahl an Werken skaliert. Die Detailansicht gibt zusätzlich noch Auskunft über die Lebensdaten sowie eine Zeitleiste der Veröffentlichungsdaten.</p>
+      <h4 class="results">Ergebnisse</h4>
+      <p>Im untersten Bereich werden die Werke angezeigt, die sich durch die Filter der anderen Bereiche ergeben. In der Detailansicht sind lediglich die ersten angezeigt, während die Detailansicht die Werke mit Autor, Titel und falls verfügbar Verlag und Erscheinungsjahr anzeigt. Ein Klick auf ein Werk öffnet außerdem ein Popover, in dem das Werk detaillierte angezeigt wird.</p>
+    </div>
+  </div>
+</div>
