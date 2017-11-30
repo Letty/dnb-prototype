@@ -3,6 +3,7 @@ from flask_cors import CORS  # remove for production
 import json
 import ast
 from datetime import datetime, date
+import itertools
 import pymysql.cursors
 import queryhelper as qh
 import utils
@@ -310,38 +311,8 @@ def filter_by_year_person_result_topic():
     params = json.loads(request.data.decode('utf-8'))
     topic_result = {'data': {}, 'error': None}
     t = []
-
-    with con.cursor() as cursor:
-        sql = 'select ai.i_id, ai.year, it.t_id, item.title, tc.keyword from dnb_author_item ai, ' \
-            'dnb_item_topic it, dnb_topic_count tc, dnb_item item where  ai.a_id = %s ' \
-            'and ai.year >= %s and ai.year <= %s and ai.i_id = it.i_id and it.t_id = tc.id and item.id=ai.i_id'
-
-        try:
-            cursor.execute(sql, (params['person_id'],
-                                 params['min_year'], params['max_year']))
-        except:
-            topic_result['error'] = str(sys.exc_info()[0])
-        else:
-            topics = {}
-            data = cursor.fetchall()
-            for d in data:
-                try:
-                    topics[d['t_id']]
-                except KeyError:
-                    topics[d['t_id']] = {
-                        'keyword': d['keyword'],
-                        'count': 1
-                    }
-                else:
-                    topics[d['t_id']]['count'] += 1
-
-            for key in topics:
-                t.append({'id': key, 'keyword': topics[key][
-                         'keyword'], 'count': topics[key]['count']})
-
-        topic_result['data'] = t
+    topic_result = qh.get_topics_for_year_person(con, params)
     con.close()
-
     return jsonify(topic_result)
 
 
@@ -735,9 +706,21 @@ def get_topic_network_filter_year():
     con = open_db_connection()
     years = json.loads(request.data.decode('utf-8'))
     network_result = {'data': []}
-    result = qh.get_topics_for_year(years, con)
-    network_result['data'] = qh.combine_topics_with_queries(
-        result['data'], con)
+    topics = qh.get_topics_for_year(years, con)
+    topic_comb = list(itertools.combinations(topics['data'], 2))
+    with con.cursor() as cursor:
+        for t in topic_comb:
+            r = {'source': t[0]['id'], 'target': t[1]['id'], 'strength': 0}
+
+            sql = 'select count(it1.i_id) count from dnb_item_topic it1, ' \
+                'dnb_item_topic it2  where it1.t_id = %s and it2.t_id = %s ' \
+                'and it1.year >=%s and it1.year <= %s and it1.i_id = it2.i_id'
+            cursor.execute(sql, (t[0]['id'], t[1]['id'], years[0], years[1]))
+            f = cursor.fetchone()
+            if f != None:
+                r['strength'] = f['count']
+
+            network_result['data'].append(r)
     con.close()
     return jsonify(network_result)
 
@@ -750,7 +733,6 @@ def get_topic_network_filter_person():
     result = qh.get_topics_for_person(person_id, con)
     network_result['data'] = qh.combine_topics_with_queries(
         result['data'], con)
-    print(network_result)
     con.close()
     return jsonify(network_result)
 
@@ -775,6 +757,33 @@ def get_topic_network_filter_year_topic():
                                           params['max_year'], con)
     network_result['data'] = qh.combine_topics(
         result['data'], params['topic_id'])
+    con.close()
+    return jsonify(network_result)
+
+
+@app.route('/getTopicNetworkFilterYearPerson', methods=['POST'])
+def get_topic_network_filter_year_person():
+    con = open_db_connection()
+    network_result = {'data': []}
+    params = json.loads(request.data.decode('utf-8'))
+
+    topics = qh.get_topics_for_year_person(con, params)
+    topic_comb = list(itertools.combinations(topics['data'], 2))
+    with con.cursor() as cursor:
+        for t in topic_comb:
+            r = {'source': t[0]['id'], 'target': t[1]['id'], 'strength': 0}
+
+            sql = 'select count(it1.i_id) count from dnb_item_topic it1,  '\
+                'dnb_item_topic it2, dnb2.dnb_author_item ai  where '\
+                'it1.t_id = %s and it2.t_id = %s and it1.year >=%s and it1.year <= %s '\
+                'and ai.a_id = %s and ai.i_id = it1.i_id and it1.i_id = it2.i_id'
+            cursor.execute(sql, (t[0]['id'], t[1]['id'], params['min_year'],
+                                 params['max_year'], params['person_id']))
+            f = cursor.fetchone()
+            if f != None:
+                r['strength'] = f['count']
+
+            network_result['data'].append(r)
     con.close()
     return jsonify(network_result)
 
