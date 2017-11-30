@@ -307,9 +307,10 @@ export class DataService {
   }
 
   filterDataByPerson(personID: string): void {
-    const { topic, year, items, network } = this.load;
+    const { topic, year, items, network, person} = this.load;
     if (topic) this.api.filterDataByPersonResultTopic(personID).subscribe(data => this.setTopic(data));
     if (year) this.api.filterDataByPersonResultYear(personID).subscribe(data => this.setYear(data));
+    if (person) this.api.filterDataByPersonResultPerson(personID).subscribe(data => this.setPerson(data));
     if (items) this.api.filterDataByPersonResultItems(personID).subscribe(data => this.setItems(data));
     if (network) this.api.getTopicNetworkFilterPerson(personID).subscribe(data => this.setNetworkLinks(data));
   }
@@ -343,6 +344,7 @@ export class DataService {
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
     if (this.load.year) this.api.filterDataForYearPersonResultYear(personID).subscribe(data => this.setYear(data));
+    if (this.load.person) this.api.filterDataForYearPersonResultPerson(minYear, maxYear, personID).subscribe(data => this.setPerson(data));
     if (this.load.topic) this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personID).subscribe(data => this.setTopic(data));
     if (this.load.items) this.api.filterDataForYearPersonResultItems(minYear, maxYear, personID).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterYearPerson(minYear, maxYear, personID).subscribe(data => this.setNetworkLinks(data));
@@ -351,6 +353,7 @@ export class DataService {
   filterDataByPersonAndTopic(personID: string, topicID: string): void {
     if (this.load.year) this.api.filterDataForPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
     if (this.load.topic) this.api.filterDataForPersonTopicResultTopic(personID, topicID).subscribe(data => this.setTopic(data));
+    if (this.load.person) this.api.filterDataForPersonTopicResultPerson(personID, topicID).subscribe(data => this.setPerson(data));
     if (this.load.items) this.api.filterDataForPersonTopicResultItems(personID, topicID).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterPersonTopic(personID, topicID).subscribe(data => this.setNetworkLinks(data));
   }
@@ -371,6 +374,7 @@ export class DataService {
   filterDataByYearAndPersonAndTopic(minYear: number, maxYear: number, personID: string, topicID: string): void {
     if (this.load.year) this.api.filterDataForYearPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
     if (this.load.items) this.api.filterDataForYearPersonTopicResultItems(minYear, maxYear, personID, topicID).subscribe(data => this.setItems(data));
+    if (this.load.person) this.api.filterDataForYearPersonTopicResultPerson(minYear, maxYear, personID, topicID).subscribe(data => this.setPerson(data));
     if (this.load.topic) this.api.filterDataForYearPersonTopicResultTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setTopic(data));
     if (this.load.network) this.api.getTopicNetworkFilterYearPersonTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setNetworkLinks(data));
   }

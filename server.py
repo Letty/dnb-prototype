@@ -37,11 +37,11 @@ def get_top_topics():
 @app.route('/getTopPeople')
 def get_top_people():
     con = open_db_connection()
-    result = []
-    with con.cursor() as cursor:
-        sql = 'select * from dnb_author_count order by count DESC limit 20'
-        cursor.execute(sql)
-        result = cursor.fetchall()
+    result = qh.get_default_people(con)
+    # with con.cursor() as cursor:
+    #     sql = 'select * from dnb_author_count order by count DESC limit 20'
+    #     cursor.execute(sql)
+    #     result = cursor.fetchall()
     con.close()
     return jsonify(result)
 
@@ -91,6 +91,30 @@ def filter_by_person_result_year():
             year_result['data'] = cursor.fetchall()
     con.close()
     return jsonify(year_result)
+
+
+@app.route('/setFilterForPersonResultPerson', methods=['POST'])
+def filter_by_person_result_person():
+    person_result = {'data': None, 'error': None}
+    con = open_db_connection()
+    person_id = request.data.decode('utf-8')
+    person_result['data'] = qh.get_default_people(con)
+
+    isInList = False
+    for entry in person_result['data']:
+        if entry['id'] == person_id:
+            isInList = True
+
+    if isInList == False:
+        with con.cursor() as cursor:
+            sql = 'select * from dnb_author_count where id = %s'
+            cursor.execute(sql, (person_id))
+            r2 = cursor.fetchone()
+            person_result['data'].append(r2)
+
+    con.close()
+
+    return jsonify(person_result)
 
 
 @app.route('/setFilterForPersonResultTopic', methods=['POST'])
@@ -148,18 +172,7 @@ def filter_by_topic_result_year():
 def filter_by_topic_result_person():
     con = open_db_connection()
     topic_id = request.data.decode('utf-8')
-    person_result = {'data': None, 'error': None}
-
-    with con.cursor() as cursor:
-        sql = 'select a.a_id id, ac.name, ac.lastname, ac.date_of_birth, ac.date_of_death,a.count '\
-            'from dnb_author_topic a, dnb_author_count ac where a.t_id =%s '\
-            'and a.a_id=ac.id order by count desc limit 20'
-        try:
-            cursor.execute(sql, (topic_id))
-        except:
-            person_result['error'] = str(sys.exc_info()[0])
-        else:
-            person_result['data'] = cursor.fetchall()
+    person_result = qh.get_person_for_topic(con, topic_id)
     con.close()
     return jsonify(person_result)
 
@@ -206,24 +219,10 @@ def filter_by_topic_result_items():
 @app.route('/setFilterForYearResultPerson', methods=['POST'])
 def filter_by_year_result_person():
     con = open_db_connection()
-    startTime = datetime.now()
     years = json.loads(request.data.decode('utf-8'))
     person_result = {'data': None, 'error': None}
-
-    with con.cursor() as cursor:
-        sql = 'select ai.a_id id, ac.lastname, ac.name, ac.date_of_birth, ac.date_of_death, '\
-            'count(ai.a_id) count from dnb_author_item ai, dnb_author_count ac '\
-            'where ai.a_id = ac.id and ai.year >= %s and ai.year <= %s '\
-            'group by ai.a_id order by count desc limit 20'
-        try:
-            cursor.execute(sql, (years[0], years[1]))
-        except:
-            person_result['error'] = str(sys.exc_info()[0])
-        else:
-            person_result['data'] = cursor.fetchall()
+    person_result = qh.get_person_for_year(con, years[0], years[1])
     con.close()
-    uptime = str(datetime.now() - startTime)
-    print('uptime: %s', (uptime))
     return jsonify(person_result)
 
 
@@ -281,7 +280,30 @@ def filter_by_year_person_result_year():
     return jsonify(year_result)
 
 
+@app.route('/setFilterForYearPersonResultPerson', methods=['POST'])
+def filter_by_year_person_result_person():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    person_result = {'data': None, 'error': None}
+    person_result = qh.get_person_for_year(
+        con, params['min_year'], params['max_year'])
+
+    isInList = False
+    for entry in person_result['data']:
+        if entry['id'] == params['person_id']:
+            isInList = True
+
+    if isInList == False:
+        r2 = qh.get_one_person_for_year(
+            con, params['person_id'], params['min_year'], params['max_year'])
+        person_result['data'].append(r2)
+
+    con.close()
+    return jsonify(person_result)
+
 # todo in extra fkt und dazu noch das netzwerk
+
+
 @app.route('/setFilterForYearPersonResultTopic', methods=['POST'])
 def filter_by_year_person_result_topic():
     con = open_db_connection()
@@ -362,6 +384,25 @@ def filter_by_person_topic_result_year():
             year_result['data'] = cursor.fetchall()
     con.close()
     return jsonify(year_result)
+
+
+@app.route('/setFilterForPersonTopicResultPerson', methods=['POST'])
+def filter_by_person_topic_result_person():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    person_result = qh.get_person_for_topic(con, params['topic_id'])
+
+    isInList = False
+    for entry in person_result['data']:
+        if entry['id'] == params['person_id']:
+            isInList = True
+
+    if isInList == False:
+        r2 = qh.get_one_person_for_topic(
+            con, params['topic_id'], params['person_id'])
+        person_result['data'].append(r2)
+    con.close()
+    return jsonify(person_result)
 
 
 @app.route('/setFilterForPersonTopicResultTopic', methods=['POST'])
@@ -454,19 +495,19 @@ def filter_by_year_topic_result_person():
     con = open_db_connection()
     params = json.loads(request.data.decode('utf-8'))
     person_result = {'data': {}, 'error': None}
-
-    with con.cursor() as cursor:
-        sql = 'select ac.id, ac.lastname, ac.name, count(ai.a_id) count '\
-            'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it '\
-            'where  it.t_id = %s and it.year >= %s and it.year <= %s and it.i_id = ai.i_id '\
-            'and ac.id = ai.a_id group by ai.a_id order by count desc limit 20'
-        try:
-            cursor.execute(sql, (params['topic_id'],
-                                 params['min_year'], params['max_year']))
-        except:
-            person_result['error'] = str(sys.exc_info()[0])
-        else:
-            person_result['data'] = cursor.fetchall()
+    person_result = qh.get_person_for_year_topic(con, params)
+    # with con.cursor() as cursor:
+    #     sql = 'select ac.id, ac.lastname, ac.name, count(ai.a_id) count '\
+    #         'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it '\
+    #         'where  it.t_id = %s and it.year >= %s and it.year <= %s and it.i_id = ai.i_id '\
+    #         'and ac.id = ai.a_id group by ai.a_id order by count desc limit 20'
+    #     try:
+    #         cursor.execute(sql, (params['topic_id'],
+    #                              params['min_year'], params['max_year']))
+    #     except:
+    #         person_result['error'] = str(sys.exc_info()[0])
+    #     else:
+    #         person_result['data'] = cursor.fetchall()
     con.close()
     return jsonify(person_result)
 
@@ -547,9 +588,9 @@ def filter_by_year_person_topic_result_topic():
                                                        params['min_year'], params['max_year'], con)
     con.close()
     if len(topic_result['data']) > 0:
-        topic_result['data'].append(topic)
+        topic_result['data'].append(t)
     else:
-        topic_result['data'] = [topic]
+        topic_result['data'] = [t]
     return jsonify(topic_result)
 
 
@@ -574,6 +615,25 @@ def filter_by_year_person_topic_result_items():
             items_result['data'] = utils.extract_publisher_name(res)
     con.close()
     return jsonify(items_result)
+
+
+@app.route('/setFilterForYearPersonTopicResultPerson', methods=['POST'])
+def filter_by_year_person_topic_result_person():
+    con = open_db_connection()
+    params = json.loads(request.data.decode('utf-8'))
+    person_result = qh.get_person_for_year_topic(con, params)
+
+    isInList = False
+    for entry in person_result['data']:
+        if entry['id'] == params['person_id']:
+            isInList = True
+
+    if isInList == False:
+        r2 = qh.get_one_person_for_year_topic(con, params)
+        person_result['data'].append(r2)
+    con.close()
+
+    return jsonify(person_result)
 
 
 @app.route('/getItem', methods=['POST'])
