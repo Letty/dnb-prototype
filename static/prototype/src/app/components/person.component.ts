@@ -96,7 +96,6 @@ export class PersonComponent implements OnInit {
       this.detail = size === 2;
       this.collapsed = size === 0 ? true : false;
       this.viewSize = size;
-      console.log(this.viewSize);
     });
 
     this.dataService.personYears.subscribe(value => {
@@ -180,7 +179,6 @@ export class PersonComponent implements OnInit {
 
     this.personYearsLines = this.personYears.map(v => line(this.addMissingYears(v)));
 
-    // console.log(birthYears, Math.min(...birthYears), Math.min(...pubYears));
     this.ticks = '.'.repeat(Math.ceil((this.max - this.min) / 50)).split('').map((t, i) => {
       const year = this.min + i * 50;
       return {
