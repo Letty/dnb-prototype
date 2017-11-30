@@ -11,4 +11,6 @@
       <results-list></results-list>
     </accordion-section>
   </div>
+  <information-modal *ngIf="showInformation" (closeInformation)='close()'
+    ></information-modal>
 </div>

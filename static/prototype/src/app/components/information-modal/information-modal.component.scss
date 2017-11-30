@@ -1,0 +1,54 @@
+@import "../../../style/variables";
+@import "../../../style/mixins";
+
+.information-modal {
+  // background: $color-overlay-background;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 2;
+
+  .close {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: $color-overlay-background;
+  }
+
+  .panel {
+    background: $color-header-background;
+    width: 80vw;
+    height: 80vh;
+    margin: 10vh 10vw;
+    position: absolute;
+    @include box-shadow(0px 0px 40px 5px rgba(0, 0, 0, 0.3));
+
+    header {
+      height: 64px;
+      background: $color-result-default;
+      color: $color-header-background;
+      padding-left: 32px;
+
+      h2 {
+        line-height: 64px;
+        margin: 0;
+      }
+
+      svg.arrow {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    .details {
+      padding: 32px;
+      overflow: scroll;
+      height: calc(80vh - 64px * 2);
+    }
+  }
+}
