@@ -13,7 +13,7 @@ export class CollapsedTagsComponent implements OnInit {
   @Input() tags = [];
   @Input() totalResults: number = null;
   @Input() selectedTag: any = null;
-  @Input() isResultBar: boolean = false;
+  @Input() isResultBar = false;
 
   @Input() showTags = false;
 

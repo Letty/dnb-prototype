@@ -31,6 +31,13 @@ svg {
   position: relative;
   // padding: 8px 0;
   width: 100%;
+
+  .collapsed {
+    position: absolute;
+    left: calc(116px + #{$distance-outer-default});
+    top: 4px;
+  }
+
   svg {
     overflow: visible;
 
@@ -82,11 +89,11 @@ svg {
 
   .label {
     position: absolute;
-    top: 0px;
+    top: 6px;
     left: 0px;
-    font-family: 'RobotoMono', monospace;
-    font-weight: 500;
-    text-transform: uppercase;
+    // font-family: 'RobotoMono', monospace;
+    font-weight: 700;
+    // text-transform: uppercase;
     color: $color-year-default;
     pointer-events: none;
 

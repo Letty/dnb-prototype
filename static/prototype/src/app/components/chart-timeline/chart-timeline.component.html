@@ -1,10 +1,13 @@
 <div class="chart-timeline year-area-svg" #svgWrapper>
+  <collapsed-tags class="collapsed year"
+  [selectedTag]="label ? {label: label} : null" [showTags]="true"
+  (selection)="resetYear()"></collapsed-tags>
   <svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetRuler()">
     <g #brush class="brush" pointer-events="all"></g>
     <g *ngIf="init" class="no-interaction">
-      <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
+      <!-- <g *ngFor="let t of yTicks" [attr.transform]="t.transform">
         <line x1="0" [attr.x2]="width"></line>
-      </g>
+      </g> -->
       <path [attr.d]="path" class="area-path"></path>
       <path [attr.d]="pathFromSelection" class="area-path selection"></path>
       <g *ngFor="let t of xTicks">
@@ -31,10 +34,10 @@
       </g>
     </g>
   </svg>
-  <div class="label" *ngIf="!label">
+  <div class="label">
     Erscheinungsjahre
   </div>
-  <div class="label clickable" *ngIf="label" (click)="resetYear()">
+  <!-- <div class="label clickable" *ngIf="label" (click)="resetYear()">
     {{label}}<strong class="close-button">&times;</strong>
-  </div>
+  </div> -->
 </div>
