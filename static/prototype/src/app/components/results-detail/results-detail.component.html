@@ -7,8 +7,17 @@
       </svg>
       <div>{{itemAutor}}: {{itemTitle}}</div>
     </header>
-    <div class="details" *ngIf="item">
-      <div class="meta-data">
+    <div class="loading" [class.loading-data]="loadingData">
+      <svg width="16px" height="16px" class="circle">
+        <g fill-rule="evenodd">
+          <path class="three-quarts" d="M14,8 C14,11.3137085 11.3137085,14 8,14 C4.6862915,14 2,11.3137085 2,8 C2,4.6862915 4.6862915,2 8,2 L8,8 L16,8 C16,12.418278 12.418278,16 8,16 C3.581722,16 0,12.418278 0,8 C0,3.581722 3.581722,0 8,0 L8,8 L14,8 Z"></path>
+          <path class="quart" d="M14,8 L16,8 C16,3.581722 12.418278,0 8,0 L8,2 C11.3137085,2 14,4.6862915 14,8 Z"></path>
+        </g>
+      </svg>
+      <span>Daten werden geladen</span>
+    </div>
+    <div class="details" [class.loading-data]="loadingData">
+      <div class="meta-data" *ngIf="item">
         <div class="wrapper">
           <div class="datum">
             <div class="prop">
