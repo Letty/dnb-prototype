@@ -22,8 +22,12 @@
   .panel {
     background: $color-header-background;
     width: 80vw;
+    max-width: 1200px;
     height: 80vh;
-    margin: 10vh 10vw;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
     position: absolute;
     @include box-shadow(0px 0px 40px 5px rgba(0, 0, 0, 0.3));
 
@@ -31,7 +35,7 @@
       height: 64px;
       background: $color-result-default;
       color: $color-header-background;
-      padding: 0 32px;
+      padding: 0 16px 0 32px;
 
       @include flex-default();
       align-items: center;
@@ -44,23 +48,20 @@
         font-size: 2rem;
         cursor: pointer;
         text-align: right;
-        color: rgba(255, 255, 255, 0.9);
-
-        &:hover {
-          color: #fff;
-        }
+        color: #fff;
+        padding: 4px 16px;
       }
     }
 
     .details {
       padding: 32px;
-      overflow: scroll;
+      overflow-y: auto;
+      overflow-x: hidden;
       height: calc(80vh - 64px * 2);
       @include flex-default();
 
       aside, section {
         width: 48%;
-        padding-bottom: 32px;
       }
 
       a {
@@ -102,6 +103,10 @@
 
       p {
         max-width: 600px;
+
+        &:last-of-type {
+          padding-bottom: 32px;
+        }
       }
 
       dt {

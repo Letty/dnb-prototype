@@ -17,11 +17,11 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
   ]),
   trigger('slideInOut', [
     transition(':enter', [   // :enter is alias to 'void => *'
-      style({transform: 'translateX(100%)'}),
-      animate(200, style({transform: 'translateX(0)'}))
+      style({transform: 'translate(-50%, -53%) scale(0.9)', opacity: 0}),
+      animate(200, style({transform: 'translate(-50%, -50%) scale(1)', opacity: 1}))
     ]),
     transition('in => out', [
-      animate(200, style({transform: 'translateX(100%)'}))
+      animate(200, style({transform: 'translate(-50%, -53%) scale(0.9)', opacity: 0}))
     ])
   ])
 ]
