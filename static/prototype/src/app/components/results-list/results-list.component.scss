@@ -51,7 +51,7 @@ $gutter-results-default: $distance-outer-default / 2;
       // }
 
       .result {
-        transition: background .2s;
+        // transition: background .2s;
         cursor: pointer;
       	background-color: $color-result-default;
       	display: inline-block;
