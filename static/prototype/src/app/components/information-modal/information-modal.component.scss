@@ -113,12 +113,24 @@
         font-weight: bold;
       }
 
+      dd {
+        margin-left: 0;
+      }
+
+      dd + dt {
+        margin-top: 1em;
+      }
+
       .logos {
         width: 100%;
+        @include flex-default();
 
-        li {
-          display: inline-block;
-          width: 30%;
+        img {
+          width: 25%;
+
+          &.dnb-logo {
+            width: 20%;
+          }
         }
       }
     }
