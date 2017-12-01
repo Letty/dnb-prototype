@@ -103,6 +103,19 @@
       p {
         max-width: 600px;
       }
+
+      dt {
+        font-weight: bold;
+      }
+
+      .logos {
+        width: 100%;
+
+        li {
+          display: inline-block;
+          width: 30%;
+        }
+      }
     }
   }
 }
