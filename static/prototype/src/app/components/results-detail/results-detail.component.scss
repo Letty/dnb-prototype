@@ -33,18 +33,29 @@
       background: $color-result-default;
       color: $color-header-background;
 
-      padding: 20px 48px;
+      padding: 20px 56px;
 
-      svg.arrow {
-        position: absolute;
-        top: 0px;
-        left: 0px;
+      // svg.arrow {
+      //   position: absolute;
+      //   top: 0px;
+      //   left: 0px;
+      //   cursor: pointer;
+      //   opacity: 0.8;
+      //
+      //   &:hover {
+      //     opacity: 1;
+      //   }
+      // }
+
+      span {
+        font-size: 2rem;
         cursor: pointer;
-        opacity: 0.8;
-
-        &:hover {
-          opacity: 1;
-        }
+        text-align: right;
+        color: #fff;
+        padding: 4px 16px;
+        position: absolute;
+        top: 4px;
+        left: 8px;
       }
 
       div {

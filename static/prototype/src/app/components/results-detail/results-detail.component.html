@@ -2,9 +2,10 @@
   <div class="close" (click)="close()" [@fadeInOut]="inOut" (@fadeInOut.done)="animationDone($event)"></div>
   <div class="panel" [@slideInOut]="inOut">
     <header class="header">
-      <svg class="arrow" width="48px" height="64px" (click)="close()">
+      <!-- <svg class="arrow" width="48px" height="64px" (click)="close()">
         <polygon id="Shape" fill="#FFFFFF" fill-rule="nonzero" points="22.7 38.7 24.1 37.3 19.8 33 32 33 32 31 19.8 31 24.1 26.7 22.7 25.3 16 32"></polygon>
-      </svg>
+      </svg> -->
+      <span (click)="close()">&times;</span>
       <div>{{itemAutor}}: {{itemTitle}}</div>
     </header>
     <div class="loading" [class.loading-data]="loadingData">
