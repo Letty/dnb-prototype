@@ -40,6 +40,12 @@ export class ApiService {
     return this.http.get(`${this.server}/getStartResults`).map(res => <IItem[]>res.json());
   }
 
+  getResultsForPage(page: number): Observable<IItem[]> {
+    this.loadingData$.emit('item-more');
+    return this.http.post(`${this.server}/getResultsForPage`, JSON.stringify({page}), this.headers)
+      .map(res => <IItem[]>res.json());
+  }
+
 
   filterDataByPersonResultYear(personID: string): Observable<IYear[]> {
     this.loadingData$.emit('year');
@@ -59,9 +65,9 @@ export class ApiService {
       res => <IPerson[]>res.json().data);
   }
 
-  filterDataByPersonResultItems(personID: string): Observable<IItem[]> {
-    this.loadingData$.emit('item');
-    return this.http.post(`${this.server}/setFilterForPersonResultItems`, personID, this.headers)
+  filterDataByPersonResultItems(personID: string, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
+    return this.http.post(`${this.server}/setFilterForPersonResultItems`, JSON.stringify({person_id: personID, page}), this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
@@ -83,9 +89,9 @@ export class ApiService {
       res => <ITopic[]>res.json().data);
   }
 
-  filterDataByTopicResultItems(topicID: string): Observable<IItem[]> {
-    this.loadingData$.emit('item');
-    return this.http.post(`${this.server}/setFilterForTopicResultItems`, topicID, this.headers)
+  filterDataByTopicResultItems(topicID: string, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
+    return this.http.post(`${this.server}/setFilterForTopicResultItems`, JSON.stringify({topic_id: topicID, page}), this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
@@ -103,10 +109,10 @@ export class ApiService {
       .map(res => <ITopic[]>res.json().data);
   }
 
-  filterDataByYearResultItems(yearMin: number, yearMax: number): Observable<IItem[]> {
-    this.loadingData$.emit('item');
+  filterDataByYearResultItems(yearMin: number, yearMax: number, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForYearResultItems`,
-      JSON.stringify([yearMin, yearMax]), this.headers)
+      JSON.stringify({years: [yearMin, yearMax], page}), this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
@@ -131,10 +137,10 @@ export class ApiService {
       .map(res => <ITopic[]>res.json().data);
   }
 
-  filterDataForYearPersonResultItems(yearMin: number, yearMax: number, personID: string): Observable<IItem[]> {
-    this.loadingData$.emit('item');
+  filterDataForYearPersonResultItems(yearMin: number, yearMax: number, personID: string, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForYearPersonResultItems`,
-      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax}), this.headers)
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, page}), this.headers)
       .map(res => <IItem[]>res.json().data);
   }
 
@@ -162,10 +168,10 @@ export class ApiService {
       .map(res => <ITopic[]>res.json().data);
   }
 
-  filterDataForPersonTopicResultItems(personID: string, topicID: string): Observable<IItem[]> {
-    this.loadingData$.emit('item');
+  filterDataForPersonTopicResultItems(personID: string, topicID: string, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForPersonTopicResultItems`,
-      JSON.stringify({'person_id': personID, 'topic_id': topicID})
+      JSON.stringify({'person_id': personID, 'topic_id': topicID, page})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
   }
@@ -193,10 +199,10 @@ export class ApiService {
       .map(res => <ITopic[]>res.json().data);
   }
 
-  filterDataForYearTopicResultItems(yearMin: number, yearMax: number, topicID: string): Observable<IItem[]> {
-    this.loadingData$.emit('item');
+  filterDataForYearTopicResultItems(yearMin: number, yearMax: number, topicID: string, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForYearTopicResultItems`,
-      JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      JSON.stringify({'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID, page})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
   }
@@ -227,10 +233,10 @@ export class ApiService {
       .map(res => <ITopic[]>res.json().data);
   }
   filterDataForYearPersonTopicResultItems(yearMin: number, yearMax: number, personID: string,
-                                          topicID: string): Observable<IItem[]> {
-    this.loadingData$.emit('item');
+                                          topicID: string, page = 0): Observable<IItem[]> {
+    if (page === 0) this.loadingData$.emit('item');
     return this.http.post(`${this.server}/setFilterForYearPersonTopicResultItems`,
-      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID})
+      JSON.stringify({'person_id': personID, 'min_year': yearMin, 'max_year': yearMax, 'topic_id': topicID, page})
       , this.headers)
       .map(res => <IItem[]>res.json().data);
   }

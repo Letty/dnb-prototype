@@ -32,12 +32,14 @@ export class ResultsListComponent implements OnInit {
   public itemTitle: string = null;
   public itemAutor: string = null;
   public loadingData = true;
+  public loadingMoreData = false;
   public loadingDetailData = false;
   public totalResults: number = null;
   public collapsed = true;
   public years: IYear[];
   public itemWidth = 100;
   public em = 1;
+  public hideLoadingMore = false;
 
   constructor(
     private api: ApiService,
@@ -69,16 +71,27 @@ export class ResultsListComponent implements OnInit {
     this.em = this.itemWidth / 250;
 
     this.dataService.items.subscribe(value => {
-      this.items = value;
-      this.items.forEach(item => {
-        item.aspectRatio = 1.25 + Math.random() * 0.4;
-        item.margin = this.getBottomMargin();
+
+      const newItems = value.filter(item => this.items.find(d => d.id === item.id) == null);
+
+      if (this.loadingData) {
+        this.resultList.nativeElement.scrollTop = 0;
+        this.hideLoadingMore = value.length < 100;
+      } else {
+        this.hideLoadingMore = newItems.length < 100;
+      }
+
+      newItems.forEach(item => {
+        (item as any).aspectRatio = 1.25 + Math.random() * 0.4;
+        (item as any).margin = this.getBottomMargin();
       });
+      this.items = value;
       this.tags = value.map(tag => {
         return {label: tag.title, tag};
       });
+
       this.loadingData = false;
-      this.resultList.nativeElement.scrollTop = 0;
+      this.loadingMoreData = false;
       this.getTotalResults();
     });
 
@@ -114,5 +127,10 @@ export class ResultsListComponent implements OnInit {
 
   getBottomMargin() {
     return `${200 + Math.random() * 32}px`;
+  }
+
+  more () {
+    this.loadingMoreData = true;
+    this.dataService.getResultsForNextPage();
   }
 }

@@ -32,6 +32,8 @@ export class DataService {
 
   private year: Array<IYear>;
 
+  private page = 0;
+
   private dataStore: {
     persons: IPerson[],
     defaultPersons: IPerson[],
@@ -177,6 +179,7 @@ export class DataService {
   }
 
   setFilter(): void {
+    this.page = 0;
     this.dataStore.personsAvailable =
     this.dataStore.topicsAvailable =
     this.dataStore.yearsAvailable =
@@ -343,6 +346,8 @@ export class DataService {
     if (this.load.topic) this.api.filterDataByYearResultTopic(minYear, maxYear).subscribe(data => this.setTopic(data));
     if (this.load.items) this.api.filterDataByYearResultItems(minYear, maxYear).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterYear(minYear, maxYear).subscribe(data => this.setNetworkLinks(data));
+
+    // correctly reset years
   }
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
@@ -395,6 +400,48 @@ export class DataService {
     }
     if (this.load.topic) this.api.filterDataForYearPersonTopicResultTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setTopic(data));
     if (this.load.network) this.api.getTopicNetworkFilterYearPersonTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setNetworkLinks(data));
+  }
+
+
+  getResultsForNextPage() {
+    const filter = this.selection.getSelection();
+
+    let person_id = filter['person_id'];
+    let topic_id = filter['topic_id'];
+    const min_year = filter['min_year'];
+    const max_year = filter['max_year'];
+
+    const hasPerson = person_id !== null;
+    const hasTopic = topic_id !== null;
+    const hasYear = min_year !== null && max_year !== null;
+
+    this.page += 1;
+
+    person_id = String(person_id);
+    topic_id = String(topic_id);
+
+
+    if (!hasPerson && !hasTopic && !hasYear) {
+      this.api.getResultsForPage(this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (!hasPerson && !hasTopic && hasYear) {
+      this.api.filterDataByYearResultItems(min_year, max_year, this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (hasPerson && !hasTopic && !hasYear) {
+      this.api.filterDataByPersonResultItems(person_id, this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (!hasPerson && hasTopic && !hasYear) {
+      this.api.filterDataByTopicResultItems(topic_id, this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (hasPerson && !hasTopic && hasYear) {
+      this.api.filterDataForYearPersonResultItems(min_year, max_year, person_id, this.page)
+        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (!hasPerson && hasTopic && hasYear) {
+      this.api.filterDataForYearTopicResultItems(min_year, max_year, topic_id, this.page)
+        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (hasPerson && hasTopic && !hasYear) {
+      this.api.filterDataForPersonTopicResultItems(person_id, topic_id, this.page)
+        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    } else if (hasPerson && hasTopic && hasYear) {
+      this.api.filterDataForYearPersonTopicResultItems(min_year, max_year, person_id, topic_id, this.page)
+        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+    }
   }
 
 }
