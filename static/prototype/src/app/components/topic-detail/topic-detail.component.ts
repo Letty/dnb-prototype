@@ -96,6 +96,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           return {label: tag.keyword, tag};
         }).filter(tag => this.selectedTopic == null || tag.tag.id !== this.selectedTopic.id);
         this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
+
         this.update();
     });
 
@@ -259,9 +260,11 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     nodes = _.sortBy(nodes, 'count');
 
+    const maxCount = nodes.length >= 2 ? nodes[nodes.length - 2].count * 2 : Infinity;
+
     const height = (window.innerHeight - 248) * 0.5 - 32;
     let remainingWidth = this.width;
-    let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + b);
+    let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + Math.min(b, maxCount));
     let packs = [{
       width: 0,
       count: 0,
@@ -272,12 +275,12 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
     nodes.forEach((node, i) => {
       let pack = packs[packs.length - 1];
-      const packCount = pack.count + node.count;
+      const packCount = pack.count + Math.min(maxCount, node.count);
 
       let hasSpace = true;
 
       pack.nodes.forEach(pNode => {
-        if (pNode.count / packCount < minHeight) {
+        if (Math.min(maxCount, pNode.count) / packCount < minHeight) {
           hasSpace = false;
         }
       });
@@ -298,7 +301,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
         packs.push({
           width: 0,
-          count: node.count,
+          count: Math.min(maxCount, node.count),
           nodes: [node]
         });
       }
@@ -319,7 +322,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       let yOffset = 0;
       p.nodes.forEach(n => {
         n.width = p.width;
-        n.height = (n.count / p.count * height);
+        n.height = (Math.min(maxCount, n.count) / p.count * height);
         n.x = xOffset + n.width / 2;
         n.y = yOffset + n.height / 2;
 
@@ -327,7 +330,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           n.width >= 200 && n.height >= 64 ? 18 :
           n.width >= 128 && n.height >= 48 ? 14 : 12;
 
-        yOffset += (n.count / p.count * this.height);
+        yOffset += (Math.min(maxCount, n.count) / p.count * this.height);
       });
       xOffset += p.width;
     });
