@@ -6,30 +6,24 @@
   <div class="suggestions" *ngIf="showSuggestions && (years.length || topics.length || persons.length)">
     <ng-container *ngIf="years.length">
       <div class="section-title year">Erscheinungsjahre</div>
-      <div class="suggestion year" *ngFor="let s of years" [innerHTML]="s.formatted" (click)="selectYear(s)">
+      <div class="suggestion year" *ngFor="let s of years; let i = index"
+        [innerHTML]="s.formatted" [class.highlighted]="highlight === i"
+        (click)="selectYear(s)" (mouseover)="highlightSuggestion(i)">
       </div>
     </ng-container>
     <ng-container *ngIf="topics.length">
       <div class="section-title topic">Themen</div>
-      <div class="suggestion topic" *ngFor="let s of topics" [innerHTML]="s.formatted" (click)="selectTopic(s)">
+      <div class="suggestion topic" *ngFor="let s of topics; let i = index"
+        [innerHTML]="s.formatted" [class.highlighted]="highlight === i + years.length"
+        (click)="selectTopic(s)" (mouseover)="highlightSuggestion(i + years.length)">
       </div>
     </ng-container>
     <ng-container *ngIf="persons.length">
       <div class="section-title person">Personen</div>
-      <div class="suggestion person" *ngFor="let s of persons" [innerHTML]="s.formatted" (click)="selectPerson(s)">
+      <div class="suggestion person" *ngFor="let s of persons; let i = index"
+        [innerHTML]="s.formatted" [class.highlighted]="highlight === i + years.length + topics.length"
+        (click)="selectPerson(s)" (mouseover)="highlightSuggestion(i + years.length + topics.length)">
       </div>
     </ng-container>
   </div>
-  <!-- <div class="tags" *ngIf="selectedMinYear || selectedPerson || selectedTopic">
-    <nav class="nav-selection">
-      <div class="selected-year facet" *ngIf="selectedMinYear" (click)="resetYear()">
-        <span>{{selectedMinYear}}</span><span *ngIf="selectedMaxYear && selectedMaxYear !== selectedMinYear">&thinsp;&ndash;&thinsp;{{selectedMaxYear}}</span><strong class="close-button">&times;</strong>
-      </div>
-      <div class="selected-person facet" *ngIf="selectedPerson" (click)="resetPerson()">
-        {{selectedPerson.name}} {{selectedPerson.lastname}}<strong class="close-button">&times;</strong>
-      </div>
-      <div class="selected-topic facet" *ngIf="selectedTopic" (click)="resetTopic()">
-        {{selectedTopic.keyword}}<strong class="close-button">&times;</strong></div>
-    </nav>
-  </div> -->
 </div>

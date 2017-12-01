@@ -83,12 +83,22 @@
 
       &.year {
         color: $color-year-default;
+
+        &.highlighted {
+          background-color: $color-year-background;
+        }
       }
       &.topic {
         color: $color-topic-default;
+        &.highlighted {
+          background-color: $color-topic-background;
+        }
       }
       &.person {
         color: $color-person-default;
+        &.highlighted {
+          background-color: $color-person-background;
+        }
       }
     }
 
@@ -103,6 +113,7 @@
 
     .section-title {
       font-weight: 700;
+      padding-left: 0.75em;
     }
   }
   .tags {

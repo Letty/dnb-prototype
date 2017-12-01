@@ -31,7 +31,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   public nodes;
   public links;
-  public tags;
+  public tags = [];
   public selectedTag = null;
   private upcomingTopics = [];
   private upcomingLinks = [];

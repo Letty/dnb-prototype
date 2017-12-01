@@ -25,6 +25,8 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
   public selectedPerson: IPerson;
   public selectedTopic: ITopic;
 
+  public highlight = 0;
+
   @Output() close: EventEmitter<any> = new EventEmitter();
   @Input() term: string = null;
 
@@ -84,6 +86,7 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
                 keyword: d.keyword
               };
             });
+            if (this.years.length + this.topics.length + this.persons.length <= this.highlight) this.highlight = 0;
           });
           this.api.searchForPerson(term).subscribe(data => {
             this.persons = data.map(d => {
@@ -94,6 +97,7 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
                 lastname: d.lastname
               };
             });
+            if (this.years.length + this.topics.length + this.persons.length <= this.highlight) this.highlight = 0;
           });
         } else {
           this.persons = this.topics = [];
@@ -119,6 +123,7 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
             end: y[1]
           };
         });
+        if (this.years.length + this.topics.length + this.persons.length <= this.highlight) this.highlight = 0;
       });
   }
 
@@ -158,14 +163,17 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
 
   keydown (e) {
     if (e.keyCode === 13) {
-      if (this.years != null && this.years.length) {
-        this.selectYear(this.years[0]);
-      } else if (this.topics != null && this.topics.length) {
-        this.selectTopic(this.topics[0]);
-      } else if (this.persons != null && this.persons.length) {
-        this.selectPerson(this.persons[0]);
+      if (this.highlight < this.years.length) {
+        this.selectYear(this.years[this.highlight]);
+      } else if (this.highlight < this.topics.length + this.years.length) {
+        this.selectTopic(this.topics[this.highlight - this.years.length]);
+      } else if (this.highlight < this.persons.length + this.topics.length + this.years.length) {
+        this.selectPerson(this.persons[this.highlight - this.topics.length - this.years.length]);
       }
      }
+     const results = this.years.length + this.topics.length + this.persons.length;
+     if (e.keyCode === 40) this.highlight = (this.highlight + 1) % results;
+     if (e.keyCode === 38) this.highlight = (this.highlight + results - 1) % results;
   }
 
   resetYear(): void {
@@ -179,5 +187,9 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
   resetPerson(): void {
     this.selection.setPerson(null);
     this.dataService.setFilter();
+  }
+
+  highlightSuggestion (i) {
+    this.highlight = i;
   }
 }
