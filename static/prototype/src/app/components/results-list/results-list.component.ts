@@ -1,4 +1,4 @@
-import {Component, OnInit, NgModule, ViewChild} from '@angular/core';
+import {Component, OnInit, NgModule, ViewChild, HostListener} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {SelectionService} from '../../services/selection.service';
 
@@ -24,8 +24,9 @@ import { MasonryModule } from 'angular2-masonry';
 
 export class ResultsListComponent implements OnInit {
   @ViewChild('resultList') resultList;
+  @ViewChild('resultGrid') resultGrid;
 
-  public items: Observable<IItem[]>;
+  public items = [];
   public item: any = null;
   public tags = [];
   public itemTitle: string = null;
@@ -35,6 +36,8 @@ export class ResultsListComponent implements OnInit {
   public totalResults: number = null;
   public collapsed = true;
   public years: IYear[];
+  public itemWidth = 100;
+  public em = 1;
 
   constructor(
     private api: ApiService,
@@ -52,9 +55,25 @@ export class ResultsListComponent implements OnInit {
     });
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const width = this.resultGrid.nativeElement.clientWidth;
+    this.itemWidth = width / Math.floor(width / 250);
+    this.em = this.itemWidth / 250;
+  }
+
   ngOnInit(): void {
-    this.items = this.dataService.items;
+    // this.items = this.dataService.items;
+    const width = this.resultGrid.nativeElement.clientWidth;
+    this.itemWidth = width / Math.floor(width / 250);
+    this.em = this.itemWidth / 250;
+
     this.dataService.items.subscribe(value => {
+      this.items = value;
+      this.items.forEach(item => {
+        item.aspectRatio = 1.25 + Math.random() * 0.4;
+        item.margin = this.getBottomMargin();
+      });
       this.tags = value.map(tag => {
         return {label: tag.title, tag};
       });
@@ -91,5 +110,9 @@ export class ResultsListComponent implements OnInit {
     const max = (this.selection.getSelection() as any).max_year;
     const selectedYears = min && max ? this.years.filter(d => d.year >= min && d.year <= max) : this.years;
     this.totalResults = selectedYears.length > 0 ? selectedYears.map(d => d.count).reduce((a, c) => a + c) : 0;
+  }
+
+  getBottomMargin() {
+    return `${200 + Math.random() * 32}px`;
   }
 }

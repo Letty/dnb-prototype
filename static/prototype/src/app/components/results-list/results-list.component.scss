@@ -28,35 +28,35 @@ $gutter-results-default: $distance-outer-default / 2;
       box-sizing: border-box;
       padding: $gutter-results-default;
 
-      @media screen and (min-width: 480px) {
-        width: 50%;
-      }
-      @media screen and (min-width: 720px) {
-        width: 33.33%;
-      }
-      @media screen and (min-width: 960px) {
-        width: 25%;
-      }
-      @media screen and (min-width: 1200px) {
-        width: 20%;
-      }
-      @media screen and (min-width: 1440px) {
-        width: 16.66%;
-      }
-      @media screen and (min-width: 1680px) {
-        width: 14.28%;
-      }
-      @media screen and (min-width: 1920px) {
-        width: 12.5%;
-      }
+      // @media screen and (min-width: 480px) {
+      //   width: 50%;
+      // }
+      // @media screen and (min-width: 720px) {
+      //   width: 33.33%;
+      // }
+      // @media screen and (min-width: 960px) {
+      //   width: 25%;
+      // }
+      // @media screen and (min-width: 1200px) {
+      //   width: 20%;
+      // }
+      // @media screen and (min-width: 1440px) {
+      //   width: 16.66%;
+      // }
+      // @media screen and (min-width: 1680px) {
+      //   width: 14.28%;
+      // }
+      // @media screen and (min-width: 1920px) {
+      //   width: 12.5%;
+      // }
 
       .result {
-        transition: all .2s ease-in-out;
+        transition: background .2s;
         cursor: pointer;
       	background-color: $color-result-default;
       	display: inline-block;
       	width: 100%;
-        min-height: 360px;
+        // min-height: 360px;
         position: relative;
 
         box-sizing: border-box;
@@ -85,7 +85,12 @@ $gutter-results-default: $distance-outer-default / 2;
             font-weight: normal;
           }
 
-          margin-bottom: 200px;
+          .title {
+            font-size: 1.15em;
+            line-height: 1.3em;
+          }
+
+          margin-bottom: 80px;
       	}
 
       	footer {

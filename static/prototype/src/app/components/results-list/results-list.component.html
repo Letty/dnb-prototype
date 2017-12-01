@@ -3,10 +3,10 @@
   [tags]="tags" [totalResults]="totalResults" [showTags]="collapsed"
   (selection)="getItem($event)" [isResultBar]="true" [loadingData]="loadingData"></collapsed-tags>
 
-  <section class="result-section" [class.loading]="loadingData">
+  <section class="result-section" [class.loading]="loadingData" #resultGrid>
     <masonry>
-      <masonry-brick class="brick" *ngFor="let item of items | async">
-        <div class="result" (click)="getItem(item)">
+      <masonry-brick class="brick" *ngFor="let item of items" [style.width]="itemWidth + 'px'">
+        <div class="result" (click)="getItem(item)" [style.min-height]="(item.aspectRatio * itemWidth) + 'px'" [style.font-size]="em + 'em'">
           <header>
             <span class="author">
               {{item.name}} {{item.lastname}}
