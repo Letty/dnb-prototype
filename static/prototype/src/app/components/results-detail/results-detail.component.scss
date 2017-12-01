@@ -39,6 +39,12 @@
         position: absolute;
         top: 0px;
         left: 0px;
+        cursor: pointer;
+        opacity: 0.8;
+
+        &:hover {
+          opacity: 1;
+        }
       }
 
       div {
