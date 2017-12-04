@@ -24,6 +24,21 @@
     <meta name="twitter:description" content="Das visuelle Kataloginterface lädt zum digitalen Flanieren und zur explorativen Recherche des Bestandes der Deutschen Nationalbibliothek ein.">
     <meta name="twitter:image" content="https://dnbvis.fh-potsdam.de/dist/assets/previewTwitter.png">
 
+    <script type="text/javascript">
+      window.onload = function () {
+
+        var ua= navigator.userAgent, tem;
+        M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+        if(/trident/i.test(M[1])){
+          tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+          console.log('IE '+(tem[1] || ''));
+          var h1 = document.createTextNode('Der Internet Explorer wird nicht unterstützt. Bitte nutzen Sie Chrome oder Firefox.');
+          document.body.appendChild(h1);
+
+        }
+      }
+
+    </script>
 
     <!-- Piwik -->
     <script type="text/javascript">
