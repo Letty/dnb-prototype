@@ -58,20 +58,20 @@ export class ResultsListComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     const width = this.resultGrid.nativeElement.clientWidth;
-    this.itemWidth = width / Math.floor(width / 250);
-    this.em = this.itemWidth / 250;
+    this.itemWidth = width / Math.floor(width / 220);
+    this.em = this.itemWidth / 220 * 0.85;
   }
 
   ngOnInit(): void {
     // this.items = this.dataService.items;
     const width = this.resultGrid.nativeElement.clientWidth;
-    this.itemWidth = width / Math.floor(width / 250);
-    this.em = this.itemWidth / 250;
+    this.itemWidth = width / Math.floor(width / 220);
+    this.em = this.itemWidth / 220 * 0.85;
 
     this.dataService.items.subscribe(value => {
       this.items = value;
       this.items.forEach(item => {
-        item.aspectRatio = 1.25 + Math.random() * 0.4;
+        item.aspectRatio = 1.2 + Math.random() * 0.3;
         item.margin = this.getBottomMargin();
       });
       this.tags = value.map(tag => {
