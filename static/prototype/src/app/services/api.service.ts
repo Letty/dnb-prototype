@@ -11,8 +11,8 @@ import {trackPiwik} from './piwikTracking';
 @Injectable()
 export class ApiService {
   private headers = new Headers();
-  // private server = ''; // set to '' for production
-  private server = 'http://localhost:5000'; // set to '' for production
+  private server = ''; // set to '' for production
+  // private server = 'http://localhost:5000'; // set to '' for production
   public loadingData$: EventEmitter<string>;
 
   constructor(private http: Http) {
