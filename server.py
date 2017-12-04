@@ -56,8 +56,25 @@ def get_start_results():
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, item.year, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
-            'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 50'
+            'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 100'
         cursor.execute(sql, (year))
+        res = cursor.fetchall()
+        result = utils.extract_publisher_name(res)
+    con.close()
+    return jsonify(result)
+
+@app.route('/getResultsForPage', methods=['POST'])
+def get_results_for_page():
+    con = open_db_connection()
+    result = []
+    year = date.today().year
+    params = json.loads(request.data.decode('utf-8'))
+
+    with con.cursor() as cursor:
+        sql = 'select item.id, item.title, item.publisher, item.year, ac.lastname, ac.name '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
+            'where ai.year = %s and item.id = ai.i_id and ai.a_id = ac.id limit 100 offset %s'
+        cursor.execute(sql, (year, 100 * params['page']))
         res = cursor.fetchall()
         result = utils.extract_publisher_name(res)
     con.close()
@@ -132,15 +149,15 @@ def filter_by_person_result_topic():
 def filter_by_person_result_items():
     con = open_db_connection()
     # todo
-    person_id = request.data.decode('utf-8')
+    params = json.loads(request.data.decode('utf-8'))
     item_result = {'data': None, 'error': None}
 
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, item.year, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
-            'where ai.a_id = %s and item.id = ai.i_id and ai.a_id = ac.id limit 100'
+            'where ai.a_id = %s and item.id = ai.i_id and ai.a_id = ac.id limit 100 offset %s'
         try:
-            cursor.execute(sql, (person_id))
+            cursor.execute(sql, (params['person_id'], 100 * params['page']))
         except:
             item_result['error'] = str(sys.exc_info()[0])
         else:
@@ -199,14 +216,14 @@ def filter_by_topic_result_topic():
 @app.route('/setFilterForTopicResultItems', methods=['POST'])
 def filter_by_topic_result_items():
     con = open_db_connection()
-    topic_id = request.data.decode('utf-8')
+    params = json.loads(request.data.decode('utf-8'))
     items_result = {'data': None, 'error': None}
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, item.year, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it, dnb_item item '\
-            'where it.t_id = %s and it.i_id = ai.i_id and item.id = ai.i_id and ai.a_id = ac.id limit 100'
+            'where it.t_id = %s and it.i_id = ai.i_id and item.id = ai.i_id and ai.a_id = ac.id limit 100 offset %s'
         try:
-            cursor.execute(sql, (topic_id))
+            cursor.execute(sql, (params['topic_id'], 100 * params['page']))
         except:
             err = sys.exc_info()[0]
             items_result['error'] = str(err)
@@ -240,19 +257,19 @@ def filter_by_year_result_topic():
 @app.route('/setFilterForYearResultItems', methods=['POST'])
 def filter_by_year_result_items():
     con = open_db_connection()
-    years = json.loads(request.data.decode('utf-8'))
+    params = json.loads(request.data.decode('utf-8'))
     items_result = {'data': None, 'error': None}
 
     # todo - row count befor result list
     # todo - how to load dynamically the items? fetch one after another and
     # make a datastream?
     with con.cursor() as cursor:
-        sql = 'select item.id, item.title, item.publisher, item.year, ac.name, ac.lastname from '\
-            'dnb_item item, dnb_author_item ai, dnb_author_count ac ' \
+        sql = 'select item.id, item.title, item.publisher, item.year, ac.lastname, ac.name '\
+            'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
             'where item.year >= %s and item.year <= %s and item.id = ai.i_id and '\
-            'ai.a_id = ac.id limit 20'
+            'ai.a_id = ac.id limit 100 offset %s'
         try:
-            cursor.execute(sql, (years[0], years[1]))
+            cursor.execute(sql, (params['years'][0], params['years'][1], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
@@ -325,10 +342,10 @@ def filter_by_year_person_result_items():
     with con.cursor() as cursor:
         sql = 'select ai.i_id id, ai.year, item.title, item.publisher, ac.name, ac.lastname from dnb_author_item ai, '\
             'dnb_item item, dnb_author_count ac where  ai.a_id =%s and ai.year >= %s and ai.year <=%s '\
-            'and ai.i_id = item.id and ai.a_id = ac.id'
+            'and ai.i_id = item.id and ai.a_id = ac.id limit 100 offset %s'
         try:
             cursor.execute(sql, (params['person_id'],
-                                 params['min_year'], params['max_year']))
+                                 params['min_year'], params['max_year'], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
@@ -407,9 +424,9 @@ def filter_by_person_topic_result_items():
         sql = 'select item.id, item.title, item.publisher, item.year, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
             'where ai.a_id =%s and it.t_id = %s and item.id = ai.i_id '\
-            'and ai.a_id = ac.id and ai.i_id = it.i_id limit 100'
+            'and ai.a_id = ac.id and ai.i_id = it.i_id limit 100 offset %s'
         try:
-            cursor.execute(sql, (params['person_id'], params['topic_id']))
+            cursor.execute(sql, (params['person_id'], params['topic_id'], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
@@ -493,10 +510,10 @@ def filter_by_year_topic_result_items():
         sql = 'select item.id, item.title, item.publisher, item.year, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
             'where ai.year >= %s and ai.year <= %s and it.t_id = %s and '\
-            'item.id = ai.i_id and ai.a_id = ac.id limit 100'
+            'item.id = ai.i_id and ai.a_id = ac.id limit 100 offset %s'
         try:
             cursor.execute(sql, (params['min_year'],
-                                 params['max_year'], params['topic_id']))
+                                 params['max_year'], params['topic_id'], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
@@ -575,10 +592,10 @@ def filter_by_year_person_topic_result_items():
         sql = 'select item.id, item.title, item.publisher, item.year, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
             'where ai.a_id =%s and ai.year >= %s and ai.year <= %s and it.t_id = %s and '\
-            'item.id = ai.i_id and ai.a_id = ac.id and ai.i_id = it.i_id limit 100'
+            'item.id = ai.i_id and ai.a_id = ac.id and ai.i_id = it.i_id limit 100 offset %s'
         try:
             cursor.execute(sql, (params['person_id'], params['min_year'],
-                                 params['max_year'], params['topic_id']))
+                                 params['max_year'], params['topic_id'], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
