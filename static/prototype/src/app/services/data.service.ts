@@ -98,6 +98,8 @@ export class DataService {
     this.personYears = this._personYears.asObservable();
     this.totalResults = this._totalResults.asObservable();
 
+    this.loadingData$ = new EventEmitter();
+
     this.api.getYears()
       .subscribe(data => {
         this.dataStore.years = data;
@@ -267,6 +269,12 @@ export class DataService {
       network: !networkLinksAvailable && networkLinksRequired,
       personYears: !personYearsAvailable && personYearsRequired
     };
+
+    if (this.load.person) this.loadingData$.emit('person');
+    if (this.load.topic) this.loadingData$.emit('topic');
+    if (this.load.year) this.loadingData$.emit('year');
+    if (this.load.items) this.loadingData$.emit('item');
+    if (this.load.network) this.loadingData$.emit('links');
 
     if (!hasPerson && !hasTopic && hasYear) {
       this.filterDataByYear(min_year, max_year);

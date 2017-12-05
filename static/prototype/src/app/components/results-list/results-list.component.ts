@@ -47,7 +47,7 @@ export class ResultsListComponent implements OnInit {
     private routerService: RouterService,
     private selection: SelectionService
   ) {
-    api.loadingData$.subscribe((e) => {
+    dataService.loadingData$.subscribe((e) => {
       if (e === 'item') {
         this.loadingData = true;
       }
