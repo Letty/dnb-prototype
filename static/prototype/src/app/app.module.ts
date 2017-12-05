@@ -11,7 +11,6 @@ import {ResultsDetailComponent} from './components/results-detail/results-detail
 import {PersonComponent} from './components/person.component';
 import {TopicComponent} from './components/topic.component';
 import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline.component';
-import {BtnLinkComponent} from './components/btn-link/btn-link.component';
 import {LoadingDataComponent} from './components/loading-data/loading-data.component';
 import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
 import {SearchComponent} from './components/search/search.component';
@@ -37,7 +36,6 @@ import { FormsModule } from '@angular/forms';
     TopicComponent,
     ChartTimelineComponent,
     DnbHeaderComponent,
-    BtnLinkComponent,
     LoadingDataComponent,
     TopicDetailComponent,
     ResultsDetailComponent,
