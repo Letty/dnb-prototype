@@ -30,7 +30,7 @@ export class TopicComponent implements OnInit {
     private dataService: DataService,
     private routerService: RouterService
   ) {
-    api.loadingData$.subscribe((e) => {
+    dataService.loadingData$.subscribe((e) => {
       if (e === 'topic') { this.loadingData = true; }
     });
   }

@@ -77,7 +77,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
           this.updateBrush();
         }
       );
-      api.loadingData$.subscribe((e) => {
+      dataService.loadingData$.subscribe((e) => {
         if (e === 'year') { this.loadingData = true; }
       });
       dataService.years.subscribe(value => {

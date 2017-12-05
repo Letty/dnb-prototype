@@ -60,7 +60,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
               private api: ApiService,
               private routerService: RouterService
   ) {
-    api.loadingData$.subscribe((e) => {
+    dataService.loadingData$.subscribe((e) => {
       if (e === 'topic') this.loadingTopic = this.loadingData = true;
       if (e === 'links') this.loadingLinks = true;
     });
