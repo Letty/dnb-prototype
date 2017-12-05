@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS  # remove for production
 import json
 import ast
 from datetime import datetime, date
@@ -9,7 +8,6 @@ import queryhelper as qh
 import utils
 
 app = Flask(__name__, static_url_path='')
-CORS(app)  # remove for production
 
 
 def open_db_connection():
@@ -62,6 +60,7 @@ def get_start_results():
         result = utils.extract_publisher_name(res)
     con.close()
     return jsonify(result)
+
 
 @app.route('/getResultsForPage', methods=['POST'])
 def get_results_for_page():
@@ -269,7 +268,8 @@ def filter_by_year_result_items():
             'where item.year >= %s and item.year <= %s and item.id = ai.i_id and '\
             'ai.a_id = ac.id limit 100 offset %s'
         try:
-            cursor.execute(sql, (params['years'][0], params['years'][1], 100 * params['page']))
+            cursor.execute(sql, (params['years'][0],
+                                 params['years'][1], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
@@ -426,7 +426,8 @@ def filter_by_person_topic_result_items():
             'where ai.a_id =%s and it.t_id = %s and item.id = ai.i_id '\
             'and ai.a_id = ac.id and ai.i_id = it.i_id limit 100 offset %s'
         try:
-            cursor.execute(sql, (params['person_id'], params['topic_id'], 100 * params['page']))
+            cursor.execute(sql, (params['person_id'],
+                                 params['topic_id'], 100 * params['page']))
         except:
             items_result['error'] = str(sys.exc_info()[0])
         else:
@@ -640,7 +641,8 @@ def get_item():
         else:
             item_result['data']['item'] = cursor.fetchone()
 
-        sql = 'select ac.id, ac.lastname, ac.name from dnb_author_item ai, dnb_author_count ac where ai.i_id = %s and ai.a_id = ac.id'
+        sql = 'select ac.id, ac.lastname, ac.name from dnb_item item, dnb_author_item ai, dnb_author_count ac where '\
+            'item.id = %s and item.id = ai.i_id and ai.a_id = ac.id'
         try:
             cursor.execute(sql, (item_id))
         except:
