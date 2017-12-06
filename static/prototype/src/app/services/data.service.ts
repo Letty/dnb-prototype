@@ -147,29 +147,11 @@ export class DataService {
 
   setFilter(): void {
     this.page = 0;
-    this.filterData();
+    this.requestData();
     if (this.route === 'topic') this.requestLinks();
   }
 
   setRoute(route): void {
-    // todo: move piwik into router.service
-    let piwikDescription;
-    switch (route) {
-      case 'index':
-        piwikDescription = 'StartView';
-        break;
-      case 'topic':
-        piwikDescription = 'TopicDetailView';
-        break;
-      case 'person':
-        piwikDescription = 'PersonDetailView';
-        break;
-      case 'results':
-        piwikDescription = 'PersonResultView';
-        break;
-    }
-    trackPiwik('setRoute', piwikDescription);
-
     this.route = route;
     if (route === 'topic') {
       this.requestLinks();
@@ -179,7 +161,7 @@ export class DataService {
   }
 
   getFilter (): any {
-    const {personId, topicId, minYear, maxYear} = this.selection.getSelection() as any;
+    const {personId, topicId, minYear, maxYear} = this.selection.getSelection();
     return {
       personId: String(personId),
       topicId: String(topicId),
@@ -191,7 +173,7 @@ export class DataService {
     };
   }
 
-  filterData(): void {
+  requestData(): void {
     console.log('FILTER DATA');
     const {personId, topicId, minYear, maxYear, filterPerson, filterTopic, filterYear} = this.getFilter();
 

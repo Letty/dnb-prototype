@@ -3,6 +3,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 
 import {DataService} from './data.service';
+import {trackPiwik} from './piwikTracking';
 
 @Injectable()
 export class RouterService {
@@ -47,10 +48,27 @@ export class RouterService {
     this.showInfo$ = new EventEmitter();
   }
 
-  setView(view_: string): void {
-    this.routerStore.view = view_;
+  setView(view: string): void {
+    this.routerStore.view = view;
     this._view.next(Object.assign('', this.routerStore).view);
     this.dataService.setRoute(this.routerStore.view);
+
+    let piwikDescription;
+    switch (view) {
+      case 'index':
+        piwikDescription = 'StartView';
+        break;
+      case 'topic':
+        piwikDescription = 'TopicDetailView';
+        break;
+      case 'person':
+        piwikDescription = 'PersonDetailView';
+        break;
+      case 'results':
+        piwikDescription = 'PersonResultView';
+        break;
+    }
+    trackPiwik('setRoute', piwikDescription);
   }
 
   toggle(section: string): void {

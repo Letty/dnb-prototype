@@ -52,7 +52,7 @@ export class SelectionService {
   //   return [this.selectedMinYear, this.selectedMaxYear];
   // }
 
-  getSelection(): Object {
+  getSelection() {
     const {personId, topicId, minYear, maxYear} = this;
     return {personId, topicId, minYear, maxYear};
   }
