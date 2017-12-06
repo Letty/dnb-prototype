@@ -129,6 +129,6 @@ export class ResultsListComponent implements OnInit {
 
   more () {
     this.loadingMoreData = true;
-    this.dataService.getResultsForNextPage();
+    this.dataService.requestResultsForNextPage();
   }
 }

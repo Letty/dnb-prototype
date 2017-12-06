@@ -11,10 +11,10 @@ export class SelectionService {
   private selectedMinYear = new Subject<number>();
   private selectedMaxYear = new Subject<number>();
 
-  private personID: string = null;
-  private topicID: number = null;
-  private yearMin: number = null;
-  private yearMax: number = null;
+  private personId: string = null;
+  private topicId: number = null;
+  private minYear: number = null;
+  private maxYear: number = null;
 
   selPerson$ = this.selectedPerson.asObservable();
   selTopic$ = this.selectedTopic.asObservable();
@@ -22,8 +22,8 @@ export class SelectionService {
   selMaxYear$ = this.selectedMaxYear.asObservable();
 
   setPerson(person: IPerson): void {
-    if (person && this.personID === person.id) person = null;
-    this.personID = person ? person.id : null;
+    if (person && this.personId === person.id) person = null;
+    this.personId = person ? person.id : null;
     this.selectedPerson.next(person);
   }
 
@@ -32,8 +32,8 @@ export class SelectionService {
   }
 
   setTopic(topic: ITopic): void {
-    if (topic && this.topicID === topic.id) topic = null;
-    this.topicID = topic ? topic.id : null;
+    if (topic && this.topicId === topic.id) topic = null;
+    this.topicId = topic ? topic.id : null;
     this.selectedTopic.next(topic);
   }
 
@@ -41,11 +41,11 @@ export class SelectionService {
     return this.selectedTopic;
   }
 
-  setYear(yearMin: number, yearMax: number): void {
-    this.yearMin = yearMin;
-    this.yearMax = yearMax;
-    this.selectedMinYear.next(yearMin);
-    this.selectedMaxYear.next(yearMax);
+  setYear(minYear: number, maxYear: number): void {
+    this.minYear = minYear;
+    this.maxYear = maxYear;
+    this.selectedMinYear.next(minYear);
+    this.selectedMaxYear.next(maxYear);
   }
 
   // getYears(): Subject<Number[]> {
@@ -53,11 +53,7 @@ export class SelectionService {
   // }
 
   getSelection(): Object {
-    return {
-      'person_id': this.personID,
-      'topic_id': this.topicID,
-      'min_year': this.yearMin,
-      'max_year': this.yearMax
-    };
+    const {personId, topicId, minYear, maxYear} = this;
+    return {personId, topicId, minYear, maxYear};
   }
 }
