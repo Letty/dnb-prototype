@@ -48,9 +48,7 @@ export class ResultsListComponent implements OnInit {
     private selection: SelectionService
   ) {
     dataService.loadingData$.subscribe((e) => {
-      if (e === 'item') {
-        this.loadingData = true;
-      }
+      if (e === 'data') this.loadingData = true;
     });
     routerService.result.subscribe(size => {
       this.collapsed = size === 0 || size === null;

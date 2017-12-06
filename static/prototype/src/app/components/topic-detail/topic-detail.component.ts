@@ -61,7 +61,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
               private routerService: RouterService
   ) {
     dataService.loadingData$.subscribe((e) => {
-      if (e === 'topic') this.loadingTopic = this.loadingData = true;
+      if (e === 'data') this.loadingTopic = this.loadingData = true;
       if (e === 'links') this.loadingLinks = true;
     });
     selection.selTopic$.subscribe(

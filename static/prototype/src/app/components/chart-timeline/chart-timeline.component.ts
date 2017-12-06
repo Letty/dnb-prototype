@@ -78,7 +78,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
         }
       );
       dataService.loadingData$.subscribe((e) => {
-        if (e === 'year') { this.loadingData = true; }
+        if (e === 'data') { this.loadingData = true; }
       });
       dataService.years.subscribe(value => {
         this.loadingData = false;

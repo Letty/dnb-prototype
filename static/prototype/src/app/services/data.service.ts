@@ -18,7 +18,6 @@ export class DataService {
   items: Observable<IItem[]>;
   networkLinks: Observable<INetworkLink[]>;
   personYears: Observable<IYear[][]>;
-  totalResults: Observable<number>;
 
   private _topics: BehaviorSubject<ITopic[]>;
   private _persons: BehaviorSubject<IPerson[]>;
@@ -26,7 +25,6 @@ export class DataService {
   private _items: BehaviorSubject<IItem[]>;
   private _networkLinks: BehaviorSubject<INetworkLink[]>;
   private _personYears: BehaviorSubject<IYear[][]>;
-  private _totalResults: BehaviorSubject<number>;
 
   private load: any = {};
 
@@ -37,23 +35,15 @@ export class DataService {
   private dataStore: {
     persons: IPerson[],
     defaultPersons: IPerson[],
-    personsAvailable: boolean,
-    personsRequired: boolean,
 
     topics: ITopic[],
     defaultTopics: ITopic[],
-    topicsAvailable: boolean,
-    topicsRequired: boolean,
 
     years: IYear[],
     defaultYears: IYear[],
-    yearsAvailable: boolean,
-    yearsRequired: boolean,
 
     items: IItem[],
     defaultItems: IItem[]
-    itemsAvailable: boolean,
-    itemsRequired: boolean,
 
     networkLinks: INetworkLink[],
     defaultNetworkLinks: INetworkLink[],
@@ -61,11 +51,7 @@ export class DataService {
     networkLinksRequired: boolean
 
     personYears: IYear[][],
-    defaultPersonYears: IYear[][],
-    personYearsAvailable: boolean,
-    personYearsRequired: boolean,
-
-    totalResults: number
+    defaultPersonYears: IYear[][]
   };
 
   constructor(
@@ -73,13 +59,12 @@ export class DataService {
     private selection: SelectionService
   ) {
     this.dataStore = {
-      persons: [], defaultPersons: [], personsAvailable: false, personsRequired: false,
-      topics: [], defaultTopics: [], topicsAvailable: false, topicsRequired: false,
-      years: [], defaultYears: [], yearsAvailable: false, yearsRequired: false,
-      items: [], defaultItems: [], itemsAvailable: false, itemsRequired: false,
+      persons: [], defaultPersons: [],
+      topics: [], defaultTopics: [],
+      years: [], defaultYears: [],
+      items: [], defaultItems: [],
       networkLinks: [], defaultNetworkLinks: [], networkLinksAvailable: false, networkLinksRequired: false,
-      personYears: [], defaultPersonYears: [], personYearsAvailable: false, personYearsRequired: false,
-      totalResults: 0
+      personYears: [], defaultPersonYears: []
     };
 
     this._topics = <BehaviorSubject<ITopic[]>>new BehaviorSubject([]);
@@ -88,7 +73,6 @@ export class DataService {
     this._items = <BehaviorSubject<IItem[]>>new BehaviorSubject([]);
     this._networkLinks = <BehaviorSubject<INetworkLink[]>>new BehaviorSubject([]);
     this._personYears = <BehaviorSubject<IYear[][]>>new BehaviorSubject([]);
-    this._totalResults = <BehaviorSubject<number>>new BehaviorSubject(0);
 
     this.topics = this._topics.asObservable();
     this.persons = this._persons.asObservable();
@@ -96,7 +80,6 @@ export class DataService {
     this.items = this._items.asObservable();
     this.networkLinks = this._networkLinks.asObservable();
     this.personYears = this._personYears.asObservable();
-    this.totalResults = this._totalResults.asObservable();
 
     this.loadingData$ = new EventEmitter();
 
@@ -105,11 +88,6 @@ export class DataService {
         this.dataStore.years = data;
         this.dataStore.defaultYears = data;
         this._years.next(Object.assign({}, this.dataStore).years);
-        const min = (this.selection.getSelection() as any).min_year;
-        const max = (this.selection.getSelection() as any).max_year;
-        const selectedYears = min && max ? data.filter(d => d.year >= min && d.year <= max) : data;
-        this.dataStore.totalResults = selectedYears.length > 0 ? selectedYears.map(d => d.count).reduce((a, c) => a + c) : 0;
-        this._totalResults.next(Object.assign({}, this.dataStore).totalResults);
       }, err => console.log('error while loading default year'));
 
     this.api.getPersons()
@@ -150,9 +128,7 @@ export class DataService {
 
   setYear(years_: IYear[]): void {
     this.dataStore.years = years_;
-    this.dataStore.totalResults = years_.length > 0 ? years_.map(d => d.count).reduce((a, c) => a + c) : 0;
     this._years.next(Object.assign({}, this.dataStore).years);
-    this._totalResults.next(Object.assign({}, this.dataStore).totalResults);
   }
 
   setTopic(topics_: ITopic[]): void {
@@ -182,13 +158,7 @@ export class DataService {
 
   setFilter(): void {
     this.page = 0;
-    this.dataStore.personsAvailable =
-    this.dataStore.topicsAvailable =
-    this.dataStore.yearsAvailable =
-    this.dataStore.itemsAvailable =
-    this.dataStore.networkLinksAvailable =
-    this.dataStore.personYearsAvailable = false;
-
+    this.dataStore.networkLinksAvailable = false;
     this.filterData();
   }
 
@@ -196,84 +166,48 @@ export class DataService {
     let piwikDescription;
     switch (route) {
       case 'index':
-        this.dataStore.personsRequired = true;
-        this.dataStore.topicsRequired = true;
-        this.dataStore.yearsRequired = true;
-        this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = false;
-        this.dataStore.personYearsRequired = false;
         piwikDescription = 'StartView';
         break;
       case 'topic':
-        this.dataStore.personsRequired = true;
-        this.dataStore.topicsRequired = true;
-        this.dataStore.yearsRequired = true;
-        this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = true;
-        this.dataStore.personYearsRequired = false;
         piwikDescription = 'TopicDetailView';
         break;
       case 'person':
-        this.dataStore.personsRequired = true;
-        this.dataStore.topicsRequired = true;
-        this.dataStore.yearsRequired = true;
-        this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = false;
-        this.dataStore.personYearsRequired = true;
         piwikDescription = 'PersonDetailView';
         break;
       case 'results':
-        this.dataStore.personsRequired = true;
-        this.dataStore.topicsRequired = true;
-        this.dataStore.yearsRequired = true;
-        this.dataStore.itemsRequired = true;
         this.dataStore.networkLinksRequired = false;
-        this.dataStore.personYearsRequired = false;
+        piwikDescription = 'PersonResultView';
         break;
     }
     trackPiwik('setRoute', piwikDescription);
-    this.filterData();
+    if (this.dataStore.networkLinksRequired) this.filterData();
+  }
+
+  getFilter (): any {
+    const {person_id, topic_id, min_year, max_year} = this.selection.getSelection() as any;
+    return {
+      person_id: String(person_id),
+      topic_id: String(topic_id),
+      min_year,
+      max_year,
+      hasPerson: person_id !== null,
+      hasTopic: topic_id !== null,
+      hasYear: min_year !== null && max_year !== null
+    };
   }
 
   filterData(): void {
-    const filter = this.selection.getSelection();
-
-    let person_id = filter['person_id'];
-    let topic_id = filter['topic_id'];
-    const min_year = filter['min_year'];
-    const max_year = filter['max_year'];
-
-    const hasPerson = person_id !== null;
-    const hasTopic = topic_id !== null;
-    const hasYear = min_year !== null && max_year !== null;
-
-    // Fuuuu JS.
-    // console.log(String(null) !== null, null !== null);
-    person_id = String(person_id);
-    topic_id = String(topic_id);
-
-    const {
-      personsAvailable, personsRequired,
-      topicsAvailable, topicsRequired,
-      yearsAvailable, yearsRequired,
-      itemsAvailable, itemsRequired,
-      networkLinksAvailable, networkLinksRequired,
-      personYearsAvailable, personYearsRequired
-    } = this.dataStore;
+    const {person_id, topic_id, min_year, max_year, hasPerson, hasTopic, hasYear} = this.getFilter();
+    const {networkLinksAvailable, networkLinksRequired} = this.dataStore;
 
     this.load = {
-      person: !personsAvailable && personsRequired,
-      topic: !topicsAvailable && topicsRequired,
-      year: !yearsAvailable && yearsRequired,
-      items: !itemsAvailable && itemsRequired,
-      network: !networkLinksAvailable && networkLinksRequired,
-      personYears: !personYearsAvailable && personYearsRequired
+      network: !networkLinksAvailable && networkLinksRequired
     };
 
-    if (this.load.person) this.loadingData$.emit('person');
-    if (this.load.topic) this.loadingData$.emit('topic');
-    if (this.load.year) this.loadingData$.emit('year');
-    if (this.load.items) this.loadingData$.emit('item');
+    this.loadingData$.emit('data');
     if (this.load.network) this.loadingData$.emit('links');
 
     if (!hasPerson && !hasTopic && hasYear) {
@@ -299,157 +233,129 @@ export class DataService {
       trackPiwik('filterData', 'filterDataByYearAndPersonAndTopic', ['P' + person_id, 'T' + topic_id, 'Y' + min_year, 'Y' + max_year]);
     } else {
       trackPiwik('filterData', 'Start Filter');
-      const { defaultItems, defaultTopics, defaultYears, defaultPersons, defaultNetworkLinks, defaultPersonYears } = this.dataStore;
-
-      if (this.load.person) this.setPerson(defaultPersons);
-      if (this.load.topic) this.setTopic(defaultTopics);
-      if (this.load.year) this.setYear(defaultYears);
-      if (this.load.items) this.setItems(defaultItems);
-      if (this.load.network) this.setNetworkLinks(defaultNetworkLinks);
-      if (this.load.personYears) this.setPersonYears(defaultPersonYears);
+      const {defaultItems, defaultTopics, defaultYears, defaultPersons, defaultNetworkLinks, defaultPersonYears} = this.dataStore;
+      this.setPerson(defaultPersons);
+      this.setTopic(defaultTopics);
+      this.setYear(defaultYears);
+      this.setItems(defaultItems);
+      this.setNetworkLinks(defaultNetworkLinks);
+      this.setPersonYears(defaultPersonYears);
     }
 
-    if (personsRequired) this.dataStore.personsAvailable = true;
-    if (topicsRequired) this.dataStore.topicsAvailable = true;
-    if (yearsRequired) this.dataStore.yearsAvailable = true;
-    if (itemsRequired) this.dataStore.itemsAvailable = true;
     if (networkLinksRequired) this.dataStore.networkLinksAvailable = true;
-    if (personYearsRequired) this.dataStore.personYearsAvailable = true;
   }
 
   filterDataByPerson(personID: string): void {
-    const { topic, year, items, network, person} = this.load;
-    if (topic) this.api.filterDataByPersonResultTopic(personID).subscribe(data => this.setTopic(data));
-    if (year) this.api.filterDataByPersonResultYear(personID).subscribe(data => this.setYear(data));
-    if (person) {
-      this.api.filterDataByPersonResultPerson(personID).subscribe(data => {
-        this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
-        this.setPerson(data);
-      });
-    }
-    if (items) this.api.filterDataByPersonResultItems(personID).subscribe(data => this.setItems(data));
-    if (network) this.api.getTopicNetworkFilterPerson(personID).subscribe(data => this.setNetworkLinks(data));
+    this.api.filterDataByPersonResultTopic(personID).subscribe(data => this.setTopic(data));
+    this.api.filterDataByPersonResultYear(personID).subscribe(data => this.setYear(data));
+
+    this.api.filterDataByPersonResultPerson(personID).subscribe(data => {
+      this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
+      this.setPerson(data);
+    });
+    this.api.filterDataByPersonResultItems(personID).subscribe(data => this.setItems(data));
+    if (this.load.network) this.api.getTopicNetworkFilterPerson(personID).subscribe(data => this.setNetworkLinks(data));
   }
 
   filterDataByTopic(topicID: string): void {
-    if (this.load.person) {
-      this.api.filterDataByTopicResultPerson(topicID).subscribe(data => {
-        this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
-        return this.setPerson(data);
-      });
-    }
-    if (this.load.topic) this.api.filterDataByTopicResultTopic(topicID).subscribe(data => this.setTopic(data));
-    if (this.load.year) this.api.filterDataByTopicResultYear(topicID).subscribe(data => this.setYear(data));
-    if (this.load.items) this.api.filterDataByTopicResultItems(topicID).subscribe(data => this.setItems(data));
+    this.api.filterDataByTopicResultPerson(topicID).subscribe(data => {
+      this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
+      return this.setPerson(data);
+    });
+    this.api.filterDataByTopicResultTopic(topicID).subscribe(data => this.setTopic(data));
+    this.api.filterDataByTopicResultYear(topicID).subscribe(data => this.setYear(data));
+    this.api.filterDataByTopicResultItems(topicID).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterTopic(topicID).subscribe(data => this.setNetworkLinks(data));
   }
 
   filterDataByYear(minYear: number, maxYear: number): void {
-    if (this.load.person) {
-      this.api.filterDataByYearResultPerson(minYear, maxYear).subscribe(data => {
-        this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
-        return this.setPerson(data);
-      });
-    }
-    if (this.load.topic) this.api.filterDataByYearResultTopic(minYear, maxYear).subscribe(data => this.setTopic(data));
-    if (this.load.items) this.api.filterDataByYearResultItems(minYear, maxYear).subscribe(data => this.setItems(data));
+    this.api.filterDataByYearResultPerson(minYear, maxYear).subscribe(data => {
+      this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
+      return this.setPerson(data);
+    });
+    this.api.filterDataByYearResultTopic(minYear, maxYear).subscribe(data => this.setTopic(data));
+    this.api.filterDataByYearResultItems(minYear, maxYear).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterYear(minYear, maxYear).subscribe(data => this.setNetworkLinks(data));
-
-    // correctly reset years
+    this.setYear(this.dataStore.defaultYears);
   }
 
   filterDataByYearAndPerson(minYear: number, maxYear: number, personID: string): void {
-    if (this.load.year) this.api.filterDataForYearPersonResultYear(personID).subscribe(data => this.setYear(data));
-    if (this.load.person) {
-      this.api.filterDataForYearPersonResultPerson(minYear, maxYear, personID).subscribe(data => {
-        this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
-        this.setPerson(data);
-      });
-    }
-    if (this.load.topic) this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personID).subscribe(data => this.setTopic(data));
-    if (this.load.items) this.api.filterDataForYearPersonResultItems(minYear, maxYear, personID).subscribe(data => this.setItems(data));
+    this.api.filterDataForYearPersonResultYear(personID).subscribe(data => this.setYear(data));
+    this.api.filterDataForYearPersonResultPerson(minYear, maxYear, personID).subscribe(data => {
+      this.api.getYearsForMultiplePersons(data.map(d => d.id)).subscribe(years => this.setPersonYears(years));
+      this.setPerson(data);
+    });
+    this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personID).subscribe(data => this.setTopic(data));
+    this.api.filterDataForYearPersonResultItems(minYear, maxYear, personID).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterYearPerson(minYear, maxYear, personID).subscribe(data => this.setNetworkLinks(data));
   }
 
   filterDataByPersonAndTopic(personID: string, topicID: string): void {
-    if (this.load.year) this.api.filterDataForPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
-    if (this.load.topic) this.api.filterDataForPersonTopicResultTopic(personID, topicID).subscribe(data => this.setTopic(data));
-    if (this.load.person) {
-      this.api.filterDataForPersonTopicResultPerson(personID, topicID).subscribe(data => {
-        this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
-        this.setPerson(data);
-      });
-    }
-    if (this.load.items) this.api.filterDataForPersonTopicResultItems(personID, topicID).subscribe(data => this.setItems(data));
+    this.api.filterDataForPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
+    this.api.filterDataForPersonTopicResultTopic(personID, topicID).subscribe(data => this.setTopic(data));
+    this.api.filterDataForPersonTopicResultPerson(personID, topicID).subscribe(data => {
+      this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
+      this.setPerson(data);
+    });
+    this.api.filterDataForPersonTopicResultItems(personID, topicID).subscribe(data => this.setItems(data));
     if (this.load.network) this.api.getTopicNetworkFilterPersonTopic(personID, topicID).subscribe(data => this.setNetworkLinks(data));
   }
 
   filterDataByYearAndTopic(minYear: number, maxYear: number, topicID: string): void {
-    if (this.load.year) this.api.filterDataForYearTopicResultYear(topicID).subscribe(data => this.setYear(data));
-    if (this.load.person) {
-      this.api.filterDataForYearTopicResultPerson(minYear, maxYear, topicID).subscribe(data => {
-        this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
-        this.setPerson(data);
-      });
-    }
-    if (this.load.items) this.api.filterDataForYearTopicResultItems(minYear, maxYear, topicID).subscribe(data => this.setItems(data));
-    if (this.load.topic) this.api.filterDataForYearTopicResultTopic(minYear, maxYear, topicID).subscribe(data => this.setTopic(data));
+    this.api.filterDataForYearTopicResultYear(topicID).subscribe(data => this.setYear(data));
+    this.api.filterDataForYearTopicResultPerson(minYear, maxYear, topicID).subscribe(data => {
+      this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
+      this.setPerson(data);
+    });
+    this.api.filterDataForYearTopicResultItems(minYear, maxYear, topicID).subscribe(data => this.setItems(data));
+    this.api.filterDataForYearTopicResultTopic(minYear, maxYear, topicID).subscribe(data => this.setTopic(data));
     if (this.load.network) this.api.getTopicNetworkFilterYearTopic(minYear, maxYear, topicID).subscribe(data => this.setNetworkLinks(data));
   }
 
   filterDataByYearAndPersonAndTopic(minYear: number, maxYear: number, personID: string, topicID: string): void {
-    if (this.load.year) this.api.filterDataForYearPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
-    if (this.load.items) this.api.filterDataForYearPersonTopicResultItems(minYear, maxYear, personID, topicID).subscribe(data => this.setItems(data));
-    if (this.load.person) {
-      this.api.filterDataForYearPersonTopicResultPerson(minYear, maxYear, personID, topicID).subscribe(data => {
-        this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
-        this.setPerson(data);
-      });
-    }
-    if (this.load.topic) this.api.filterDataForYearPersonTopicResultTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setTopic(data));
+    this.api.filterDataForYearPersonTopicResultYear(personID, topicID).subscribe(data => this.setYear(data));
+    this.api.filterDataForYearPersonTopicResultItems(minYear, maxYear, personID, topicID).subscribe(data => this.setItems(data));
+    this.api.filterDataForYearPersonTopicResultPerson(minYear, maxYear, personID, topicID).subscribe(data => {
+      this.api.getYearsForMultiplePersonsFilterTopics(data.map(d => d.id), topicID).subscribe(years => this.setPersonYears(years));
+      this.setPerson(data);
+    });
+    this.api.filterDataForYearPersonTopicResultTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setTopic(data));
     if (this.load.network) this.api.getTopicNetworkFilterYearPersonTopic(minYear, maxYear, personID, topicID).subscribe(data => this.setNetworkLinks(data));
   }
 
 
-  getResultsForNextPage() {
-    const filter = this.selection.getSelection();
-
-    let person_id = filter['person_id'];
-    let topic_id = filter['topic_id'];
-    const min_year = filter['min_year'];
-    const max_year = filter['max_year'];
-
-    const hasPerson = person_id !== null;
-    const hasTopic = topic_id !== null;
-    const hasYear = min_year !== null && max_year !== null;
-
+  getResultsForNextPage () {
     this.page += 1;
-
-    person_id = String(person_id);
-    topic_id = String(topic_id);
-
+    this.requestResultsforPage(this.page);
+  }
+  requestResultsforPage (page: number) {
+    const {person_id, topic_id, min_year, max_year, hasPerson, hasTopic, hasYear} = this.getFilter();
+    const {items} = this.dataStore;
 
     if (!hasPerson && !hasTopic && !hasYear) {
-      this.api.getResultsForPage(this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+      this.api.getResultsForPage(this.page)
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (!hasPerson && !hasTopic && hasYear) {
-      this.api.filterDataByYearResultItems(min_year, max_year, this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+      this.api.filterDataByYearResultItems(min_year, max_year, this.page)
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (hasPerson && !hasTopic && !hasYear) {
-      this.api.filterDataByPersonResultItems(person_id, this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+      this.api.filterDataByPersonResultItems(person_id, this.page)
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (!hasPerson && hasTopic && !hasYear) {
-      this.api.filterDataByTopicResultItems(topic_id, this.page).subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+      this.api.filterDataByTopicResultItems(topic_id, this.page)
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (hasPerson && !hasTopic && hasYear) {
       this.api.filterDataForYearPersonResultItems(min_year, max_year, person_id, this.page)
-        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (!hasPerson && hasTopic && hasYear) {
       this.api.filterDataForYearTopicResultItems(min_year, max_year, topic_id, this.page)
-        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (hasPerson && hasTopic && !hasYear) {
       this.api.filterDataForPersonTopicResultItems(person_id, topic_id, this.page)
-        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+        .subscribe(data => this.setItems([...items, ...data]));
     } else if (hasPerson && hasTopic && hasYear) {
       this.api.filterDataForYearPersonTopicResultItems(min_year, max_year, person_id, topic_id, this.page)
-        .subscribe(data => this.setItems([...this.dataStore.items, ...data]));
+        .subscribe(data => this.setItems([...items, ...data]));
     }
   }
-
 }

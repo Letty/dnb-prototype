@@ -58,7 +58,7 @@ export class PersonComponent implements OnInit {
     private routerService: RouterService
     ) {
       dataService.loadingData$.subscribe((e) => {
-        if (e === 'person') { this.loadingData = true; }
+        if (e === 'data') { this.loadingData = true; }
       });
       selection.selPerson$.subscribe(
         person => {
