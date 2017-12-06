@@ -127,7 +127,9 @@
         width: 100%;
         @include flex-default();
 
-        img {
+        a {
+          img {
+          }
           width: 25%;
 
           &.dnb-logo {
