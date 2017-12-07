@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 
 @Component({
@@ -27,19 +27,13 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
 ]
 })
 
-export class InformationModalComponent implements OnInit, OnChanges {
+export class InformationModalComponent {
 
   @Output() closeInformation: EventEmitter<any> = new EventEmitter();
 
   public inOut = 'in';
 
   constructor() {}
-
-  ngOnInit(): void {
-  }
-
-  ngOnChanges (changes: SimpleChanges) {
-  }
 
   close () {
     this.inOut = 'out';
