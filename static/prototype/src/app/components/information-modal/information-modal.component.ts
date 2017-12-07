@@ -7,7 +7,7 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
   styleUrls: ['./information-modal.component.scss'],
   animations: [
   trigger('fadeInOut', [
-    transition(':enter', [   // :enter is alias to 'void => *'
+    transition(':enter', [
       style({opacity: 0}),
       animate(200, style({opacity: 1}))
     ]),
@@ -16,7 +16,7 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
     ])
   ]),
   trigger('slideInOut', [
-    transition(':enter', [   // :enter is alias to 'void => *'
+    transition(':enter', [
       style({transform: 'translate(-50%, -53%) scale(0.9)', opacity: 0}),
       animate(200, style({transform: 'translate(-50%, -50%) scale(1)', opacity: 1}))
     ]),
