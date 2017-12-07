@@ -9,7 +9,7 @@ import {ResultsListComponent} from './components/results-list/results-list.compo
 import {ResultsDetailComponent} from './components/results-detail/results-detail.component';
 import {PersonComponent} from './components/person.component';
 import {TopicComponent} from './components/topic.component';
-import {ChartTimelineComponent} from './components/chart-timeline/chart-timeline.component';
+import {YearsComponent} from './components/years/years.component';
 import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
 import {SearchComponent} from './components/search/search.component';
 import {AccordionSectionComponent} from './components/accordion-section/accordion-section.component';
@@ -31,7 +31,7 @@ import { FormsModule } from '@angular/forms';
     ResultsListComponent,
     PersonComponent,
     TopicComponent,
-    ChartTimelineComponent,
+    YearsComponent,
     DnbHeaderComponent,
     TopicDetailComponent,
     ResultsDetailComponent,
