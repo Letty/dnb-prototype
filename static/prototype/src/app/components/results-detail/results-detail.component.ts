@@ -1,6 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {trigger, state, style, animate, transition} from '@angular/animations';
-import {ApiService} from '../../services/api.service';
 
 import {IItem, IPerson, ITopic} from '../../app.interfaces';
 import {DataService} from '../../services/data.service';
@@ -13,27 +12,23 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./results-detail.component.scss'],
   animations: [
   trigger('fadeInOut', [
-    transition(':enter', [   // :enter is alias to 'void => *'
+    transition(':enter', [
       style({opacity: 0}),
       animate(200, style({opacity: 1}))
     ]),
-    transition('in => out', [
-      animate(200, style({opacity: 0}))
-    ])
+    transition('in => out', [animate(200, style({opacity: 0}))])
   ]),
   trigger('slideInOut', [
-    transition(':enter', [   // :enter is alias to 'void => *'
+    transition(':enter', [
       style({transform: 'translateX(100%)'}),
       animate(200, style({transform: 'translateX(0)'}))
     ]),
-    transition('in => out', [
-      animate(200, style({transform: 'translateX(100%)'}))
-    ])
+    transition('in => out', [animate(200, style({transform: 'translateX(100%)'}))])
   ])
 ]
 })
 
-export class ResultsDetailComponent implements OnInit, OnChanges {
+export class ResultsDetailComponent implements OnInit {
   public selectedMinYear: number;
   public selectedMaxYear: number;
   public selectedPerson: IPerson;
@@ -46,41 +41,18 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
   @Input() itemAutor: string = null;
 
   public items: Observable<IItem[]>;
-
   public inOut = 'in';
 
   constructor(
     private selection: SelectionService,
     private dataService: DataService
-  ) {
-    selection.selPerson$.subscribe(
-      person => {
-        this.selectedPerson = person;
-      }
-    );
+  ) {}
 
-    selection.selTopic$.subscribe(
-      topic => {
-        this.selectedTopic = topic;
-      }
-    );
-
-    selection.selMinYear$.subscribe(
-      year => {
-        this.selectedMinYear = year;
-      }
-    );
-    selection.selMaxYear$.subscribe(
-      year => {
-        this.selectedMaxYear = year;
-      }
-    );
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngOnChanges (changes: SimpleChanges) {
+  ngOnInit() {
+    this.selection.selPerson$.subscribe(person => this.selectedPerson = person);
+    this.selection.selTopic$.subscribe(topic => this.selectedTopic = topic);
+    this.selection.selMinYear$.subscribe(year => this.selectedMinYear = year);
+    this.selection.selMaxYear$.subscribe(year => this.selectedMaxYear = year);
   }
 
   close () {
@@ -103,12 +75,14 @@ export class ResultsDetailComponent implements OnInit, OnChanges {
     this.dataService.setFilter();
     this.close();
   }
+
   selectTopic(topic): void {
     this.reset();
     this.selection.setTopic(topic);
     this.dataService.setFilter();
     this.close();
   }
+
   selectPerson(person): void {
     this.reset();
     this.selection.setPerson(person);
