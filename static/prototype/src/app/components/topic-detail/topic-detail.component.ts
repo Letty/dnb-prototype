@@ -67,6 +67,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     selection.selTopic$.subscribe(
       topic => {
         this.selectedTopic = topic;
+        this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
       }
     );
   }

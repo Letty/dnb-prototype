@@ -12,7 +12,7 @@ $gutter-results-default: $distance-outer-default / 2;
 
   .collapsed {
     position: absolute;
-    margin-top: -44px;
+    margin-top: -47px;
     left: calc(90px + #{$distance-outer-default});
     right: calc(160px + #{$distance-outer-default});
   }

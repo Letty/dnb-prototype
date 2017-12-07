@@ -7,14 +7,17 @@
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+  display: flex;
+  align-items: center;
 
   .loading {
     opacity: 0;
-    position: absolute;
-    top: 2px;
+    top: 5px;
     display: flex;
     align-items: center;
     pointer-events: none;
+    // margin-left: $distance-inner-default;
+    position: absolute;
 
     svg {
       margin-top: -1px;
@@ -26,17 +29,25 @@
     }
   }
 
-  .loading, .content {
+  .loading, .hide-while-loading {
     transition: opacity .4s;
   }
+
 
   &.loading-data {
     .loading {
       opacity: 1;
     }
-    .content {
+    .hide-while-loading {
       opacity: 0;
     }
+    .selected {
+      margin-right: $distance-inner-default;
+    }
+  }
+
+  .wrapper {
+    height: 26px;
   }
 
   .total-results {

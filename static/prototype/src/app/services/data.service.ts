@@ -174,7 +174,6 @@ export class DataService {
   }
 
   requestData(): void {
-    console.log('FILTER DATA');
     const {personId, topicId, minYear, maxYear, filterPerson, filterTopic, filterYear} = this.getFilter();
 
     this.loadingData$.emit('data');

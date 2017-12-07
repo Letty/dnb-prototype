@@ -1,5 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {formatNum, formatTitleResult, formatTotalResult, formatTagAction} from '../../services/formatting';
 
 @Component({
@@ -8,7 +7,7 @@ import {formatNum, formatTitleResult, formatTotalResult, formatTagAction} from '
   styleUrls: ['./collapsed-tags.component.scss']
 })
 
-export class CollapsedTagsComponent implements OnInit {
+export class CollapsedTagsComponent {
   @Output() selection: EventEmitter<any> = new EventEmitter();
   @Input() tags = [];
   @Input() totalResults: number = null;
@@ -19,9 +18,6 @@ export class CollapsedTagsComponent implements OnInit {
   @Input() showTags = false;
 
   constructor() {}
-
-  ngOnInit () {
-  }
 
   selected (node) {
     this.selection.emit(node);
