@@ -8,13 +8,9 @@ import {Observable} from 'rxjs/Observable';
 import {RouterService} from '../../services/router.service';
 
 import _ from 'lodash';
-import { MasonryModule } from 'angular2-masonry';
+import {MasonryModule} from 'angular2-masonry';
 
-@NgModule({
-  imports: [
-    MasonryModule
-  ]
-})
+@NgModule({imports: [MasonryModule]})
 
 @Component({
   selector: 'results-list',
@@ -46,14 +42,7 @@ export class ResultsListComponent implements OnInit {
     private dataService: DataService,
     private routerService: RouterService,
     private selection: SelectionService
-  ) {
-    dataService.loadingData$.subscribe((e) => {
-      if (e === 'data') this.loadingData = true;
-    });
-    routerService.result.subscribe(size => {
-      this.collapsed = size === 0 || size === null;
-    });
-  }
+  ) {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -63,13 +52,17 @@ export class ResultsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.items = this.dataService.items;
     const width = this.resultGrid.nativeElement.clientWidth;
     this.itemWidth = width / Math.floor(width / 250);
     this.em = this.itemWidth / 250;
 
-    this.dataService.items.subscribe(value => {
+    this.dataService.loadingData$.subscribe(e => {
+      if (e === 'data') this.loadingData = true;
+    });
 
+    this.routerService.result.subscribe(size => this.collapsed = size === 0 || size === null);
+
+    this.dataService.items.subscribe(value => {
       const newItems = value.filter(item => this.items.find(d => d.id === item.id) == null);
 
       if (this.loadingData) {

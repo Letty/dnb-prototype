@@ -28,39 +28,13 @@ $gutter-results-default: $distance-outer-default / 2;
       box-sizing: border-box;
       padding: $gutter-results-default;
 
-      // @media screen and (min-width: 480px) {
-      //   width: 50%;
-      // }
-      // @media screen and (min-width: 720px) {
-      //   width: 33.33%;
-      // }
-      // @media screen and (min-width: 960px) {
-      //   width: 25%;
-      // }
-      // @media screen and (min-width: 1200px) {
-      //   width: 20%;
-      // }
-      // @media screen and (min-width: 1440px) {
-      //   width: 16.66%;
-      // }
-      // @media screen and (min-width: 1680px) {
-      //   width: 14.28%;
-      // }
-      // @media screen and (min-width: 1920px) {
-      //   width: 12.5%;
-      // }
-
       .result {
-        // transition: background .2s;
         cursor: pointer;
       	background-color: $color-result-default;
       	display: inline-block;
       	width: 100%;
-        // min-height: 360px;
         position: relative;
-
         box-sizing: border-box;
-
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
 
@@ -79,6 +53,7 @@ $gutter-results-default: $distance-outer-default / 2;
       		font-weight: bold;
       		line-height: 1.2em;
           width: calc(100% - #{$distance-outer-default * 2});
+          margin-bottom: 80px;
 
           .author {
             display: flex;
@@ -89,8 +64,6 @@ $gutter-results-default: $distance-outer-default / 2;
             font-size: 1.15em;
             line-height: 1.3em;
           }
-
-          margin-bottom: 80px;
       	}
 
       	footer {
@@ -108,7 +81,6 @@ $gutter-results-default: $distance-outer-default / 2;
 
       &:hover .result {
         background-color: darken($color-result-default, 2%);
-        // transform: scale(1.01);
       }
     }
 
@@ -121,20 +93,18 @@ $gutter-results-default: $distance-outer-default / 2;
       font-size: 14px;
       display: inline-block;
       cursor: pointer;
-
-      &.loading {
-        pointer-events: none;
-        opacity: 0;
-      }
-
       transition: opacity .4s;
-
       background: $color-result-background;
       text-decoration: none;
       margin: #{$distance-outer-default / 2} 0 $distance-outer-default;
       position: relative;
       left: 50%;
       transform: translateX(-50%);
+
+      &.loading {
+        pointer-events: none;
+        opacity: 0;
+      }
     }
 
     .loading-more {
