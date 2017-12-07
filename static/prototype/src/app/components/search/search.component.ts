@@ -1,15 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges,
-  ViewChild, AfterViewInit, SecurityContext} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, AfterViewInit, SecurityContext} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 
-import {IItem, IPerson, ITopic} from '../../app.interfaces';
+import {IPerson, ITopic} from '../../app.interfaces';
 import {DataService} from '../../services/data.service';
 import {SelectionService} from '../../services/selection.service';
-import {Observable} from 'rxjs/Observable'; // in use?
-
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
-import _ from 'lodash'; // in use?
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
@@ -19,23 +15,19 @@ import 'rxjs/add/operator/distinctUntilChanged';
   styleUrls: ['./search.component.scss']
 })
 
-export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
+export class SearchComponent implements OnInit, AfterViewInit {
+  @Output() close: EventEmitter<any> = new EventEmitter();
+  @Input() term: string = null;
+  @ViewChild('input') input;
+
   public selectedMinYear: number;
   public selectedMaxYear: number;
   public selectedPerson: IPerson;
   public selectedTopic: ITopic;
-
   public highlight = 0;
-
-  @Output() close: EventEmitter<any> = new EventEmitter();
-  @Input() term: string = null;
-
-  @ViewChild('input') input;
-
   public years: any = [];
   public topics: any = [];
   public persons: any = [];
-
   public showSuggestions = false;
 
   constructor(
@@ -43,32 +35,13 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
     private selection: SelectionService,
     private dataService: DataService,
     private sanitizer: DomSanitizer
-  ) {
-    selection.selPerson$.subscribe(
-      person => {
-        this.selectedPerson = person;
-      }
-    );
-
-    selection.selTopic$.subscribe(
-      topic => {
-        this.selectedTopic = topic;
-      }
-    );
-
-    selection.selMinYear$.subscribe(
-      year => {
-        this.selectedMinYear = year;
-      }
-    );
-    selection.selMaxYear$.subscribe(
-      year => {
-        this.selectedMaxYear = year;
-      }
-    );
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.selection.selPerson$.subscribe(person => this.selectedPerson = person);
+    this.selection.selTopic$.subscribe(topic => this.selectedTopic = topic);
+    this.selection.selMinYear$.subscribe(year => this.selectedMinYear = year);
+    this.selection.selMaxYear$.subscribe(year => this.selectedMaxYear = year);
   }
 
   ngAfterViewInit() {
@@ -102,6 +75,7 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
         } else {
           this.persons = this.topics = [];
         }
+
         const start = term.match(/^(\d{4})(?:[^0-9]|$)/) ? +term.match(/^(\d{4})(?:[^0-9]|$)/)[1] : null;
         const end = term.match(/[^0-9](\d{4})$/) ? +term.match(/[^0-9](\d{4})$/)[1] : null;
         const today = 2018;
@@ -127,9 +101,6 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
       });
   }
 
-  ngOnChanges (changes: SimpleChanges) {
-  }
-
   format (value: string) {
     return this.sanitizer.sanitize(SecurityContext.HTML,
       value.replace(new RegExp(this.term, 'gi'), inner => `<b>${inner}</b>`));
@@ -141,12 +112,14 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
     this.showSuggestions = false;
     this.reset();
   }
+
   selectTopic(topic) {
     this.selection.setTopic(topic);
     this.dataService.setFilter();
     this.showSuggestions = false;
     this.reset();
   }
+
   selectPerson(person) {
     this.selection.setPerson(person);
     this.dataService.setFilter();
@@ -180,10 +153,12 @@ export class SearchComponent implements OnInit, OnChanges, AfterViewInit {
     this.selection.setYear(null, null);
     this.dataService.setFilter();
   }
+
   resetTopic(): void {
     this.selection.setTopic(null);
     this.dataService.setFilter();
   }
+
   resetPerson(): void {
     this.selection.setPerson(null);
     this.dataService.setFilter();
