@@ -24,18 +24,18 @@ svg {
   }
 }
 
-
-
-
 .chart-timeline {
   position: relative;
   // padding: 8px 0;
-  width: 100%;
+  width: calc(100% - #{$distance-outer-default * 2});
+
+  box-sizing: border-box;
+  margin: 0 $distance-outer-default;
 
   .collapsed {
     position: absolute;
     left: calc(116px + #{$distance-outer-default});
-    top: 4px;
+    top: 0px;
     right: 0px;
     color: $color-year-default;
   }

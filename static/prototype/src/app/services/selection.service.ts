@@ -42,6 +42,7 @@ export class SelectionService {
   }
 
   setYear(minYear: number, maxYear: number): void {
+    console.log(minYear, maxYear);
     this.minYear = minYear;
     this.maxYear = maxYear;
     this.selectedMinYear.next(minYear);

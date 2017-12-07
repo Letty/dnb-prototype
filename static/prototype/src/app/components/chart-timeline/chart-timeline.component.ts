@@ -20,7 +20,6 @@ import { debounce } from '../../decorators';
 })
 
 export class ChartTimelineComponent implements OnInit, OnChanges {
-  @Input() years: IYear[] = [];
   @Input() showXTicks = false;
   @Input() showYTicks = true;
   @Input() showRuler = false;
@@ -46,11 +45,14 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   public label: string = null;
   public rulerOffset = 'translate(0 -6)';
   public init = true;
+  public years: IYear[] = [];
+
   private xTickValues = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
   private yTickValues = [1, 2];
   private brush = d3.brushX();
   private xScale;
   private yScale;
+  private _years: Observable<IYear[]>;
 
   public loadingData = true;
 
@@ -67,12 +69,14 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
     private dataService: DataService) {
       selection.selMinYear$.subscribe(
         year => {
+          console.log(year);
           this.selMin = year;
           this.updateBrush();
         }
       );
       selection.selMaxYear$.subscribe(
         year => {
+          console.log(year);
           this.selMax = year;
           this.updateBrush();
         }
@@ -82,6 +86,8 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
       });
       dataService.years.subscribe(value => {
         this.loadingData = false;
+        this.years = value;
+        this.updatePath();
       });
     }
 
@@ -99,10 +105,13 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
 
+    // this.xScale.rangeRound([0, this.width])
+    //   .domain([this.minYear, this.maxYear]);
+
     if (this.enableBrush) {
       this.brush
         .extent([[0, 0], [this.width, this.height]])
-        .on('brush end', e => {
+        .on('brush end', () => {
           const sel = d3.event.selection;
           if (d3.event.type === 'end' && sel) {
             if (this.breakRecursion) {
@@ -122,7 +131,6 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
 
       d3.select(this.brushContainer.nativeElement)
         .call(this.brush)
-        .call(this.brush.move, this.xScale.range())
         .selectAll('.overlay')
           .on('mousedown', () => {
             this.brushStart = this.offsetX(d3.event.clientX);
@@ -296,6 +304,7 @@ export class ChartTimelineComponent implements OnInit, OnChanges {
   }
 
   updateBrush (): void {
+    console.log('UPDATEBRUSH');
     if (this.enableBrush && this.selMin != null && this.selMax != null) {
       if (this.selMin !== this.selMax) this.breakRecursion = true;
       this.brush.move(d3.select(this.brushContainer.nativeElement), [this.xScale(this.selMin), this.xScale(this.selMax)]);

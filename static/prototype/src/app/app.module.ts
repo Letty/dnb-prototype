@@ -5,7 +5,6 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {DnbHeaderComponent} from './components/dnb-header/dnb-header.component';
-import {ResultsHeaderComponent} from './components/results-header/results-header.component';
 import {ResultsListComponent} from './components/results-list/results-list.component';
 import {ResultsDetailComponent} from './components/results-detail/results-detail.component';
 import {PersonComponent} from './components/person.component';
@@ -29,7 +28,6 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
-    ResultsHeaderComponent,
     ResultsListComponent,
     PersonComponent,
     TopicComponent,
