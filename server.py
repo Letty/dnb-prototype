@@ -37,10 +37,6 @@ def get_top_topics():
 def get_top_people():
     con = open_db_connection()
     result = qh.get_default_people(con)
-    # with con.cursor() as cursor:
-    #     sql = 'select * from dnb_author_count order by count DESC limit 20'
-    #     cursor.execute(sql)
-    #     result = cursor.fetchall()
     con.close()
     return jsonify(result)
 
@@ -147,7 +143,6 @@ def filter_by_person_result_topic():
 @app.route('/setFilterForPersonResultItems', methods=['POST'])
 def filter_by_person_result_items():
     con = open_db_connection()
-    # todo
     params = json.loads(request.data.decode('utf-8'))
     item_result = {'data': None, 'error': None}
 
@@ -259,9 +254,6 @@ def filter_by_year_result_items():
     params = json.loads(request.data.decode('utf-8'))
     items_result = {'data': None, 'error': None}
 
-    # todo - row count befor result list
-    # todo - how to load dynamically the items? fetch one after another and
-    # make a datastream?
     with con.cursor() as cursor:
         sql = 'select item.id, item.title, item.publisher, item.year, ac.lastname, ac.name '\
             'from dnb_author_count ac, dnb_author_item ai, dnb_item item '\
@@ -318,8 +310,6 @@ def filter_by_year_person_result_person():
 
     con.close()
     return jsonify(person_result)
-
-# todo in extra fkt und dazu noch das netzwerk
 
 
 @app.route('/setFilterForYearPersonResultTopic', methods=['POST'])
@@ -485,18 +475,6 @@ def filter_by_year_topic_result_person():
     params = json.loads(request.data.decode('utf-8'))
     person_result = {'data': {}, 'error': None}
     person_result = qh.get_person_for_year_topic(con, params)
-    # with con.cursor() as cursor:
-    #     sql = 'select ac.id, ac.lastname, ac.name, count(ai.a_id) count '\
-    #         'from dnb_author_count ac, dnb_author_item ai, dnb_item_topic it '\
-    #         'where  it.t_id = %s and it.year >= %s and it.year <= %s and it.i_id = ai.i_id '\
-    #         'and ac.id = ai.a_id group by ai.a_id order by count desc limit 20'
-    #     try:
-    #         cursor.execute(sql, (params['topic_id'],
-    #                              params['min_year'], params['max_year']))
-    #     except:
-    #         person_result['error'] = str(sys.exc_info()[0])
-    #     else:
-    #         person_result['data'] = cursor.fetchall()
     con.close()
     return jsonify(person_result)
 
@@ -511,7 +489,7 @@ def filter_by_year_topic_result_items():
         sql = 'select item.id, item.title, item.publisher, item.year, ac.name, ac.lastname '\
             'from dnb_item item, dnb_author_item ai, dnb_author_count ac, dnb_item_topic it '\
             'where ai.year >= %s and ai.year <= %s and it.t_id = %s and '\
-            'item.id = ai.i_id and ai.a_id = ac.id limit 100 offset %s'
+            'item.id = ai.i_id and ai.a_id = ac.id and it.i_id=item.id limit 100 offset %s'
         try:
             cursor.execute(sql, (params['min_year'],
                                  params['max_year'], params['topic_id'], 100 * params['page']))
