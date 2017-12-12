@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { ApiService } from '../services/api.service';
-import { SelectionService } from '../services/selection.service';
+import { ApiService } from '../../services/api.service';
+import { SelectionService } from '../../services/selection.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { scaleLinear } from 'd3-scale';
 
 // import _ from 'lodash';
-import {debounce} from '../decorators';
+import {debounce} from '../../decorators';
 
-import { IPerson, IYear } from '../app.interfaces';
-import { DataService } from '../services/data.service';
-import { RouterService } from '../services/router.service';
+import { IPerson, IYear } from '../../app.interfaces';
+import { DataService } from '../../services/data.service';
+import { RouterService } from '../../services/router.service';
 
 import * as d3 from 'd3';
-import {formatNum, formatTitleResult} from '../services/formatting';
+import {formatNum, formatTitleResult} from '../../services/formatting';
 
 @Component({
   selector: 'chart-person',
