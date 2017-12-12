@@ -17,7 +17,8 @@ import {formatNum, formatTitleResult} from '../../services/formatting';
 
 @Component({
   selector: 'chart-person',
-  templateUrl: './person.component.html'
+  templateUrl: './person.component.html',
+  styleUrls: ['./person.component.scss']
 })
 
 export class PersonComponent implements OnInit {
