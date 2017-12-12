@@ -1,32 +1,7 @@
 @import "../../../style/variables";
 
-svg {
-  display: block;
-
-  text {
-    fill: $color-deep-grey;
-  }
-  .area-path {
-    fill: $color-year-background;
-
-    &.selection {
-      fill: $color-year-default;
-    }
-  }
-  circle {
-    stroke: $color-deep-grey;
-  }
-  line {
-    stroke: $color-grey;
-  }
-  rect {
-    fill: $color-grey;
-  }
-}
-
 .years {
   position: relative;
-  // padding: 8px 0;
   width: calc(100% - #{$distance-outer-default * 2});
 
   box-sizing: border-box;
@@ -34,7 +9,7 @@ svg {
 
   .collapsed {
     position: absolute;
-    left: calc(116px + #{$distance-outer-default});
+    left: 0px;
     top: 0px;
     right: 0px;
     color: $color-year-default;
@@ -42,6 +17,7 @@ svg {
 
   svg {
     overflow: visible;
+    display: block;
 
     transition: opacity .4s;
     &.loading {
@@ -55,6 +31,7 @@ svg {
     text {
       font-size: 10px;
       font-family: 'RobotoMono', monospace;
+      fill: $color-deep-grey;
 
       &.x-axis {
         text-anchor: middle;
@@ -77,9 +54,26 @@ svg {
       }
     }
 
+    .area-path {
+      fill: $color-year-background;
+
+      &.selection {
+        fill: $color-year-default;
+      }
+    }
+
+    circle {
+      stroke: $color-deep-grey;
+    }
+
     line {
+      stroke: $color-grey;
       stroke-width: 1;
       shape-rendering: crisp-edges;
+    }
+
+    rect {
+      fill: $color-grey;
     }
 
     .ruler {
@@ -91,26 +85,6 @@ svg {
       text {
         text-anchor: middle;
       }
-    }
-  }
-
-  .label {
-    position: absolute;
-    top: 6px;
-    left: 0px;
-    // font-family: 'RobotoMono', monospace;
-    font-weight: 700;
-    // text-transform: uppercase;
-    color: $color-year-default;
-    pointer-events: none;
-
-    &.clickable {
-      cursor: pointer;
-      pointer-events: all;
-    }
-
-    .close-button {
-      margin-left: 0.5em;
     }
   }
 }

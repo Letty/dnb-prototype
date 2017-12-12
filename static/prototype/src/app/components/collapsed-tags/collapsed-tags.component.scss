@@ -10,6 +10,12 @@
   display: flex;
   align-items: center;
 
+  h2 {
+    font-size: 1em;
+    margin-right: $distance-outer-default;
+    padding: 0;
+  }
+
   .loading {
     opacity: 0;
     top: 5px;

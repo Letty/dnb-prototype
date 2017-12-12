@@ -1,8 +1,10 @@
 <div class="years" #svgWrapper>
-  <collapsed-tags class="collapsed year"
+  <collapsed-tags class="collapsed year" label="Erscheinungsjahre"
   [selectedTag]="label ? {label: label} : null" [showTags]="true"
-  (selection)="resetYear()" [loadingData]="loadingData"></collapsed-tags>
-  <svg width="100%" [attr.height]="height" (mousemove)="setYear($event)" (mouseout)="resetRuler()" [class.loading]="loadingData">
+  [loadingData]="loadingData" (selection)="resetYear()"></collapsed-tags>
+
+  <svg width="100%" [attr.height]="height" [class.loading]="loadingData"
+    (mousemove)="setYear($event)" (mouseout)="resetRuler()">
     <g #brush class="brush" pointer-events="all"></g>
     <g class="no-interaction">
       <path [attr.d]="path" class="area-path"></path>
@@ -29,7 +31,4 @@
       </g>
     </g>
   </svg>
-  <div class="label">
-    Erscheinungsjahre
-  </div>
 </div>

@@ -14,6 +14,7 @@ export class CollapsedTagsComponent {
   @Input() selectedTag: any = null;
   @Input() isResultBar = false;
   @Input() loadingData = false;
+  @Input() label: string = null;
 
   @Input() showTags = false;
 
