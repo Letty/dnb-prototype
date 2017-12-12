@@ -14,6 +14,9 @@
 
   .viz-container {
     transition: opacity .4s;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 16px $distance-outer-default;
 
     .wrapper {
       position: relative;

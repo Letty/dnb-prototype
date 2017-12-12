@@ -1,20 +1,17 @@
-import {Component, Input, OnInit, OnChanges, ViewChild, SimpleChanges, HostListener} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Component, OnInit, ViewChild, HostListener} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
+
+import {formatNum, formatTitleResult} from '../../services/formatting';
+import {debounce} from '../../decorators';
+
+import {ITopic, INetworkLink} from '../../app.interfaces';
 import {SelectionService} from '../../services/selection.service';
 import {DataService} from '../../services/data.service';
 import {ApiService} from '../../services/api.service';
+import {RouterService} from '../../services/router.service';
 
 import * as d3 from 'd3';
 import _ from 'lodash';
-
-import {formatNum, formatTitleResult} from '../../services/formatting';
-
-import {ITopic, INetworkLink} from '../../app.interfaces';
-import {RouterService} from '../../services/router.service';
-
-import {debounce} from '../../decorators';
-
 import rectCollide from './forceforce';
 
 @Component({
@@ -23,14 +20,11 @@ import rectCollide from './forceforce';
   styleUrls: ['./topic-detail.component.scss']
 })
 
-export class TopicDetailComponent implements OnInit, OnChanges {
-  @Input() topics: Observable<ITopic[]>;
-  @Input() forces = false;
-
+export class TopicDetailComponent implements OnInit {
   @ViewChild('svgWrapper') svg;
 
-  public nodes;
-  public links;
+  public nodes = [];
+  public links = [];
   public tags = [];
   public selectedTag = null;
   private upcomingTopics = [];
@@ -52,24 +46,24 @@ export class TopicDetailComponent implements OnInit, OnChanges {
 
   public selectedTopic: ITopic = null;
 
-  public networkLinks: Observable<INetworkLink[]>;
-
-  constructor(private sanitizer: DomSanitizer,
-              private selection: SelectionService,
-              private dataService: DataService,
-              private api: ApiService,
-              private routerService: RouterService
+  constructor(
+    private sanitizer: DomSanitizer,
+    private selection: SelectionService,
+    private dataService: DataService,
+    private api: ApiService,
+    private routerService: RouterService
   ) {
-    dataService.loadingData$.subscribe((e) => {
-      if (e === 'data') this.loadingTopic = this.loadingData = true;
-      if (e === 'links') this.loadingLinks = true;
-    });
-    selection.selTopic$.subscribe(
-      topic => {
-        this.selectedTopic = topic;
-        this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
-      }
-    );
+    this.simulation = d3.forceSimulation()
+      .force('link', d3.forceLink()
+        .id((d: ITopic) => String(d.id))
+        .strength(0))
+      .force('charge', d3.forceManyBody()
+        .strength(d => (d as any).type === 'gravity' ? -500 : -200))
+      .force('collision', rectCollide()
+        .size(d => [d.width + 20, d.height + 20])
+        .iterations(1)
+        .strength(1))
+      .on('tick', () => this.ticked());
   }
 
   // Listeners
@@ -77,27 +71,33 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   @debounce(250)
   onResize(event) {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5) - 32;
+    this.height = (window.innerHeight - 248) * (this.detail ? 1 : 0.5) - 32;
     this.update();
+    this.simulate();
   }
 
   // Life-cycle hooks
   ngOnInit () {
     this.width = this.svg.nativeElement.clientWidth;
-    this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5) - 32;
+    this.height = (window.innerHeight - 248) * (this.detail ? 1 : 0.5) - 32;
 
-    this.simulation = this.getSimulation();
-    this.nodes = [];
-    this.links = [];
+    this.dataService.loadingData$.subscribe((e) => {
+      if (e === 'data') this.loadingTopic = this.loadingData = true;
+      if (e === 'links') this.loadingLinks = true;
+    });
 
-    this.topics.subscribe(values => {
+    this.selection.selTopic$.subscribe(topic => {
+      this.selectedTopic = topic;
+      this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
+    });
+
+    this.dataService.topics.subscribe(values => {
         this.loadingTopic = false;
         this.upcomingTopics = values;
         this.tags = values.map(tag => {
           return {label: tag.keyword, tag};
         }).filter(tag => this.selectedTopic == null || tag.tag.id !== this.selectedTopic.id);
         this.selectedTag = this.selectedTopic != null ? {label: this.selectedTopic.keyword, tag: this.selectedTopic} : null;
-
         this.update();
     });
 
@@ -106,29 +106,29 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       this.detail = size === 2;
     });
 
-    this.networkLinks = this.dataService.networkLinks;
-    this.networkLinks.subscribe(values => {
+    this.routerService.view.subscribe(view => {
+      this.detail = view === 'topic';
+      this.height = (window.innerHeight - 248) * (this.detail ? 1 : 0.5) - 32;
+      if (this.detail && !this.loadingLinks) this.simulate();
+      else if (this.detail) this.links = [];
+      else {
+        this.simulation.alpha(0);
+        this.pack(this.nodes.filter(n => n.type !== 'gravity'));
+      }
+    });
+
+    this.dataService.networkLinks.subscribe(values => {
       this.loadingLinks = false;
       this.upcomingLinks = values;
-      this.update();
+      this.simulate();
     });
   }
 
   update(): void {
-    if (this.loadingTopic || this.loadingLinks || (this.forces && this.upcomingLinks.find(l => {
-      return this.upcomingTopics.find(t => t.id === l.source) == null || this.upcomingTopics.find(t => t.id === l.target) == null;
-    }))) {
-      return;
-    }
+    if (this.loadingTopic) return;
+    if (this.detail === false) this.loadingData = false;
 
-    this.loadingData = false;
-
-    const nodes = _.cloneDeep(this.upcomingTopics);
-
-    if (nodes.length === 0) {
-      this.nodes = [];
-      return;
-    }
+    const nodes = this.upcomingTopics;
 
     // calc layout
     this.pack(nodes);
@@ -142,7 +142,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
           oldNode.count = newNode.count;
           oldNode.fontSize = newNode.fontSize;
 
-          if (this.forces === false) {
+          if (this.detail === false) {
             oldNode.x = newNode.x;
             oldNode.y = newNode.y;
           }
@@ -161,80 +161,36 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     for (let i = 0; i <= 1; i += 0.25) {
       this.nodes.push({
         type: 'gravity',
-        x: this.width,
-        y: this.height * i,
-        fx: this.width,
-        fy: this.height * i,
-        multiplyer: i,
-        width: 0,
-        height: 0
-      });
-
-      this.nodes.push({
-        type: 'gravity',
-        x: 0,
-        y: this.height * i,
         fx: 0,
         fy: this.height * i,
         multiplyer: i,
         width: 0,
         height: 0
       });
-    }
-
-    // start simulation
-    this.simulate(this.nodes);
-  }
-
-  ngOnChanges (changes: SimpleChanges) {
-    if (changes.forces && !changes.forces.firstChange) {
-      // window.setTimeout(() => {
-        this.height = (window.innerHeight - 248) * (this.forces ? 1 : 0.5) - 32;
-        if (changes.forces.currentValue) {
-          if (!this.loadingLinks) {
-            this.simulate(this.nodes);
-          } else {
-            this.links = [];
-          }
-        } else {
-          this.simulation.alpha(0);
-          this.pack(this.nodes.filter(n => n.type !== 'gravity'));
-        }
-      // }, 10);
+      this.nodes.push({
+        type: 'gravity',
+        fx: this.width,
+        fy: this.height * i,
+        multiplyer: i,
+        width: 0,
+        height: 0
+      });
     }
   }
 
   // Methods
-  getSimulation() {
-    return d3.forceSimulation()
-      .force('link', d3.forceLink()
-        .id(function (d: ITopic) { return `${d.id}`; })
-        .strength(0)
-      )
-      .force('charge', d3.forceManyBody()
-        .strength(d => (d as any).type === 'gravity' ? -200 - Math.random() * 400 : -200))
-      .force('collision', rectCollide()
-        .size((d) => {
-          return [d.width + 20, d.height + 20];
-        })
-        .iterations(1)
-        .strength(1))
-      .on('tick', () => {this.ticked(); });
-  }
-
-  simulate(values): void {
-    if (this.nodes.length === 0 || this.forces === false) {
+  simulate(): void {
+    if (this.nodes.length === 0 || this.detail === false) {
       this.links = [];
       return;
     }
+    this.loadingData = false;
 
-    // make links from upcomingLinks
-    const _links = _.cloneDeep(this.upcomingLinks);
-    const max = Math.max(..._links.map(l => l.strength));
-    const links = _links.filter(d => d.strength >= max / 16);
+    const max = Math.max(...this.upcomingLinks.map(l => l.strength));
+    const links = this.upcomingLinks.filter(d => d.strength >= max / 16);
     const min = Math.min(...links.map(l => l.strength));
-
     const scale = d3.scaleLinear().domain([min, max]).range([0.25, 4]);
+
     this.links = links.map(d => {
       return {
         source: d.source,
@@ -257,13 +213,14 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   }
 
   pack(nodes): void {
-    if (nodes.length === 0) { return; }
+    if (nodes.length === 0) return;
 
     nodes = _.sortBy(nodes, 'count');
 
     const maxCount = nodes.length >= 2 ? nodes[nodes.length - 2].count * 2 : Infinity;
-
     const height = (window.innerHeight - 248) * 0.5 - 32;
+    const minHeight = 32 / height;
+
     let remainingWidth = this.width;
     let remainingCount = nodes.map(n => n.count).reduce((a, b) => a + Math.min(b, maxCount));
     let packs = [{
@@ -272,25 +229,13 @@ export class TopicDetailComponent implements OnInit, OnChanges {
       nodes: []
     }];
 
-    const minHeight = 32 / height;
-
     nodes.forEach((node, i) => {
       let pack = packs[packs.length - 1];
       const packCount = pack.count + Math.min(maxCount, node.count);
-
-      let hasSpace = true;
-
-      pack.nodes.forEach(pNode => {
-        if (Math.min(maxCount, pNode.count) / packCount < minHeight) {
-          hasSpace = false;
-        }
-      });
-
       const packWidth = pack.count / remainingCount * remainingWidth;
 
-      if (pack.nodes.length > 1 && packWidth > this.width * 0.15) {
-        hasSpace = false;
-      }
+      const hasSpace = pack.nodes.find(pNode => Math.min(maxCount, pNode.count) / packCount < minHeight) == null
+        && !(pack.nodes.length > 1 && packWidth > this.width * 0.15);
 
       if (hasSpace) {
         pack.count = packCount;
@@ -338,66 +283,85 @@ export class TopicDetailComponent implements OnInit, OnChanges {
   }
 
   ticked(): void {
-    if (this.forces === false) {
+    if (this.detail === false) {
       this.pack(this.nodes.filter(n => n.type !== 'gravity'));
       return;
     }
 
-    // keep nodes in bounding box
-    this.nodes.filter(d => d.type !== 'gravity').forEach((n, i) => {
-      n.x = Math.max(n.x, n.width * 0.5);
-      n.x = Math.min(n.x, this.width - n.width * 0.5);
-
-      n.y = Math.max(n.y, n.height * 0.5);
-      n.y = Math.min(n.y, this.height - n.height * 0.5);
-    });
-
-    // calculate link anchors
+    this.constrainNodesToBBox();
     this.links.filter((d, i) => i >= 0).forEach(link => {
-      const p1 = [link.source.x, link.source.y];
-      const p2 = [link.target.x, link.target.y];
-
-      const dist = [p2[0] - p1[0], p2[1] - p1[1]];
-      const dir = [dist[0] > 0 ? 1 : -1, dist[1] > 0 ? 1 : -1];
-
-      const p1Corner = [link.source.x + (link.source.width / 2) * dir[0],
-        link.source.y + (link.source.height / 2) * dir[1]];
-      const p2Corner = [link.target.x + (link.target.width / 2) * -dir[0],
-        link.target.y + (link.target.height / 2) * -dir[1]];
-
-      const cDist = [p2Corner[0] - p1Corner[0], p2Corner[1] - p1Corner[1]];
-
-      let anchor = [];
-
-      if (dir[0] === -1 && dir[1] === -1) {
-        anchor = (cDist[0] > cDist[1]) ? anchor = [0, -1] : anchor = [-1, 0];
-      } else if (dir[0] === 1 && dir[1] === -1) {
-        anchor = (cDist[0] > -cDist[1]) ? [1, 0] : [0, -1];
-      } else if (dir[0] === 1 && dir[1] === 1) {
-        anchor = (cDist[0] > cDist[1]) ? [1, 0] : [0, 1];
-      } else {
-        anchor = (cDist[0] > -cDist[1]) ? anchor = [0, 1] : [-1, 0];
-      }
-
-      const s = {
-        x: link.source.x + (link.source.width / 2 - 2) * anchor[0],
-        y: link.source.y + (link.source.height / 2 - 2) * anchor[1]
-      };
-
-      const t = {
-        x: link.target.x + (link.target.width / 2 - 2) * -anchor[0],
-        y: link.target.y + (link.target.height / 2 - 2) * -anchor[1]
-      };
-
-      const offset = {
-        x: anchor[0] !== 0 ? (t.x - s.x) * 0.25 : 0,
-        y: anchor[0] !== 0 ? 0 : (t.y - s.y) * 0.25,
-      };
-
-      link.path = `M ${s.x},${s.y} C${s.x + offset.x},${s.y + offset.y} ${t.x - offset.x},${t.y - offset.y} ${t.x},${t.y}`;
-      link.sourceAnchor = s;
-      link.targetAnchor = t;
+      link.path = this.linkPathProperties(link);
     });
+  }
+
+  constrainNodesToBBox(): void {
+    this.nodes.filter(d => d.type !== 'gravity').forEach((n, i) => {
+      n.x = this.constrain(n.x, n.width * 0.5, this.width - n.width * 0.5);
+      n.y = this.constrain(n.y, n.height * 0.5, this.height - n.height * 0.5);
+    });
+  }
+
+  constrain (value: number, min: number, max: number): number {
+    return Math.min(Math.max(min, value), max);
+  }
+
+  linkPathProperties (link: any): {
+    source: {x: number, y: number},
+    target: {x: number, y: number},
+    d: string
+  } {
+    const {source, target} = link;
+
+    const dir = {
+      x: target.x - source.x > 0 ? 'right' : 'left',
+      y: target.y - source.y > 0 ? 'up' : 'down'
+    };
+
+    const closestVertices = [{
+      x: dir.x === 'right' ? source.x + (source.width / 2) : source.x - (source.width / 2),
+      y: dir.y === 'up' ? source.y + (source.height / 2) : source.y - (source.height / 2)
+    }, {
+      x: dir.x === 'right' ? target.x - (target.width / 2) : target.x + (target.width / 2),
+      y: dir.y === 'up' ? target.y - (target.height / 2) : target.y + (target.height / 2)
+    }];
+
+    const vector = [closestVertices[1].x - closestVertices[0].x, closestVertices[1].y - closestVertices[0].y];
+
+    let multiply;
+    if (dir.x === 'right') {
+      if (dir.y === 'up') multiply = (vector[0] > vector[1]) ? {x: 1, y: 0} : {x: 0, y: 1};
+      else multiply = (vector[0] > -vector[1]) ? {x: 1, y: 0} : {x: 0, y: -1};
+    } else {
+      if (dir.y === 'up') multiply = (vector[0] > -vector[1]) ? {x: 0, y: 1} : {x: -1, y: 0};
+      else multiply = (vector[0] > vector[1]) ? {x: 0, y: -1} : {x: -1, y: 0};
+    }
+
+    const s = {
+      x: link.source.x + (link.source.width / 2 - 2) * multiply.x,
+      y: link.source.y + (link.source.height / 2 - 2) * multiply.y
+    };
+    const t = {
+      x: link.target.x + (link.target.width / 2 - 2) * -multiply.x,
+      y: link.target.y + (link.target.height / 2 - 2) * -multiply.y
+    };
+    const offset = {
+      x: multiply.x !== 0 ? (t.x - s.x) * 0.25 : 0,
+      y: multiply.x !== 0 ? 0 : (t.y - s.y) * 0.25,
+    };
+
+    return {
+      source: {x: s.x, y: s.y},
+      target: {x: t.x, y: t.y},
+      d: `M ${s.x},${s.y} C${s.x + offset.x},${s.y + offset.y} ${t.x - offset.x},${t.y - offset.y} ${t.x},${t.y}`
+    };
+  }
+
+  nodeLinkMismatch (): boolean {
+    const mismatch = this.upcomingLinks.find(l => {
+      return this.upcomingTopics.find(t => t.id === l.source) == null ||
+        this.upcomingTopics.find(t => t.id === l.target) == null;
+    });
+    return mismatch == null;
   }
 
   getTranslate(n) {
@@ -405,7 +369,7 @@ export class TopicDetailComponent implements OnInit, OnChanges {
     return this.sanitizer.bypassSecurityTrustStyle(transform);
   }
 
-  onSelect(topic: ITopic): void {
+  setTopic(topic: ITopic): void {
     this.selection.setTopic(topic);
     this.dataService.setFilter();
   }

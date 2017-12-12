@@ -97,6 +97,13 @@ export class DataService {
         this.dataStore.topics = data;
         this.dataStore.defaultTopics = data;
         this._topics.next(Object.assign({}, this.dataStore).topics);
+
+        this.api.getTopTopicConnections()
+          .subscribe(links => {
+            this.dataStore.networkLinks = links;
+            this.dataStore.defaultNetworkLinks = links;
+            this._networkLinks.next(Object.assign({}, this.dataStore).networkLinks);
+          }, err => console.log('error while loading default networkLinks'));
       }, err => console.log('error while loading default topics'));
 
     this.api.getResults()
@@ -105,13 +112,6 @@ export class DataService {
         this.dataStore.defaultItems = data;
         this._items.next(Object.assign({}, this.dataStore).items);
       }, err => console.log('error while loading start results'));
-
-    this.api.getTopTopicConnections()
-      .subscribe(data => {
-        this.dataStore.networkLinks = data;
-        this.dataStore.defaultNetworkLinks = data;
-        this._networkLinks.next(Object.assign({}, this.dataStore).networkLinks);
-      }, err => console.log('error while loading default networkLinks'));
   }
 
   setYear(years_: IYear[]): void {
@@ -122,6 +122,7 @@ export class DataService {
   setTopic(topics_: ITopic[]): void {
     this.dataStore.topics = topics_;
     this._topics.next(Object.assign({}, this.dataStore).topics);
+    if (this.route === 'topic') this.requestLinks();
   }
 
   setPerson(persons_: IPerson[]): void {
@@ -148,7 +149,6 @@ export class DataService {
   setFilter(): void {
     this.page = 0;
     this.requestData();
-    if (this.route === 'topic') this.requestLinks();
   }
 
   setRoute(route): void {

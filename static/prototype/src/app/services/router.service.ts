@@ -93,12 +93,12 @@ export class RouterService {
     }
 
     this.routerStore = {view, topic, person, result};
+    this.dataService.setRoute(this.routerStore.view);
 
     this._view.next(Object.assign('', this.routerStore).view);
     this._topic.next(Object.assign('', this.routerStore).topic);
     this._person.next(Object.assign('', this.routerStore).person);
     this._result.next(Object.assign('', this.routerStore).result);
-    this.dataService.setRoute(this.routerStore.view);
   }
 
   toggleInfo () {

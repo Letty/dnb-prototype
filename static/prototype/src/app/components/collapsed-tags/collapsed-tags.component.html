@@ -3,7 +3,6 @@
     <span>{{selectedTag.label}}</span>
     <span class="close-button">&times;</span>
   </div>
-
   <div class="wrapper">
     <div class="loading">
       <svg width="16px" height="16px" class="circle">
@@ -18,13 +17,10 @@
       <div class="total-results" *ngIf="totalResults != null && tags.length > 0" title="{{ _formatTotalResult(totalResults) }}">
         <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults > 1 ? 'e' : ''}}
       </div>
-
       <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags" title="{{ _formatTagAction(tag.label, isResultBar ? 'display' : 'select') }}">
         <span>{{tag.label}}</span>
       </div>
-
     </div>
   </div>
-
   <div class="overlay"></div>
 </div>

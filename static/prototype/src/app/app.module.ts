@@ -8,7 +8,6 @@ import {DnbHeaderComponent} from './components/dnb-header/dnb-header.component';
 import {ResultsListComponent} from './components/results-list/results-list.component';
 import {ResultsDetailComponent} from './components/results-detail/results-detail.component';
 import {PersonComponent} from './components/person.component';
-import {TopicComponent} from './components/topic.component';
 import {YearsComponent} from './components/years/years.component';
 import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
 import {SearchComponent} from './components/search/search.component';
@@ -30,7 +29,6 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     ResultsListComponent,
     PersonComponent,
-    TopicComponent,
     YearsComponent,
     DnbHeaderComponent,
     TopicDetailComponent,
