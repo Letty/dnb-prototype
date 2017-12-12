@@ -110,8 +110,8 @@ export class ResultsListComponent implements OnInit {
 
   getTotalResults () {
     if (this.years == null) return;
-    const min = (this.selection.getSelection() as any).min_year;
-    const max = (this.selection.getSelection() as any).max_year;
+    const min = (this.selection.getSelection() as any).minYear;
+    const max = (this.selection.getSelection() as any).maxYear;
     const selectedYears = min && max ? this.years.filter(d => d.year >= min && d.year <= max) : this.years;
     this.totalResults = selectedYears.length > 0 ? selectedYears.map(d => d.count).reduce((a, c) => a + c) : 0;
   }
