@@ -16,12 +16,12 @@ import * as d3 from 'd3';
 import {formatNum, formatTitleResult} from '../../services/formatting';
 
 @Component({
-  selector: 'chart-person',
-  templateUrl: './person.component.html',
-  styleUrls: ['./person.component.scss']
+  selector: 'persons',
+  templateUrl: './persons.component.html',
+  styleUrls: ['./persons.component.scss']
 })
 
-export class PersonComponent implements OnInit {
+export class PersonsComponent implements OnInit {
 
   @ViewChild('temp') temp;
   @ViewChild('svgWrapper') svg;

@@ -7,9 +7,9 @@ import {SelectionService} from '../../services/selection.service';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
-  selector: 'results-detail',
-  templateUrl: './results-detail.component.html',
-  styleUrls: ['./results-detail.component.scss'],
+  selector: 'result',
+  templateUrl: './result.component.html',
+  styleUrls: ['./result.component.scss'],
   animations: [
   trigger('fadeInOut', [
     transition(':enter', [
@@ -28,7 +28,7 @@ import {Observable} from 'rxjs/Observable';
 ]
 })
 
-export class ResultsDetailComponent implements OnInit {
+export class ResultComponent implements OnInit {
   public selectedMinYear: number;
   public selectedMaxYear: number;
   public selectedPerson: IPerson;

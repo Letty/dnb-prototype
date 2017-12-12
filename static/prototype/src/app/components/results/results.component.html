@@ -34,7 +34,7 @@
     </div>
 
   </section>
-  <results-detail *ngIf="item || loadingDetailData" (closeDetail)='close()'
+  <result *ngIf="item || loadingDetailData" (closeDetail)='close()'
     [item]="item" [itemTitle]="itemTitle" [itemAutor]="itemAutor"
-    [loadingData]="loadingDetailData"></results-detail>
+    [loadingData]="loadingDetailData"></result>
 </div>

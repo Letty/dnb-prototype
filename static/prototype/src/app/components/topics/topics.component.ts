@@ -15,12 +15,12 @@ import _ from 'lodash';
 import rectCollide from './forceforce';
 
 @Component({
-  selector: 'topic-detail',
-  templateUrl: './topic-detail.component.html',
-  styleUrls: ['./topic-detail.component.scss']
+  selector: 'topics',
+  templateUrl: './topics.component.html',
+  styleUrls: ['./topics.component.scss']
 })
 
-export class TopicDetailComponent implements OnInit {
+export class TopicsComponent implements OnInit {
   @ViewChild('svgWrapper') svg;
 
   public nodes = [];

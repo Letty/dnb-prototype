@@ -5,11 +5,11 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {DnbHeaderComponent} from './components/dnb-header/dnb-header.component';
-import {ResultsListComponent} from './components/results-list/results-list.component';
-import {ResultsDetailComponent} from './components/results-detail/results-detail.component';
-import {PersonComponent} from './components/person/person.component';
+import {ResultsComponent} from './components/results/results.component';
+import {ResultComponent} from './components/result/result.component';
+import {PersonsComponent} from './components/persons/persons.component';
 import {YearsComponent} from './components/years/years.component';
-import {TopicDetailComponent} from './components/topic-detail/topic-detail.component';
+import {TopicsComponent} from './components/topics/topics.component';
 import {SearchComponent} from './components/search/search.component';
 import {AccordionSectionComponent} from './components/accordion-section/accordion-section.component';
 import {CollapsedTagsComponent} from './components/collapsed-tags/collapsed-tags.component';
@@ -27,12 +27,12 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
-    ResultsListComponent,
-    PersonComponent,
+    ResultsComponent,
+    PersonsComponent,
     YearsComponent,
     DnbHeaderComponent,
-    TopicDetailComponent,
-    ResultsDetailComponent,
+    TopicsComponent,
+    ResultComponent,
     SearchComponent,
     AccordionSectionComponent,
     CollapsedTagsComponent,

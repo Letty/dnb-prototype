@@ -13,12 +13,12 @@ import {MasonryModule} from 'angular2-masonry';
 @NgModule({imports: [MasonryModule]})
 
 @Component({
-  selector: 'results-list',
-  templateUrl: './results-list.component.html',
-  styleUrls: ['./results-list.component.scss']
+  selector: 'results',
+  templateUrl: './results.component.html',
+  styleUrls: ['./results.component.scss']
 })
 
-export class ResultsListComponent implements OnInit {
+export class ResultsComponent implements OnInit {
   @ViewChild('resultList') resultList;
   @ViewChild('resultGrid') resultGrid;
 

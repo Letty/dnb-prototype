@@ -2,13 +2,13 @@
   <dnb-header></dnb-header>
   <div class="accordion">
     <accordion-section class="topic" label="Themen" route="topic">
-      <topic-detail></topic-detail>
+      <topics></topics>
     </accordion-section>
     <accordion-section class="person" label="Personen" route="person">
-      <chart-person></chart-person>
+      <persons></persons>
     </accordion-section>
     <accordion-section class="result" label="Ergebnisse" route="result">
-      <results-list></results-list>
+      <results></results>
     </accordion-section>
   </div>
   <information-modal *ngIf="showInformation" (closeInformation)='toggleInformation()'>
