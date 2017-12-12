@@ -1,7 +1,7 @@
 <div class="results-list" #resultList>
-  <collapsed-tags class="result collapsed" label="Ergebnisse"
+  <accordion-header class="result collapsed" label="Ergebnisse"
   [tags]="tags" [totalResults]="totalResults" [showTags]="collapsed"
-  (selection)="getItem($event)" [isResultBar]="true" [loadingData]="loadingData"></collapsed-tags>
+  (selection)="getItem($event)" [isResultBar]="true" [loadingData]="loadingData"></accordion-header>
 
   <section class="result-section" [class.loading]="loadingData" #resultGrid>
     <masonry>

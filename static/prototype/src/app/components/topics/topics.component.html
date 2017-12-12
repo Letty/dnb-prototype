@@ -1,7 +1,7 @@
 <div class="chart-topic topic-div main-viz">
-  <collapsed-tags class="collapsed topic" label="Themen"
+  <accordion-header class="collapsed topic" label="Themen"
   [tags]="tags" [selectedTag]="selectedTag" [showTags]="collapsed"
-  (selection)="setTopic($event)" [loadingData]="loadingData"></collapsed-tags>
+  (selection)="setTopic($event)" [loadingData]="loadingData"></accordion-header>
   <section class="viz-container" [class.loading]="loadingData">
     <div class="wrapper" #svgWrapper>
       <svg width="100%" height="100%">

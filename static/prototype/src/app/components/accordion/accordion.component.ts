@@ -3,9 +3,9 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
 import {RouterService} from '../../services/router.service';
 
 @Component({
-  selector: 'accordion-section',
-  templateUrl: './accordion-section.component.html',
-  styleUrls: ['./accordion-section.component.scss'],
+  selector: 'accordion',
+  templateUrl: './accordion.component.html',
+  styleUrls: ['./accordion.component.scss'],
   animations: [
   trigger('scale', [
     state('0', style({height: '40px'})),
@@ -15,7 +15,7 @@ import {RouterService} from '../../services/router.service';
   ])]
 })
 
-export class AccordionSectionComponent implements OnInit {
+export class AccordionComponent implements OnInit {
   @Input() label: string = null;
   @Input() route: string = null;
 

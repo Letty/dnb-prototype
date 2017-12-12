@@ -1,7 +1,7 @@
 <div class="years" #svgWrapper>
-  <collapsed-tags class="collapsed year" label="Erscheinungsjahre"
+  <accordion-header class="collapsed year" label="Erscheinungsjahre"
   [selectedTag]="label ? {label: label} : null" [showTags]="true"
-  [loadingData]="loadingData" (selection)="resetYear()"></collapsed-tags>
+  [loadingData]="loadingData" (selection)="resetYear()"></accordion-header>
 
   <svg width="100%" [attr.height]="height" [class.loading]="loadingData"
     (mousemove)="setYear($event)" (mouseout)="resetRuler()">

@@ -1,4 +1,4 @@
-<div class="collapsed-tags" [class.loading-data]="loadingData">
+<div class="accordion-header" [class.loading-data]="loadingData">
   <h2>{{label}}</h2>
   <div *ngIf="selectedTag != null" class="item selected visible" (click)="selected(selectedTag.tag)" title="{{ _formatTagAction(selectedTag.label, 'remove') }}">
     <span>{{selectedTag.label}}</span>

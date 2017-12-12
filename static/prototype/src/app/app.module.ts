@@ -11,8 +11,8 @@ import {PersonsComponent} from './components/persons/persons.component';
 import {YearsComponent} from './components/years/years.component';
 import {TopicsComponent} from './components/topics/topics.component';
 import {SearchComponent} from './components/search/search.component';
-import {AccordionSectionComponent} from './components/accordion-section/accordion-section.component';
-import {CollapsedTagsComponent} from './components/collapsed-tags/collapsed-tags.component';
+import {AccordionComponent} from './components/accordion/accordion.component';
+import {AccordionHeaderComponent} from './components/accordion-header/accordion-header.component';
 import {InformationModalComponent} from './components/information-modal/information-modal.component';
 
 import {ApiService} from './services/api.service';
@@ -34,8 +34,8 @@ import { FormsModule } from '@angular/forms';
     TopicsComponent,
     ResultComponent,
     SearchComponent,
-    AccordionSectionComponent,
-    CollapsedTagsComponent,
+    AccordionComponent,
+    AccordionHeaderComponent,
     InformationModalComponent
   ],
   imports: [

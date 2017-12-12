@@ -2,12 +2,12 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {formatNum, formatTitleResult, formatTotalResult, formatTagAction} from '../../services/formatting';
 
 @Component({
-  selector: 'collapsed-tags',
-  templateUrl: './collapsed-tags.component.html',
-  styleUrls: ['./collapsed-tags.component.scss']
+  selector: 'accordion-header',
+  templateUrl: './accordion-header.component.html',
+  styleUrls: ['./accordion-header.component.scss']
 })
 
-export class CollapsedTagsComponent {
+export class AccordionHeaderComponent {
   @Output() selection: EventEmitter<any> = new EventEmitter();
   @Input() tags = [];
   @Input() totalResults: number = null;

@@ -1,15 +1,15 @@
 <div>
   <dnb-header></dnb-header>
   <div class="accordion">
-    <accordion-section class="topic" label="Themen" route="topic">
+    <accordion class="topic" label="Themen" route="topic">
       <topics></topics>
-    </accordion-section>
-    <accordion-section class="person" label="Personen" route="person">
+    </accordion>
+    <accordion class="person" label="Personen" route="person">
       <persons></persons>
-    </accordion-section>
-    <accordion-section class="result" label="Ergebnisse" route="result">
+    </accordion>
+    <accordion class="result" label="Ergebnisse" route="result">
       <results></results>
-    </accordion-section>
+    </accordion>
   </div>
   <information-modal *ngIf="showInformation" (closeInformation)='toggleInformation()'>
   </information-modal>
