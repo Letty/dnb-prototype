@@ -50,11 +50,6 @@ function rectCollide () {
             data.vy += y * (1 - m)
           }
         }
-
-        // if (data.x === node.x) {
-        //   data.vx *= 2
-        //   node.vx *= -2
-        // }
       }
 
       return x0 > xi + xSize || y0 > yi + ySize ||
@@ -88,15 +83,11 @@ function rectCollide () {
   force.size = function (_) {
     if (_ != null) size = typeof _ === 'function' ? _ : constant(_)
     return force
-    // return (arguments.length
-    //   ? (size = typeof _ === 'function' ? _ : constant(_), force)
-    //   : size)
   }
 
   force.strength = function (_) {
     if (_ != null) strength = +_
     return force
-    // return (arguments.length ? (strength = +_, force) : strength)
   }
 
   force.iterations = function (_) {
