@@ -31,7 +31,7 @@ function rectCollide () {
       var xSize = (size[0] + quad.size[0]) / 2
       var ySize = (size[1] + quad.size[1]) / 2
       if (data) {
-        if (data.index <= node.index) { return }
+        if (data.index <= node.index) return
 
         var x = xi - xCenter(data)
         var y = yi - yCenter(data)

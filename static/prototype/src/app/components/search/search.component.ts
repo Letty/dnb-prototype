@@ -83,9 +83,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
         const years = [];
         if (start && !end && start >= 1000 && start <= today) {
           years.push([start, start]);
-          if (start % 10 === 0 && start + 10 <= today) { years.push([start, start + 9]); }
-          if (start % 100 === 0 && start + 100 <= today) { years.push([start, start + 99]); }
-          if (start < today) { years.push([start, today]); }
+          if (start % 10 === 0 && start + 10 <= today) years.push([start, start + 9]);
+          if (start % 100 === 0 && start + 100 <= today) years.push([start, start + 99]);
+          if (start < today) years.push([start, today]);
         } else if (start && end && start <= end && start >= 1000 && end <= today) {
           years.push([start, end]);
         }

@@ -1,17 +1,14 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { ApiService } from '../../services/api.service';
-import { SelectionService } from '../../services/selection.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
-import { scaleLinear } from 'd3-scale';
+import {Component, OnInit, ViewChild, HostListener} from '@angular/core';
+import {ApiService} from '../../services/api.service';
+import {SelectionService} from '../../services/selection.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Observable} from 'rxjs/Observable';
+import {scaleLinear} from 'd3-scale';
 
-// import _ from 'lodash';
+import {IPerson, IYear} from '../../app.interfaces';
+import {DataService} from '../../services/data.service';
+import {RouterService} from '../../services/router.service';
 import {debounce} from '../../decorators';
-
-import { IPerson, IYear } from '../../app.interfaces';
-import { DataService } from '../../services/data.service';
-import { RouterService } from '../../services/router.service';
-
 import * as d3 from 'd3';
 import {formatNum, formatTitleResult} from '../../services/formatting';
 
@@ -22,7 +19,6 @@ import {formatNum, formatTitleResult} from '../../services/formatting';
 })
 
 export class PersonsComponent implements OnInit {
-
   @ViewChild('temp') temp;
   @ViewChild('svgWrapper') svg;
 
@@ -47,7 +43,6 @@ export class PersonsComponent implements OnInit {
   public selectedTag = null;
 
   private yScale = d3.scalePow().exponent(0.3).range([27, 6]);
-  // private yScale = d3.scaleLinear().range([27, 6]);
   public yearScale = scaleLinear();
   private maxPubInYear = 0;
 
@@ -57,21 +52,7 @@ export class PersonsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private dataService: DataService,
     private routerService: RouterService
-    ) {
-      dataService.loadingData$.subscribe((e) => {
-        if (e === 'data') { this.loadingData = true; }
-      });
-      selection.selPerson$.subscribe(
-        person => {
-          this.selectedPerson = person;
-          this.tags = this.rawPersons.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
-            return {label: `${tag.name} ${tag.lastname}`, tag};
-          });
-          this.selectedTag = this.selectedPerson != null ?
-            {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
-        }
-      );
-    }
+    ) {}
 
   @HostListener('window:resize', ['$event'])
   @debounce(250)
@@ -82,6 +63,20 @@ export class PersonsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataService.loadingData$.subscribe((e) => {
+      if (e === 'data') this.loadingData = true;
+    });
+    this.selection.selPerson$.subscribe(
+      person => {
+        this.selectedPerson = person;
+        this.tags = this.rawPersons.filter(d => this.selectedPerson == null || d.id !== this.selectedPerson.id).map(tag => {
+          return {label: `${tag.name} ${tag.lastname}`, tag};
+        });
+        this.selectedTag = this.selectedPerson != null ?
+          {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
+      }
+    );
+
     this.width = this.svg.nativeElement.clientWidth;
 
     this._persons = this.dataService.persons;
@@ -90,7 +85,9 @@ export class PersonsComponent implements OnInit {
       this.tags = value.map(tag => {
         return {label: `${tag.name} ${tag.lastname}`, tag};
       }).filter(d => this.selectedPerson == null || d.tag.id !== this.selectedPerson.id);
-      this.selectedTag = this.selectedPerson != null ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson} : null;
+      this.selectedTag = this.selectedPerson != null
+        ? {label: `${this.selectedPerson.name} ${this.selectedPerson.lastname}`, tag: this.selectedPerson}
+        : null;
       this.layout();
       if (!this.detail) this.loadingData = false;
     });
@@ -115,9 +112,7 @@ export class PersonsComponent implements OnInit {
 
   layout () {
     const temp = d3.select(this.temp.nativeElement);
-    this.rawPersons.forEach(p => {
-      temp.append('text').html(`${p.name} ${p.lastname}`).attr('attr-id', p.id);
-    });
+    this.rawPersons.forEach(p => temp.append('text').html(`${p.name} ${p.lastname}`).attr('attr-id', p.id));
     this.persons = temp.selectAll('text').nodes().map(n => {
       const person = this.rawPersons.find(p => d3.select(n).attr('attr-id') === p.id);
       const {id, name, lastname, date_of_birth, date_of_death, count} = person;

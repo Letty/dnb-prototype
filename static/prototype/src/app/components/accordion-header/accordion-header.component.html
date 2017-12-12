@@ -1,6 +1,7 @@
 <div class="accordion-header" [class.loading-data]="loadingData">
   <h2>{{label}}</h2>
-  <div *ngIf="selectedTag != null" class="item selected visible" (click)="selected(selectedTag.tag)" title="{{ _formatTagAction(selectedTag.label, 'remove') }}">
+  <div *ngIf="selectedTag != null" class="item selected visible" (click)="selected(selectedTag.tag)"
+    [attr.title]="_formatTagAction(selectedTag.label, 'remove')">
     <span>{{selectedTag.label}}</span>
     <span class="close-button">&times;</span>
   </div>
@@ -15,10 +16,12 @@
       <span>Daten werden geladen</span>
     </div>
     <div class="hide-while-loading">
-      <div class="total-results" *ngIf="totalResults != null && tags.length > 0" title="{{ _formatTotalResult(totalResults) }}">
+      <div class="total-results" *ngIf="totalResults != null && tags.length > 0"
+        [attr.title]="_formatTotalResult(totalResults)">
         <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults > 1 ? 'e' : ''}}
       </div>
-      <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)" [class.visible]="showTags" title="{{ _formatTagAction(tag.label, isResultBar ? 'display' : 'select') }}">
+      <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)"
+        [class.visible]="showTags" [attr.title]="_formatTagAction(tag.label, isResultBar ? 'display' : 'select')">
         <span>{{tag.label}}</span>
       </div>
     </div>

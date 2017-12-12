@@ -20,8 +20,8 @@ import {SelectionService} from './services/selection.service';
 import {DataService} from './services/data.service';
 import {RouterService} from './services/router.service';
 
-import { MasonryModule } from 'angular2-masonry';
-import { FormsModule } from '@angular/forms';
+import {MasonryModule} from 'angular2-masonry';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({

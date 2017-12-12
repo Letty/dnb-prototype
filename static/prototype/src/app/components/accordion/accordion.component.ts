@@ -21,7 +21,7 @@ export class AccordionComponent implements OnInit {
 
   public size = 0;
 
-  constructor(private router: RouterService) { }
+  constructor(private router: RouterService) {}
 
   ngOnInit () {
     this.router[this.route].subscribe(size => {
