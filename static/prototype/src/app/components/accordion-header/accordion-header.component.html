@@ -18,7 +18,7 @@
     <div class="hide-while-loading">
       <div class="total-results" *ngIf="totalResults != null && tags.length > 0"
         [attr.title]="_formatTotalResult(totalResults)">
-        <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults > 1 ? 'e' : ''}}
+        <span class="mono">{{_formatNum(totalResults)}}</span> Werk{{totalResults === 1 ? '' : 'e'}}
       </div>
       <div *ngFor="let tag of tags" class="item" (click)="selected(tag.tag)"
         [class.visible]="showTags" [attr.title]="_formatTagAction(tag.label, isResultBar ? 'display' : 'select')">
