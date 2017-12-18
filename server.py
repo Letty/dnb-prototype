@@ -14,7 +14,7 @@ def open_db_connection():
     connection = pymysql.connect(host='127.0.0.1',
                                  user='root',
                                  password='',
-                                 db='dnb2',
+                                 db='dnb',
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
     return connection
@@ -771,7 +771,7 @@ def get_topic_network_filter_year_person():
             r = {'source': t[0]['id'], 'target': t[1]['id'], 'strength': 0}
 
             sql = 'select count(it1.i_id) count from dnb_item_topic it1,  '\
-                'dnb_item_topic it2, dnb2.dnb_author_item ai  where '\
+                'dnb_item_topic it2, dnb_author_item ai  where '\
                 'it1.t_id = %s and it2.t_id = %s and it1.year >=%s and it1.year <= %s '\
                 'and ai.a_id = %s and ai.i_id = it1.i_id and it1.i_id = it2.i_id'
             cursor.execute(sql, (t[0]['id'], t[1]['id'], params['min_year'],

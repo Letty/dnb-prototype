@@ -35,7 +35,7 @@ def get_topics_for_person(person_id, connection):
 
     with connection.cursor() as cursor:
         sql = 'select a.t_id id, tc.keyword, a.count from dnb_author_topic a '\
-            'inner join dnb2.dnb_topic_count tc on a.t_id= tc.id '\
+            'inner join dnb_topic_count tc on a.t_id= tc.id '\
             'where a.a_id=%s order by count desc limit 20'
         try:
             cursor.execute(sql, (person_id))
