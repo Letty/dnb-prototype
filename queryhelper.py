@@ -60,12 +60,15 @@ def get_topics_for_topics(topic_id, connection):
         else:
             r = cursor.fetchall()
             res = utils.createTopicList(r, topic_id)
-            sorted(res, key=lambda topic: topic['count'])
-            topic_result['data'] = []
-            i = 0
-            while i < 20:
-                topic_result['data'].append(res[i])
-                i += 1
+            if len(res) == 0:
+                topic_result['data'] = []
+            else:
+                sorted(res, key=lambda topic: topic['count'])
+                topic_result['data'] = []
+                i = 0
+                while i < 20:
+                    topic_result['data'].append(res[i])
+                    i += 1
     return topic_result
 
 
