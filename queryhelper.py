@@ -66,7 +66,7 @@ def get_topics_for_topics(topic_id, connection):
                 sorted(res, key=lambda topic: topic['count'])
                 topic_result['data'] = []
                 i = 0
-                while i < 20:
+                while i < len(res) and i < 20:
                     topic_result['data'].append(res[i])
                     i += 1
     return topic_result
@@ -125,7 +125,12 @@ def get_topics_for_year_person(connection, params):
     return topic_result
 
 
-def get_topics_for_year_person_topic(person_id, topic_id, min_year, max_year, connection):
+def get_topics_for_year_person_topic(
+        person_id,
+        topic_id,
+        min_year,
+        max_year,
+        connection):
     topic_result = {'data': None, 'error': None}
 
     with connection.cursor() as cursor:
@@ -155,12 +160,12 @@ def combine_topics_with_queries(topics, connection):
             sql = 'select count from dnb_topic_topic where t_id1=%s and t_id2=%s'
             cursor.execute(sql, (t[0]['id'], t[1]['id']))
             f = cursor.fetchone()
-            if f != None:
+            if f is not None:
                 r['strength'] += f['count']
 
             cursor.execute(sql, (t[1]['id'], t[0]['id']))
             f = cursor.fetchone()
-            if f != None:
+            if f is not None:
                 r['strength'] += f['count']
 
             result.append(r)
@@ -171,8 +176,8 @@ def combine_topics(topics, selected_topic_id):
     result = []
 
     for t in topics:
-        result.append(
-            {'source': int(selected_topic_id), 'target': t['id'], 'strength': t['count']})
+        result.append({'source': int(selected_topic_id),
+                       'target': t['id'], 'strength': t['count']})
 
     return result
 
