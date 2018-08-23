@@ -6,8 +6,6 @@ import {SelectionService} from './selection.service';
 import {IPerson, ITopic, IYear, IItem, INetworkLink} from '../app.interfaces';
 import {Observable} from 'rxjs/Observable';
 
-import {trackPiwik} from './piwikTracking';
-
 @Injectable()
 export class DataService {
   public loadingData$: EventEmitter<string>;
@@ -184,49 +182,41 @@ export class DataService {
     const setItems = data => this.setItems(data);
 
     if (filterPerson && filterTopic && filterYear) {
-      trackPiwik('filterData', 'filterDataByYearAndPersonAndTopic', ['P' + personId, 'T' + topicId, 'Y' + minYear, 'Y' + maxYear]);
       this.api.filterDataForYearPersonTopicResultPerson(minYear, maxYear, personId, topicId).subscribe(setPerson);
       this.api.filterDataForYearPersonTopicResultTopic(minYear, maxYear, personId, topicId).subscribe(setTopic);
       this.api.filterDataForYearPersonTopicResultYear(personId, topicId).subscribe(setYear);
       this.api.filterDataForYearPersonTopicResultItems(minYear, maxYear, personId, topicId).subscribe(setItems);
     } else if (filterPerson && filterTopic) {
-      trackPiwik('filterData', 'filterDataByPersonAndTopic', ['P' + personId, 'T' + topicId]);
       this.api.filterDataForPersonTopicResultPerson(personId, topicId).subscribe(setPerson);
       this.api.filterDataForPersonTopicResultTopic(personId, topicId).subscribe(setTopic);
       this.api.filterDataForPersonTopicResultYear(personId, topicId).subscribe(setYear);
       this.api.filterDataForPersonTopicResultItems(personId, topicId).subscribe(setItems);
     } else if (filterPerson && filterYear) {
-      trackPiwik('filterData', 'filterDataByYearAndPerson', ['P' + personId, 'Y' + minYear, 'Y' + maxYear]);
       this.api.filterDataForYearPersonResultPerson(minYear, maxYear, personId).subscribe(setPerson);
       this.api.filterDataForYearPersonResultTopic(minYear, maxYear, personId).subscribe(setTopic);
       this.api.filterDataForYearPersonResultYear(personId).subscribe(setYear);
       this.api.filterDataForYearPersonResultItems(minYear, maxYear, personId).subscribe(setItems);
     } else if (filterTopic && filterYear) {
-      trackPiwik('filterData', 'filterDataByYearAndTopic', ['T' + topicId, 'Y' + minYear, 'Y' + maxYear]);
       this.api.filterDataForYearTopicResultPerson(minYear, maxYear, topicId).subscribe(setPerson);
       this.api.filterDataForYearTopicResultTopic(minYear, maxYear, topicId).subscribe(setTopic);
       this.api.filterDataForYearTopicResultYear(topicId).subscribe(setYear);
       this.api.filterDataForYearTopicResultItems(minYear, maxYear, topicId).subscribe(setItems);
     } else if (filterPerson) {
-      trackPiwik('filterData', 'filterDataByYear', 'P' + personId);
       this.api.filterDataByPersonResultPerson(personId).subscribe(setPerson);
       this.api.filterDataByPersonResultTopic(personId).subscribe(setTopic);
       this.api.filterDataByPersonResultYear(personId).subscribe(setYear);
       this.api.filterDataByPersonResultItems(personId).subscribe(setItems);
     } else if (filterTopic) {
-      trackPiwik('filterData', 'filterDataByYear', 'T' + topicId);
       this.api.filterDataByTopicResultPerson(topicId).subscribe(setPerson);
       this.api.filterDataByTopicResultTopic(topicId).subscribe(setTopic);
       this.api.filterDataByTopicResultYear(topicId).subscribe(setYear);
       this.api.filterDataByTopicResultItems(topicId).subscribe(setItems);
     } else if (filterYear) {
-      trackPiwik('filterData', 'filterDataByYear', ['Y' + minYear, 'Y' + maxYear]);
       this.api.filterDataByYearResultPerson(minYear, maxYear).subscribe(setPerson);
       this.api.filterDataByYearResultTopic(minYear, maxYear).subscribe(setTopic);
       this.api.filterDataByYearResultItems(minYear, maxYear).subscribe(setItems);
       this.setYear(this.dataStore.defaultYears);
     } else {
-      trackPiwik('filterData', 'Start Filter');
       const {defaultItems, defaultTopics, defaultYears, defaultPersons, defaultNetworkLinks, defaultPersonYears} = this.dataStore;
       this.setPerson(defaultPersons);
       this.setTopic(defaultTopics);
